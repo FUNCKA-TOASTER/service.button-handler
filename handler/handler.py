@@ -35,11 +35,13 @@ class ButtonHandler(ABCHandler):
         selected = selected(super().api)
         result = await selected(event)
 
+        log_text = f"Event <{event.get('event_id')}> "
+                       
         if result:
             log_text += f"triggered /{selected.NAME} handler."
 
         else:
-            log_text += "did not triggered any command."
+            log_text += "did not triggered any action."
 
         await logger.info(log_text)
         return result
