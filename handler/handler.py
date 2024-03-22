@@ -23,7 +23,7 @@ class ButtonHandler(ABCHandler):
             selected = action_list.get(call_action)
 
         else:
-            selected = action_list.get("")
+            selected = action_list.get("not_msg_owner")
 
         if selected is None:
             log_text = f"Could not call action \"{call_action}\""
