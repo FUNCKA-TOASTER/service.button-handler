@@ -15,7 +15,8 @@ class ButtonHandler(ABCHandler):
 
             return False
 
-        call_action = event.get('call_action')
+        payload = event.get("payload")
+        call_action = payload.get("call_action")
 
         kbd_owner = await self.__get_kbdowner(event)
 
