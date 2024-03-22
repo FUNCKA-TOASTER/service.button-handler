@@ -36,9 +36,9 @@ class ButtonHandler(ABCHandler):
         result = await selected(event)
 
         log_text = f"Event <{event.get('event_id')}> "
-                       
+
         if result:
-            log_text += f"triggered /{selected.NAME} handler."
+            log_text += f"triggered \"{selected.NAME}\" action."
 
         else:
             log_text += "did not triggered any action."

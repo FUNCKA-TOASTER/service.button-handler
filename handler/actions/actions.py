@@ -8,6 +8,8 @@ class NotMessageOwnerAction(BaseAction):
     unless it belongs to the author
     of the message with keyboard.
     """
+    NAME = "Not Message Owner"
+
     async def _handle(self, event: dict, kwargs) -> bool:
         snackbar_message = "⚠️ Отказано в доступе."
 
@@ -22,6 +24,8 @@ class CancelAction(BaseAction):
     """Cancels the command, closes the menu,
     and deletes the message.
     """
+    NAME = "Cancel"
+
     async def _handle(self, event: dict, kwargs) -> bool:
         self.api.messages.delete(
             peer_id=event.get("peer_id"),
