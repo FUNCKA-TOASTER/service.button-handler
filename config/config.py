@@ -15,3 +15,9 @@ MY_SQL_HOST = os.getenv("SQL_HOST")
 MY_SQL_PORT = int(os.getenv("SQL_PORT"))
 MY_SQL_USER = os.getenv("SQL_USER")
 MY_SQL_PSWD = os.getenv("SQL_PSWD")
+
+PERMISSIONS_DECODING = {
+    0: "User",
+    1: "Moderator",
+    2: "Administrator"
+}
