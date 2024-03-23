@@ -96,7 +96,7 @@ class MarkAsChatAction(BaseAction):
                 conv_mark="CHAT"
             )
 
-            snackbar_message = "📝 Беседа помечена как \"чат\"."
+            snackbar_message = "📝 Беседа помечена как \"CHAT\"."
 
         else:
             snackbar_message = f"❗Беседа уже имеет метку \"{mark[0][0]}\"."
@@ -132,7 +132,7 @@ class MarkAsLogAction(BaseAction):
                 conv_mark="LOG"
             )
 
-            snackbar_message = "📝 Беседа помечена как \"лог\"."
+            snackbar_message = "📝 Беседа помечена как \"LOG\"."
 
         else:
             snackbar_message = f"❗Беседа уже имеет метку \"{mark[0][0]}\"."
