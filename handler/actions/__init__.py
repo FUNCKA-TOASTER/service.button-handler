@@ -18,7 +18,8 @@ action_list = {
     # cancel command ----------------------------
     "cancel_command": CancelAction,
     # test --------------------------------------
-    "test": TestAction,
+    "negative_test": TestAction,
+    "positive_test": TestAction,
     # mark --------------------------------------
     "mark_as_chat": MarkAsChatAction,
     "mark_as_log": MarkAsLogAction,
