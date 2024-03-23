@@ -373,7 +373,7 @@ class SetUserPermissionAction(BaseAction):
 
     async def _handle(self, event: dict, kwargs) -> bool:
         fields = ("user_permission",)
-        target_id = event.payload.get("target")
+        target_id = event["payload"].get("target")
         lvl = db.execute.select(
             schema="toaster",
             table="permissions",
