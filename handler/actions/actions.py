@@ -329,7 +329,7 @@ class SetModeratorPermissionAction(BaseAction):
             schema="toaster",
             table="permissions",
             on_duplicate="update",
-            conv_id=event.peer_id,
+            conv_id=event.get("peer_id"),
             user_id=target_id,
             user_name=user_name,
             user_permission=1
