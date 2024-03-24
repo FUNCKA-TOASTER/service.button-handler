@@ -2,6 +2,7 @@ from tools.keyboards import Keyboard
 from db import db
 import config
 from .base import BaseAction
+import random
 
 
 
@@ -402,3 +403,84 @@ class SetUserPermissionAction(BaseAction):
         self.snackbar(event, snackbar_message)
 
         return True
+
+
+
+# ------------------------------------------------------------------------
+class GameRollAction(BaseAction):
+    """Creates a "chat" mark and stores
+    data about it in the database.
+    """
+    NAME = "Game roll"
+    EMOJI=['0️⃣', '1️⃣',' 2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣' ,'8️⃣', '9️⃣']
+
+    async def _handle(self, event: dict, kwargs) -> bool:
+        result = random.randint(0,100)
+        result = self._convert_to_emoji(result)
+
+        tag = f"[id{event.get('user_id')}|{event.get('user_name')}]"
+
+        new_msg_text = f"{tag} выбивает число: {result}"
+
+        keyboard = (
+            Keyboard(inline=True, one_time=False, owner_id=None)
+        )
+
+        self.api.messages.edit(
+            peer_id=event.get("peer_id"),
+            conversation_message_id=event.get("cmid"),
+            message=new_msg_text,
+            keyboard=keyboard.json
+        )
+
+        snackbar_message = "🎲 Рулетка прокручена!"
+
+        self.snackbar(event, snackbar_message)
+
+        return True
+
+
+    def _convert_to_emoji(self, number):
+        result = ''
+
+        for didgit in str(number):
+            result += self.EMOJI[int(didgit)]
+
+        return result
+
+
+class GameCoinflipAction(BaseAction):
+    """Creates a "chat" mark and stores
+    data about it in the database.
+    """
+    NAME = "Game coinflip"
+    EMOJI = ["Орёл 🪙", "Решка 🪙"]
+
+    async def _handle(self, event: dict, kwargs) -> bool:
+        result = random.randint(0, 1)
+        result = self._convert_to_emoji(result)
+
+        tag = f"[id{event.get('user_id')}|{event.get('user_name')}]"
+
+        new_msg_text = f"{tag} подбрасывает монетку: {result}"
+
+        keyboard = (
+            Keyboard(inline=True, one_time=False, owner_id=None)
+        )
+
+        self.api.messages.edit(
+            peer_id=event.get("peer_id"),
+            conversation_message_id=event.get("cmid"),
+            message=new_msg_text,
+            keyboard=keyboard.json
+        )
+
+        snackbar_message = "🎲 Монета брошена!"
+
+        self.snackbar(event, snackbar_message)
+
+        return True
+
+
+    def _convert_to_emoji(self, number):
+        return self.EMOJI[number]
