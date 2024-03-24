@@ -8,7 +8,9 @@ from .actions import (
     DropMarkAction,
     SetAdministratorPermissionAction,
     SetModeratorPermissionAction,
-    SetUserPermissionAction
+    SetUserPermissionAction,
+    GameRollAction,
+    GameCoinflipAction
 )
 
 
@@ -28,7 +30,10 @@ action_list = {
     # permission --------------------------------
     "set_administrator_permission": SetAdministratorPermissionAction,
     "set_moderator_permission": SetModeratorPermissionAction,
-    "set_user_permission": SetUserPermissionAction
+    "set_user_permission": SetUserPermissionAction,
+    # game --------------------------------------
+    "game_roll": GameRollAction,
+    "game_coinflip": GameCoinflipAction
 }
 
 
