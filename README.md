@@ -36,7 +36,7 @@ All documenting information is duplicated within the code in English.<br>
     }
 
 
-Пример события, которое приходит от toaster.event-routing-service сервера на toaster.command-handling-service.
+Пример события, которое приходит от toaster.event-routing-service сервера на toaster.button-handling-service.
 
 Далее, сервис определяет, какая команда была вызвана, а уже после - исполняет все действия, которые за этой командой сокрыты.
 
