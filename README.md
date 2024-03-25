@@ -1,6 +1,6 @@
 # ⚙️ TOASTER.BUTTON-HANDLING-SERVICE
 
-![drt98l](https://github.com/STALCRAFT-FUNCKA/toaster.event-routing-service/assets/76991612/08409484-c9b2-41f3-9b40-8e43614f0661)
+![main_img](https://github.com/STALCRAFT-FUNCKA/toaster.button-handling-service/assets/76991612/40e1cb24-f2d0-4786-bf49-a8dabe0f35b2)
 
 Вся документирующая информация продублированна внутри кода на английском языке.<br>
 All documenting information is duplicated within the code in English.<br>
