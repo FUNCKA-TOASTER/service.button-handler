@@ -482,7 +482,7 @@ class SystemSettingsPageOneAction(BaseAction):
         }
 
         color_by_status = {
-            0: ButtonColor.NEGATIVE,    
+            0: ButtonColor.NEGATIVE,
             1: ButtonColor.POSITIVE
         }
 
