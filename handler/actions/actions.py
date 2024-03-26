@@ -493,7 +493,7 @@ class SystemSettingsPageOneAction(BaseAction):
                 Callback(
                     label=f"Возраста аккаунта: {'Вкл.' if sys_status['Account_age'] else 'Выкл.'}",
                     payload={
-                        "call_action": "system_settings_page_1",
+                        "call_action": "systems_settings_page_1",
                         "sub_action": "change_setting",
                         "system_name": "Account_age"
                     }
@@ -505,7 +505,7 @@ class SystemSettingsPageOneAction(BaseAction):
                 Callback(
                     label=f"Плохие слова: {'Вкл.' if sys_status['Curse_words'] else 'Выкл.'}",
                     payload={
-                        "call_action": "system_settings_page_1",
+                        "call_action": "systems_settings_page_1",
                         "sub_action": "change_setting",
                         "system_name": "Curse_words"
                     }
@@ -517,7 +517,7 @@ class SystemSettingsPageOneAction(BaseAction):
                 Callback(
                     label=f"Усиленый режим: {'Вкл.' if sys_status['Hard_mode'] else 'Выкл.'}",
                     payload={
-                        "call_action": "system_settings_page_1",
+                        "call_action": "systems_settings_page_1",
                         "sub_action": "change_setting",
                         "system_name": "Hard_mode"
                     }
@@ -529,7 +529,7 @@ class SystemSettingsPageOneAction(BaseAction):
                 Callback(
                     label=f"Открытое ЛС: {'Вкл.' if sys_status['Open_pm'] else 'Выкл.'}",
                     payload={
-                        "call_action": "system_settings_page_1",
+                        "call_action": "systems_settings_page_1",
                         "sub_action": "change_setting",
                         "system_name": "Open_pm"
                     }
@@ -541,7 +541,7 @@ class SystemSettingsPageOneAction(BaseAction):
                 Callback(
                     label=f"Медленный режим: {'Вкл.' if sys_status['Slow_mode'] else 'Выкл.'}",
                     payload={
-                        "call_action": "system_settings_page_1",
+                        "call_action": "systems_settings_page_1",
                         "sub_action": "change_setting",
                         "system_name": "Slow_mode"
                     }
@@ -589,7 +589,7 @@ class SystemSettingsPageOneAction(BaseAction):
 
 
 class FilterSettingsPageOneAction(BaseAction):
-    NAME = "filter_settings_page_1"
+    NAME = "filters_settings_page_1"
 
     async def _handle(self, event: dict, kwargs) -> bool:
         new_msg_text = "Тест был пройден!"
