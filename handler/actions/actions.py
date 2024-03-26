@@ -487,7 +487,7 @@ class SystemSettingsPageOneAction(BaseAction):
         }
 
         keyboard = (
-            Keyboard(inline=True, one_time=False, owner_id=None)
+            Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
             .add_row()
             .add_button(
                 Callback(
@@ -595,7 +595,7 @@ class FilterSettingsPageOneAction(BaseAction):
         new_msg_text = "Тест был пройден!"
 
         keyboard = (
-            Keyboard(inline=True, one_time=False, owner_id=None)
+            Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
         )
 
         self.api.messages.edit(
