@@ -10,8 +10,8 @@ from .actions import (
     SetUserPermissionAction,
     GameRollAction,
     GameCoinflipAction,
-    SystemSettingsPageOneAction,
-    FilterSettingsPageOneAction
+    SystemSettingsAction,
+    FilterSettingsAction
 )
 
 
@@ -33,8 +33,8 @@ action_list = {
     GameRollAction.NAME: GameRollAction,
     GameCoinflipAction.NAME: GameCoinflipAction,
     # settings ----------------------------------
-    SystemSettingsPageOneAction.NAME: SystemSettingsPageOneAction,
-    FilterSettingsPageOneAction.NAME: FilterSettingsPageOneAction
+    SystemSettingsAction.NAME: SystemSettingsAction,
+    FilterSettingsAction.NAME: FilterSettingsAction
 }
 
 
