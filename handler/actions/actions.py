@@ -385,8 +385,7 @@ class SetUserPermissionAction(BaseAction):
 
 # ------------------------------------------------------------------------
 class GameRollAction(BaseAction):
-    """Creates a "chat" mark and stores
-    data about it in the database.
+    """Starts roll game.
     """
     NAME = "game_roll"
     EMOJI=['0️⃣', '1️⃣',' 2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣' ,'8️⃣', '9️⃣']
@@ -427,8 +426,7 @@ class GameRollAction(BaseAction):
 
 
 class GameCoinflipAction(BaseAction):
-    """Creates a "chat" mark and stores
-    data about it in the database.
+    """Starts coinflip game.
     """
     NAME = "game_coinflip"
     EMOJI = ["Орёл 🪙", "Решка 🪙"]
@@ -465,6 +463,9 @@ class GameCoinflipAction(BaseAction):
 
 # ------------------------------------------------------------------------
 class SystemSettingsAction(BaseAction):
+    """Sets the value to the 
+    selected message filter settings field.
+    """
     NAME = "systems_settings"
 
     async def _handle(self, event: dict, kwargs) -> bool:
@@ -487,7 +488,7 @@ class SystemSettingsAction(BaseAction):
         }
 
         page = int(payload.get("page", 1))
-        
+
         if payload.get("sub_action") == "change_setting":
             sys_name = payload.get("system_name")
             new_status = abs(sys_status[sys_name] - 1) # (0 to 1) or (1 to 0)
@@ -502,7 +503,7 @@ class SystemSettingsAction(BaseAction):
             )
 
         else:
-            snackbar_message = f"⚙️ Меню систем модерации ({page}/4).."
+            snackbar_message = f"⚙️ Меню систем модерации ({page}/1).."
 
         if page == 1:
             keyboard = (
@@ -584,7 +585,7 @@ class SystemSettingsAction(BaseAction):
                 )
             )
 
-        new_msg_text = "⚙️ Влючение\\Выключение систем модерации:"
+        new_msg_text = "⚙️ Включение\\Выключение систем модерации:"
         self.api.messages.edit(
             peer_id=event.get("peer_id"),
             conversation_message_id=event.get("cmid"),
@@ -599,6 +600,9 @@ class SystemSettingsAction(BaseAction):
 
 
 class FilterSettingsAction(BaseAction):
+    """Sets the value to the selected
+    moderation systems settings field.
+    """
     NAME = "filters_settings"
 
     async def _handle(self, event: dict, kwargs) -> bool:
@@ -931,7 +935,7 @@ class FilterSettingsAction(BaseAction):
                 )
             )
 
-        new_msg_text = "⚙️ Влючение\\Выключение фильтров сообщений:"
+        new_msg_text = "⚙️ Включение\\Выключение фильтров сообщений:"
         self.api.messages.edit(
             peer_id=event.get("peer_id"),
             conversation_message_id=event.get("cmid"),
