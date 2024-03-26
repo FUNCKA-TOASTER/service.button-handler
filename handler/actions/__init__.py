@@ -1,7 +1,6 @@
 from .actions import (
     NotMessageOwnerAction,
     CancelAction,
-    TestAction,
     MarkAsChatAction,
     MarkAsLogAction,
     UpdateConvDataAction,
@@ -10,30 +9,32 @@ from .actions import (
     SetModeratorPermissionAction,
     SetUserPermissionAction,
     GameRollAction,
-    GameCoinflipAction
+    GameCoinflipAction,
+    SystemSettingsPageOneAction,
+    FilterSettingsPageOneAction
 )
 
 
 action_list = {
     # not msg owner -----------------------------
-    "not_msg_owner": NotMessageOwnerAction,
+    NotMessageOwnerAction.NAME: NotMessageOwnerAction,
     # cancel command ----------------------------
-    "cancel_command": CancelAction,
-    # test --------------------------------------
-    "negative_test": TestAction,
-    "positive_test": TestAction,
+    CancelAction.NAME: CancelAction,
     # mark --------------------------------------
-    "mark_as_chat": MarkAsChatAction,
-    "mark_as_log": MarkAsLogAction,
-    "update_conv_data": UpdateConvDataAction,
-    "drop_mark": DropMarkAction,
+    MarkAsChatAction.NAME: MarkAsChatAction,
+    MarkAsLogAction.NAME: MarkAsLogAction,
+    UpdateConvDataAction.NAME: UpdateConvDataAction,
+    DropMarkAction.NAME: DropMarkAction,
     # permission --------------------------------
-    "set_administrator_permission": SetAdministratorPermissionAction,
-    "set_moderator_permission": SetModeratorPermissionAction,
-    "set_user_permission": SetUserPermissionAction,
+    SetAdministratorPermissionAction.NAME: SetAdministratorPermissionAction,
+    SetModeratorPermissionAction.NAME: SetModeratorPermissionAction,
+    SetUserPermissionAction.NAME: SetUserPermissionAction,
     # game --------------------------------------
-    "game_roll": GameRollAction,
-    "game_coinflip": GameCoinflipAction
+    GameRollAction.NAME: GameRollAction,
+    GameCoinflipAction.NAME: GameCoinflipAction,
+    # settings ----------------------------------
+    SystemSettingsPageOneAction.NAME: SystemSettingsPageOneAction,
+    FilterSettingsPageOneAction.NAME: FilterSettingsPageOneAction
 }
 
 
