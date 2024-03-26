@@ -464,8 +464,8 @@ class GameCoinflipAction(BaseAction):
 
 
 # ------------------------------------------------------------------------
-class SystemSettingsPageOneAction(BaseAction):
-    NAME = "systems_settings_page_1"
+class SystemSettingsAction(BaseAction):
+    NAME = "systems_settings"
 
     async def _handle(self, event: dict, kwargs) -> bool:
         payload = event["payload"]
@@ -502,79 +502,86 @@ class SystemSettingsPageOneAction(BaseAction):
         else:
             snackbar_message = "⚙️ Меню систем модерации."
 
-        keyboard = (
-            Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
-            .add_row()
-            .add_button(
-                Callback(
-                    label=f"Возраста аккаунта: {'Вкл.' if sys_status['Account_age'] else 'Выкл.'}",
-                    payload={
-                        "call_action": "systems_settings_page_1",
-                        "sub_action": "change_setting",
-                        "system_name": "Account_age"
-                    }
-                ),
-                color_by_status[sys_status["Account_age"]]
+        page = int(payload.get("page", 1))
+        if page == 1:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Возраста аккаунта: {'Вкл.' if sys_status['Account_age'] else 'Выкл.'}",
+                        payload={
+                            "call_action": "systems_settings_page_1",
+                            "sub_action": "change_setting",
+                            "system_name": "Account_age",
+                            "page": "1"
+                        }
+                    ),
+                    color_by_status[sys_status["Account_age"]]
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Плохие слова: {'Вкл.' if sys_status['Curse_words'] else 'Выкл.'}",
+                        payload={
+                            "call_action": "systems_settings_page_1",
+                            "sub_action": "change_setting",
+                            "system_name": "Curse_words",
+                            "page": "1"
+                        }
+                    ),
+                    color_by_status[sys_status["Curse_words"]]
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Усиленый режим: {'Вкл.' if sys_status['Hard_mode'] else 'Выкл.'}",
+                        payload={
+                            "call_action": "systems_settings_page_1",
+                            "sub_action": "change_setting",
+                            "system_name": "Hard_mode",
+                            "page": "1"
+                        }
+                    ),
+                    color_by_status[sys_status["Hard_mode"]]
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Открытое ЛС: {'Вкл.' if sys_status['Open_pm'] else 'Выкл.'}",
+                        payload={
+                            "call_action": "systems_settings_page_1",
+                            "sub_action": "change_setting",
+                            "system_name": "Open_pm",
+                            "page": "1"
+                        }
+                    ),
+                    color_by_status[sys_status["Open_pm"]]
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Медленный режим: {'Вкл.' if sys_status['Slow_mode'] else 'Выкл.'}",
+                        payload={
+                            "call_action": "systems_settings_page_1",
+                            "sub_action": "change_setting",
+                            "system_name": "Slow_mode",
+                            "page": "1"
+                        }
+                    ),
+                    color_by_status[sys_status["Slow_mode"]]
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Закрыть меню",
+                        payload={
+                            "call_action": "cancel_command"
+                        }
+                    ),
+                    ButtonColor.SECONDARY
+                )
             )
-            .add_row()
-            .add_button(
-                Callback(
-                    label=f"Плохие слова: {'Вкл.' if sys_status['Curse_words'] else 'Выкл.'}",
-                    payload={
-                        "call_action": "systems_settings_page_1",
-                        "sub_action": "change_setting",
-                        "system_name": "Curse_words"
-                    }
-                ),
-                color_by_status[sys_status["Curse_words"]]
-            )
-            .add_row()
-            .add_button(
-                Callback(
-                    label=f"Усиленый режим: {'Вкл.' if sys_status['Hard_mode'] else 'Выкл.'}",
-                    payload={
-                        "call_action": "systems_settings_page_1",
-                        "sub_action": "change_setting",
-                        "system_name": "Hard_mode"
-                    }
-                ),
-                color_by_status[sys_status["Hard_mode"]]
-            )
-            .add_row()
-            .add_button(
-                Callback(
-                    label=f"Открытое ЛС: {'Вкл.' if sys_status['Open_pm'] else 'Выкл.'}",
-                    payload={
-                        "call_action": "systems_settings_page_1",
-                        "sub_action": "change_setting",
-                        "system_name": "Open_pm"
-                    }
-                ),
-                color_by_status[sys_status["Open_pm"]]
-            )
-            .add_row()
-            .add_button(
-                Callback(
-                    label=f"Медленный режим: {'Вкл.' if sys_status['Slow_mode'] else 'Выкл.'}",
-                    payload={
-                        "call_action": "systems_settings_page_1",
-                        "sub_action": "change_setting",
-                        "system_name": "Slow_mode"
-                    }
-                ),
-                color_by_status[sys_status["Slow_mode"]]
-            )
-            .add_row()
-            .add_button(
-                Callback(
-                    label="Закрыть меню",
-                    payload={
-                        "call_action": "cancel_command"
-                    }
-                ),
-                ButtonColor.SECONDARY
-            )
-        )
 
         new_msg_text = "⚙️ Влючение\\Выключение систем модерации:"
         self.api.messages.edit(
@@ -590,24 +597,345 @@ class SystemSettingsPageOneAction(BaseAction):
 
 
 
-class FilterSettingsPageOneAction(BaseAction):
-    NAME = "filters_settings_page_1"
+class FilterSettingsAction(BaseAction):
+    NAME = "filters_settings"
 
     async def _handle(self, event: dict, kwargs) -> bool:
-        new_msg_text = "Тест был пройден!"
+        payload = event["payload"]
 
-        keyboard = (
-            Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
+        systems = db.execute.select(
+            schema="toaster_settings",
+            table="filter_status",
+            fields=("filter_name", "filter_status"),
+            conv_id=event.get("peer_id")
         )
 
+        filt_status = {
+            row[0]: int(row[1]) for row in systems
+        }
+
+        color_by_status = {
+            0: ButtonColor.NEGATIVE,
+            1: ButtonColor.POSITIVE
+        }
+
+        if payload.get("sub_action") == "change_setting":
+            filt_name = payload.get("filter_name")
+            new_status = abs(filt_status[filt_name] - 1) # (0 to 1) or (1 to 0)
+            filt_status[filt_name] = new_status
+            snackbar_message = f"⚠️ Фильтр {'Влючен' if new_status else 'Выключен'}."
+            db.execute.update(
+                schema="toaster_settings",
+                table="filter_status",
+                new_data={"filter_status": new_status},
+                conv_id=event.get("peer_id"),
+                system_name=filt_name
+            )
+
+        else:
+            snackbar_message = "⚙️ Меню фильтров сообщений."
+
+        page = int(payload.get("page", 1))
+        if page == 1:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Приложения: {'Вкл.' if filt_status['App_action'] else 'Выкл.'}",
+                        payload={
+                            "call_action": "filters_settings",
+                            "sub_action": "change_setting",
+                            "filter_name": "App_action",
+                            "page": "1"
+                        }
+                    ),
+                    color_by_status[filt_status["App_action"]]
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Музыка: {'Вкл.' if filt_status['Audio'] else 'Выкл.'}",
+                        payload={
+                            "call_action": "filters_settings",
+                            "sub_action": "change_setting",
+                            "system_name": "Audio",
+                            "page": "1"
+                        }
+                    ),
+                    color_by_status[filt_status["Audio"]]
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Аудио: {'Вкл.' if filt_status['Audio_message'] else 'Выкл.'}",
+                        payload={
+                            "call_action": "filters_settings",
+                            "sub_action": "change_setting",
+                            "system_name": "Audio_message",
+                            "page": "1"
+                        }
+                    ),
+                    color_by_status[filt_status["Audio_message"]]
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Файлы: {'Вкл.' if filt_status['Doc'] else 'Выкл.'}",
+                        payload={
+                            "call_action": "filters_settings",
+                            "sub_action": "change_setting",
+                            "system_name": "Doc",
+                            "page": "1"
+                        }
+                    ),
+                    color_by_status[filt_status["Doc"]]
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="-->",
+                        payload={
+                            "call_action": "filters_settings",
+                            "page": "2"
+                        }
+                    ),
+                    ButtonColor.SECONDARY
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Закрыть меню",
+                        payload={
+                            "call_action": "cancel_command"
+                        }
+                    ),
+                    ButtonColor.SECONDARY
+                )
+            )
+
+        elif page == 2:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Пересыл: {'Вкл.' if filt_status['Forward'] else 'Выкл.'}",
+                        payload={
+                            "call_action": "filters_settings",
+                            "sub_action": "change_setting",
+                            "filter_name": "Forward",
+                            "page": "2"
+                        }
+                    ),
+                    color_by_status[filt_status["Forward"]]
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Ответ: {'Вкл.' if filt_status['Reply'] else 'Выкл.'}",
+                        payload={
+                            "call_action": "filters_settings",
+                            "sub_action": "change_setting",
+                            "system_name": "Reply",
+                            "page": "2"
+                        }
+                    ),
+                    color_by_status[filt_status["Reply"]]
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Граффити: {'Вкл.' if filt_status['Graffiti'] else 'Выкл.'}",
+                        payload={
+                            "call_action": "filters_settings",
+                            "sub_action": "change_setting",
+                            "system_name": "Graffiti",
+                            "page": "2"
+                        }
+                    ),
+                    color_by_status[filt_status["Graffiti"]]
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Стикеры: {'Вкл.' if filt_status['Sticker'] else 'Выкл.'}",
+                        payload={
+                            "call_action": "filters_settings",
+                            "sub_action": "change_setting",
+                            "system_name": "Sticker",
+                            "page": "2"
+                        }
+                    ),
+                    color_by_status[filt_status["Sticker"]]
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="<--",
+                        payload={
+                            "call_action": "filters_settings",
+                            "page": "1"
+                        }
+                    ),
+                    ButtonColor.SECONDARY
+                )
+                .add_button(
+                    Callback(
+                        label="-->",
+                        payload={
+                            "call_action": "filters_settings",
+                            "page": "3"
+                        }
+                    ),
+                    ButtonColor.SECONDARY
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Закрыть меню",
+                        payload={
+                            "call_action": "cancel_command"
+                        }
+                    ),
+                    ButtonColor.SECONDARY
+                )
+            )
+
+        elif page == 3:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Линки: {'Вкл.' if filt_status['Link'] else 'Выкл.'}",
+                        payload={
+                            "call_action": "filters_settings",
+                            "sub_action": "change_setting",
+                            "filter_name": "Link",
+                            "page": "3"
+                        }
+                    ),
+                    color_by_status[filt_status["Link"]]
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Изображения: {'Вкл.' if filt_status['Photo'] else 'Выкл.'}",
+                        payload={
+                            "call_action": "filters_settings",
+                            "sub_action": "change_setting",
+                            "system_name": "Photo",
+                            "page": "3"
+                        }
+                    ),
+                    color_by_status[filt_status["Photo"]]
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Опросы: {'Вкл.' if filt_status['Poll'] else 'Выкл.'}",
+                        payload={
+                            "call_action": "filters_settings",
+                            "sub_action": "change_setting",
+                            "system_name": "Poll",
+                            "page": "3"
+                        }
+                    ),
+                    color_by_status[filt_status["Poll"]]
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Видео: {'Вкл.' if filt_status['Video'] else 'Выкл.'}",
+                        payload={
+                            "call_action": "filters_settings",
+                            "sub_action": "change_setting",
+                            "system_name": "Video",
+                            "page": "3"
+                        }
+                    ),
+                    color_by_status[filt_status["Video"]]
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="<--",
+                        payload={
+                            "call_action": "filters_settings",
+                            "page": "2"
+                        }
+                    ),
+                    ButtonColor.SECONDARY
+                )
+                .add_button(
+                    Callback(
+                        label="-->",
+                        payload={
+                            "call_action": "filters_settings",
+                            "page": "4"
+                        }
+                    ),
+                    ButtonColor.SECONDARY
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Закрыть меню",
+                        payload={
+                            "call_action": "cancel_command"
+                        }
+                    ),
+                    ButtonColor.SECONDARY
+                )
+            )
+
+        elif page == 4:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Записи: {'Вкл.' if filt_status['Wall'] else 'Выкл.'}",
+                        payload={
+                            "call_action": "filters_settings",
+                            "sub_action": "change_setting",
+                            "filter_name": "Wall",
+                            "page": "4"
+                        }
+                    ),
+                    color_by_status[filt_status["Wall"]]
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="<--",
+                        payload={
+                            "call_action": "filters_settings",
+                            "page": "3"
+                        }
+                    ),
+                    ButtonColor.SECONDARY
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Закрыть меню",
+                        payload={
+                            "call_action": "cancel_command"
+                        }
+                    ),
+                    ButtonColor.SECONDARY
+                )
+            )
+
+        new_msg_text = "⚙️ Влючение\\Выключение фильтров сообщений:"
         self.api.messages.edit(
             peer_id=event.get("peer_id"),
             conversation_message_id=event.get("cmid"),
             message=new_msg_text,
             keyboard=keyboard.json
         )
-
-        snackbar_message = "⚠️ Тест пройден!"
 
         self.snackbar(event, snackbar_message)
 
