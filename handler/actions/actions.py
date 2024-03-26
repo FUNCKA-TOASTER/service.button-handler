@@ -486,6 +486,22 @@ class SystemSettingsPageOneAction(BaseAction):
             1: ButtonColor.POSITIVE
         }
 
+        if payload.get("sub_action") == "change_setting":
+            sys_name = payload.get("system_name")
+            new_status = abs(sys_status[sys_name] - 1) # (0 to 1) or (1 to 0)
+            sys_status[sys_name] = new_status
+            snackbar_message = f"⚠️ Система {'Влючена' if new_status else 'Выключена'}."
+            db.execute.update(
+                schema="toaster_settings",
+                table="system_status",
+                new_data={"system_status": new_status},
+                conv_id=event.get("peer_id"),
+                system_name=sys_name
+            )
+
+        else:
+            snackbar_message = "⚙️ Меню систем модерации."
+
         keyboard = (
             Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
             .add_row()
@@ -567,21 +583,6 @@ class SystemSettingsPageOneAction(BaseAction):
             message=new_msg_text,
             keyboard=keyboard.json
         )
-
-        if payload.get("sub_action") == "change_setting":
-            sys_name = payload.get("system_name")
-            new_status = abs(sys_status[sys_name] - 1) # (0 to 1) or (1 to 0)
-            snackbar_message = f"⚠️ Система {'Влючена' if new_status else 'Выключена'}."
-            db.execute.update(
-                schema="toaster_settings",
-                table="system_status",
-                new_data={"system_status": new_status},
-                conv_id=event.get("peer_id"),
-                system_name=sys_name
-            )
-
-        else:
-            snackbar_message = "⚙️ Меню систем модерации."
 
         self.snackbar(event, snackbar_message)
 
