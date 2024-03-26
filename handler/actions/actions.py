@@ -659,7 +659,7 @@ class FilterSettingsAction(BaseAction):
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
-                            "system_name": "Audio",
+                            "filter_name": "Audio",
                             "page": "1"
                         }
                     ),
@@ -672,7 +672,7 @@ class FilterSettingsAction(BaseAction):
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
-                            "system_name": "Audio_message",
+                            "filter_name": "Audio_message",
                             "page": "1"
                         }
                     ),
@@ -685,7 +685,7 @@ class FilterSettingsAction(BaseAction):
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
-                            "system_name": "Doc",
+                            "filter_name": "Doc",
                             "page": "1"
                         }
                     ),
@@ -737,7 +737,7 @@ class FilterSettingsAction(BaseAction):
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
-                            "system_name": "Reply",
+                            "filter_name": "Reply",
                             "page": "2"
                         }
                     ),
@@ -750,7 +750,7 @@ class FilterSettingsAction(BaseAction):
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
-                            "system_name": "Graffiti",
+                            "filter_name": "Graffiti",
                             "page": "2"
                         }
                     ),
@@ -763,7 +763,7 @@ class FilterSettingsAction(BaseAction):
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
-                            "system_name": "Sticker",
+                            "filter_name": "Sticker",
                             "page": "2"
                         }
                     ),
@@ -825,7 +825,7 @@ class FilterSettingsAction(BaseAction):
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
-                            "system_name": "Photo",
+                            "filter_name": "Photo",
                             "page": "3"
                         }
                     ),
@@ -838,7 +838,7 @@ class FilterSettingsAction(BaseAction):
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
-                            "system_name": "Poll",
+                            "filter_name": "Poll",
                             "page": "3"
                         }
                     ),
@@ -851,7 +851,7 @@ class FilterSettingsAction(BaseAction):
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
-                            "system_name": "Video",
+                            "filter_name": "Video",
                             "page": "3"
                         }
                     ),
