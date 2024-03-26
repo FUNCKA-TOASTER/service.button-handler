@@ -511,7 +511,7 @@ class SystemSettingsAction(BaseAction):
                     Callback(
                         label=f"Возраста аккаунта: {'Вкл.' if sys_status['Account_age'] else 'Выкл.'}",
                         payload={
-                            "call_action": "systems_settings_page_1",
+                            "call_action": "systems_settings",
                             "sub_action": "change_setting",
                             "system_name": "Account_age",
                             "page": "1"
@@ -524,7 +524,7 @@ class SystemSettingsAction(BaseAction):
                     Callback(
                         label=f"Плохие слова: {'Вкл.' if sys_status['Curse_words'] else 'Выкл.'}",
                         payload={
-                            "call_action": "systems_settings_page_1",
+                            "call_action": "systems_settings",
                             "sub_action": "change_setting",
                             "system_name": "Curse_words",
                             "page": "1"
@@ -537,7 +537,7 @@ class SystemSettingsAction(BaseAction):
                     Callback(
                         label=f"Усиленый режим: {'Вкл.' if sys_status['Hard_mode'] else 'Выкл.'}",
                         payload={
-                            "call_action": "systems_settings_page_1",
+                            "call_action": "systems_settings",
                             "sub_action": "change_setting",
                             "system_name": "Hard_mode",
                             "page": "1"
@@ -550,7 +550,7 @@ class SystemSettingsAction(BaseAction):
                     Callback(
                         label=f"Открытое ЛС: {'Вкл.' if sys_status['Open_pm'] else 'Выкл.'}",
                         payload={
-                            "call_action": "systems_settings_page_1",
+                            "call_action": "systems_settings",
                             "sub_action": "change_setting",
                             "system_name": "Open_pm",
                             "page": "1"
@@ -563,7 +563,7 @@ class SystemSettingsAction(BaseAction):
                     Callback(
                         label=f"Медленный режим: {'Вкл.' if sys_status['Slow_mode'] else 'Выкл.'}",
                         payload={
-                            "call_action": "systems_settings_page_1",
+                            "call_action": "systems_settings",
                             "sub_action": "change_setting",
                             "system_name": "Slow_mode",
                             "page": "1"
