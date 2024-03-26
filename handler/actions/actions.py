@@ -498,7 +498,7 @@ class SystemSettingsAction(BaseAction):
                 table="system_status",
                 new_data={"system_status": new_status},
                 conv_id=event.get("peer_id"),
-                filter_name=sys_name
+                system_name=sys_name
             )
 
         else:
@@ -632,7 +632,7 @@ class FilterSettingsAction(BaseAction):
                 table="filter_status",
                 new_data={"filter_status": new_status},
                 conv_id=event.get("peer_id"),
-                system_name=filt_name
+                filter_name=filt_name
             )
 
         else:
