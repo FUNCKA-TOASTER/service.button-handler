@@ -486,6 +486,8 @@ class SystemSettingsAction(BaseAction):
             1: ButtonColor.POSITIVE
         }
 
+        page = int(payload.get("page", 1))
+        
         if payload.get("sub_action") == "change_setting":
             sys_name = payload.get("system_name")
             new_status = abs(sys_status[sys_name] - 1) # (0 to 1) or (1 to 0)
@@ -500,9 +502,8 @@ class SystemSettingsAction(BaseAction):
             )
 
         else:
-            snackbar_message = "⚙️ Меню систем модерации."
+            snackbar_message = f"⚙️ Меню систем модерации ({page}/4).."
 
-        page = int(payload.get("page", 1))
         if page == 1:
             keyboard = (
                 Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
@@ -619,6 +620,8 @@ class FilterSettingsAction(BaseAction):
             1: ButtonColor.POSITIVE
         }
 
+        page = int(payload.get("page", 1))
+
         if payload.get("sub_action") == "change_setting":
             filt_name = payload.get("filter_name")
             new_status = abs(filt_status[filt_name] - 1) # (0 to 1) or (1 to 0)
@@ -633,9 +636,8 @@ class FilterSettingsAction(BaseAction):
             )
 
         else:
-            snackbar_message = "⚙️ Меню фильтров сообщений."
+            snackbar_message = f"⚙️ Меню фильтров сообщений ({page}/4)."
 
-        page = int(payload.get("page", 1))
         if page == 1:
             keyboard = (
                 Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
