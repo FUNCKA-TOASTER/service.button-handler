@@ -364,6 +364,7 @@ class SetUserPermissionAction(BaseAction):
         snackbar_message = f"⚒️ Пользователю назначена роль \"{role}\"."
 
         if not already_promoted:
+            lvl = 0
             role = config.PERMISSIONS_DECODING[lvl]
             snackbar_message = f"❗Пользователь уже имеет роль \"{role}\"."
 
