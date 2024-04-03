@@ -832,7 +832,7 @@ class FilterSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Изображения: {'Вкл.' if filt_status['Photo'] else 'Выкл.'}",
+                        label=f"Изображения: {'Вкл.' if filt_status['photo'] else 'Выкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
