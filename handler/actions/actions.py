@@ -495,7 +495,7 @@ class SystemSettingsAction(BaseAction):
             sys_name = payload.get("system_name")
             new_status = abs(sys_status[sys_name] - 1) # (0 to 1) or (1 to 0)
             sys_status[sys_name] = new_status
-            snackbar_message = f"⚠️ Система {'Влючена' if new_status else 'Выключена'}."
+            snackbar_message = f"⚠️ Система {'Включена' if new_status else 'Выключена'}."
             db.execute.update(
                 schema="toaster_settings",
                 table="settings",
@@ -634,7 +634,7 @@ class FilterSettingsAction(BaseAction):
             filt_name = payload.get("filter_name")
             new_status = abs(filt_status[filt_name] - 1) # (0 to 1) or (1 to 0)
             filt_status[filt_name] = new_status
-            snackbar_message = f"⚠️ Фильтр {'Влючен' if new_status else 'Выключен'}."
+            snackbar_message = f"⚠️ Фильтр {'Включен' if not new_status else 'Выключен'}."
             db.execute.update(
                 schema="toaster_settings",
                 table="settings",
