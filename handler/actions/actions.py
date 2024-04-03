@@ -845,7 +845,7 @@ class FilterSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Опросы: {'Вкл.' if filt_status['Poll'] else 'Выкл.'}",
+                        label=f"Опросы: {'Вкл.' if filt_status['poll'] else 'Выкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
