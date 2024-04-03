@@ -473,9 +473,10 @@ class SystemSettingsAction(BaseAction):
 
         systems = db.execute.select(
             schema="toaster_settings",
-            table="system_status",
-            fields=("system_name", "system_status"),
-            conv_id=event.get("peer_id")
+            table="settings",
+            fields=("setting_name", "setting_status"),
+            conv_id=event.get("peer_id"),
+            setting_destination="system"
         )
 
         sys_status = {
@@ -496,10 +497,11 @@ class SystemSettingsAction(BaseAction):
             snackbar_message = f"⚠️ Система {'Влючена' if new_status else 'Выключена'}."
             db.execute.update(
                 schema="toaster_settings",
-                table="system_status",
-                new_data={"system_status": new_status},
+                table="settings",
+                new_data={"setting_status": new_status},
                 conv_id=event.get("peer_id"),
-                system_name=sys_name
+                setting_name=sys_name,
+                setting_destination="system"
             )
 
         else:
@@ -610,9 +612,10 @@ class FilterSettingsAction(BaseAction):
 
         systems = db.execute.select(
             schema="toaster_settings",
-            table="filter_status",
-            fields=("filter_name", "filter_status"),
-            conv_id=event.get("peer_id")
+            table="settings",
+            fields=("setting_name", "setting_status"),
+            conv_id=event.get("peer_id"),
+            setting_destination="filter"
         )
 
         filt_status = {
@@ -633,10 +636,11 @@ class FilterSettingsAction(BaseAction):
             snackbar_message = f"⚠️ Фильтр {'Влючен' if new_status else 'Выключен'}."
             db.execute.update(
                 schema="toaster_settings",
-                table="filter_status",
-                new_data={"filter_status": new_status},
+                table="settings",
+                new_data={"setting_status": new_status},
                 conv_id=event.get("peer_id"),
-                filter_name=filt_name
+                setting_name=filt_name,
+                setting_destination="filter"
             )
 
         else:
@@ -648,54 +652,54 @@ class FilterSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Приложения: {'Вкл.' if filt_status['App_action'] else 'Выкл.'}",
+                        label=f"Приложения: {'Вкл.' if filt_status['app_action'] else 'Выкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
-                            "filter_name": "App_action",
+                            "filter_name": "app_action",
                             "page": "1"
                         }
                     ),
-                    color_by_status[filt_status["App_action"]]
+                    color_by_status[filt_status["app_action"]]
                 )
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Музыка: {'Вкл.' if filt_status['Audio'] else 'Выкл.'}",
+                        label=f"Музыка: {'Вкл.' if filt_status['audio'] else 'Выкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
-                            "filter_name": "Audio",
+                            "filter_name": "audio",
                             "page": "1"
                         }
                     ),
-                    color_by_status[filt_status["Audio"]]
+                    color_by_status[filt_status["audio"]]
                 )
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Аудио: {'Вкл.' if filt_status['Audio_message'] else 'Выкл.'}",
+                        label=f"Аудио: {'Вкл.' if filt_status['audio_message'] else 'Выкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
-                            "filter_name": "Audio_message",
+                            "filter_name": "audio_message",
                             "page": "1"
                         }
                     ),
-                    color_by_status[filt_status["Audio_message"]]
+                    color_by_status[filt_status["audio_message"]]
                 )
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Файлы: {'Вкл.' if filt_status['Doc'] else 'Выкл.'}",
+                        label=f"Файлы: {'Вкл.' if filt_status['doc'] else 'Выкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
-                            "filter_name": "Doc",
+                            "filter_name": "doc",
                             "page": "1"
                         }
                     ),
-                    color_by_status[filt_status["Doc"]]
+                    color_by_status[filt_status["doc"]]
                 )
                 .add_row()
                 .add_button(
@@ -726,54 +730,54 @@ class FilterSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Пересыл: {'Вкл.' if filt_status['Forward'] else 'Выкл.'}",
+                        label=f"Пересыл: {'Вкл.' if filt_status['forward'] else 'Выкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
-                            "filter_name": "Forward",
+                            "filter_name": "forward",
                             "page": "2"
                         }
                     ),
-                    color_by_status[filt_status["Forward"]]
+                    color_by_status[filt_status["forward"]]
                 )
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Ответ: {'Вкл.' if filt_status['Reply'] else 'Выкл.'}",
+                        label=f"Ответ: {'Вкл.' if filt_status['reply'] else 'Выкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
-                            "filter_name": "Reply",
+                            "filter_name": "reply",
                             "page": "2"
                         }
                     ),
-                    color_by_status[filt_status["Reply"]]
+                    color_by_status[filt_status["reply"]]
                 )
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Граффити: {'Вкл.' if filt_status['Graffiti'] else 'Выкл.'}",
+                        label=f"Граффити: {'Вкл.' if filt_status['graffiti'] else 'Выкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
-                            "filter_name": "Graffiti",
+                            "filter_name": "graffiti",
                             "page": "2"
                         }
                     ),
-                    color_by_status[filt_status["Graffiti"]]
+                    color_by_status[filt_status["graffiti"]]
                 )
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Стикеры: {'Вкл.' if filt_status['Sticker'] else 'Выкл.'}",
+                        label=f"Стикеры: {'Вкл.' if filt_status['sticker'] else 'Выкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
-                            "filter_name": "Sticker",
+                            "filter_name": "sticker",
                             "page": "2"
                         }
                     ),
-                    color_by_status[filt_status["Sticker"]]
+                    color_by_status[filt_status["sticker"]]
                 )
                 .add_row()
                 .add_button(
@@ -814,15 +818,15 @@ class FilterSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Линки: {'Вкл.' if filt_status['Link'] else 'Выкл.'}",
+                        label=f"Линки: {'Вкл.' if filt_status['link'] else 'Выкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
-                            "filter_name": "Link",
+                            "filter_name": "link",
                             "page": "3"
                         }
                     ),
-                    color_by_status[filt_status["Link"]]
+                    color_by_status[filt_status["link"]]
                 )
                 .add_row()
                 .add_button(
@@ -831,11 +835,11 @@ class FilterSettingsAction(BaseAction):
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
-                            "filter_name": "Photo",
+                            "filter_name": "photo",
                             "page": "3"
                         }
                     ),
-                    color_by_status[filt_status["Photo"]]
+                    color_by_status[filt_status["photo"]]
                 )
                 .add_row()
                 .add_button(
@@ -844,24 +848,24 @@ class FilterSettingsAction(BaseAction):
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
-                            "filter_name": "Poll",
+                            "filter_name": "poll",
                             "page": "3"
                         }
                     ),
-                    color_by_status[filt_status["Poll"]]
+                    color_by_status[filt_status["poll"]]
                 )
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Видео: {'Вкл.' if filt_status['Video'] else 'Выкл.'}",
+                        label=f"Видео: {'Вкл.' if filt_status['video'] else 'Выкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
-                            "filter_name": "Video",
+                            "filter_name": "video",
                             "page": "3"
                         }
                     ),
-                    color_by_status[filt_status["Video"]]
+                    color_by_status[filt_status["video"]]
                 )
                 .add_row()
                 .add_button(
@@ -911,6 +915,19 @@ class FilterSettingsAction(BaseAction):
                         }
                     ),
                     color_by_status[filt_status["Wall"]]
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Геопозиция: {'Вкл.' if filt_status['geo'] else 'Выкл.'}",
+                        payload={
+                            "call_action": "filters_settings",
+                            "sub_action": "change_setting",
+                            "filter_name": "geo",
+                            "page": "4"
+                        }
+                    ),
+                    color_by_status[filt_status["geo"]]
                 )
                 .add_row()
                 .add_button(
