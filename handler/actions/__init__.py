@@ -8,7 +8,8 @@ from .actions import (
     GameRollAction,
     GameCoinflipAction,
     SystemSettingsAction,
-    FilterSettingsAction
+    FilterSettingsAction,
+    SlowModeDelayAction
 )
 
 
@@ -28,7 +29,9 @@ action_list = {
     GameCoinflipAction.NAME: GameCoinflipAction,
     # settings ----------------------------------
     SystemSettingsAction.NAME: SystemSettingsAction,
-    FilterSettingsAction.NAME: FilterSettingsAction
+    FilterSettingsAction.NAME: FilterSettingsAction,
+    # delay -------------------------------------
+    SlowModeDelayAction.NAME: SlowModeDelayAction
 }
 
 
