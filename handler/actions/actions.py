@@ -925,7 +925,7 @@ class SlowModeDelayAction(BaseAction):
                 Callback(
                     label="- 1 мин.",
                     payload={
-                        "call_action": "toaster_settings",
+                        "call_action": "slow_mode_delay",
                         "sub_action": "subtract_time",
                         "time": 1,
                     }
@@ -936,7 +936,7 @@ class SlowModeDelayAction(BaseAction):
                 Callback(
                     label="+ 1 мин.",
                     payload={
-                        "call_action": "toaster_settings",
+                        "call_action": "slow_mode_delay",
                         "sub_action": "add_time",
                         "time": 1,
                     }
@@ -948,7 +948,7 @@ class SlowModeDelayAction(BaseAction):
                 Callback(
                     label="- 10 мин.",
                     payload={
-                        "call_action": "toaster_settings",
+                        "call_action": "slow_mode_delay",
                         "sub_action": "subtract_time",
                         "time": 10,
                     }
@@ -959,7 +959,7 @@ class SlowModeDelayAction(BaseAction):
                 Callback(
                     label="+ 10 мин.",
                     payload={
-                        "call_action": "toaster_settings",
+                        "call_action": "slow_mode_delay",
                         "sub_action": "add_time",
                         "time": 10,
                     }
