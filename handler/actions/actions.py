@@ -49,11 +49,11 @@ class CancelAction(BaseAction):
 
 
 # ------------------------------------------------------------------------
-class MarkAsChatAction(BaseAction):
+class MarkAction(BaseAction):
     """Creates a "chat" mark and stores
     data about it in the database.
     """
-    NAME = "mark_as_chat"
+    NAME = "set_mark"
 
     async def _handle(self, event: dict, kwargs) -> bool:
         fields = ("conv_mark",)
@@ -65,55 +65,23 @@ class MarkAsChatAction(BaseAction):
         )
         already_marked = bool(mark)
 
+        payload = event.get("payload")
+        mark = payload.get("mark")
+
         if not already_marked:
+
             db.execute.insert(
                 schema="toaster",
                 table="conversations",
                 conv_id=event.get("peer_id"),
                 conv_name=event.get("peer_name"),
-                conv_mark="CHAT"
+                conv_mark=mark
             )
 
-            snackbar_message = "📝 Беседа помечена как \"CHAT\"."
+            snackbar_message = f"📝 Беседа помечена как \"{mark}\"."
 
         else:
-            snackbar_message = f"❗Беседа уже имеет метку \"{mark[0][0]}\"."
-
-        self.snackbar(event, snackbar_message)
-
-        return True
-
-
-
-class MarkAsLogAction(BaseAction):
-    """Creates a "log" mark and stores
-    data about it in the database.
-    """
-    NAME = "mark_as_log"
-
-    async def _handle(self, event: dict, kwargs) -> bool:
-        fields = ("conv_mark",)
-        mark = db.execute.select(
-            schema="toaster",
-            table="conversations",
-            fields=fields,
-            conv_id=event.get("peer_id")
-        )
-        already_marked = bool(mark)
-
-        if not already_marked:
-            db.execute.insert(
-                schema="toaster",
-                table="conversations",
-                conv_id=event.get("peer_id"),
-                conv_name=event.get("peer_name"),
-                conv_mark="LOG"
-            )
-
-            snackbar_message = "📝 Беседа помечена как \"LOG\"."
-
-        else:
-            snackbar_message = f"❗Беседа уже имеет метку \"{mark[0][0]}\"."
+            snackbar_message = f"❗Беседа уже имеет метку \"{mark}\"."
 
         self.snackbar(event, snackbar_message)
 
@@ -197,11 +165,11 @@ class DropMarkAction(BaseAction):
 
 
 # ------------------------------------------------------------------------
-class SetAdministratorPermissionAction(BaseAction):
+class SetPermissionAction(BaseAction):
     """Sets the user to the "administrator" role,
     records this in the database.
     """
-    NAME = "set_administrator_permission"
+    NAME = "set_permission"
 
     async def _handle(self, event: dict, kwargs) -> bool:
         fields = ("user_permission",)
@@ -213,20 +181,41 @@ class SetAdministratorPermissionAction(BaseAction):
             user_id=target_id
         )
         already_promoted = bool(lvl)
-
-        role = config.PERMISSIONS_DECODING[2]
-        snackbar_message = f"⚒️ Пользователю назначена роль \"{role}\"."
+        lvl = int(event.get("payload").get("permission"))
 
         if already_promoted:
-            lvl = int(lvl[0][0])
-
-            if lvl == 2:
+            if lvl == 0:
                 role = config.PERMISSIONS_DECODING[lvl]
-                snackbar_message = f"❗Пользователь уже имеет роль \"{role}\"."
+                snackbar_message = f"⚒️ Пользователю назначена роль \"{role}\"."
+
+                db.execute.delete(
+                    schema="toaster",
+                    table="permissions",
+                    user_id=target_id
+                )
 
                 self.snackbar(event, snackbar_message)
 
+                return True
+
+            lvl = int(lvl[0][0])
+
+            role = config.PERMISSIONS_DECODING[lvl]
+            snackbar_message = f"❗Пользователь уже имеет роль \"{role}\"."
+
+            self.snackbar(event, snackbar_message)
+
+            return False
+
+        else:
+            role = config.PERMISSIONS_DECODING[lvl]
+            if lvl == 0:
+                snackbar_message = f"❗Пользователь уже имеет роль \"{role}\"."
+                self.snackbar(event, snackbar_message)
+
                 return False
+
+            snackbar_message = f"⚒️ Пользователю назначена роль \"{role}\"."
 
         user_name = self.get_name(target_id)
 
@@ -237,7 +226,7 @@ class SetAdministratorPermissionAction(BaseAction):
             conv_id=event.get("peer_id"),
             user_id=target_id,
             user_name=user_name,
-            user_permission=2
+            user_permission=lvl
         )
 
         self.snackbar(event, snackbar_message)
@@ -270,84 +259,11 @@ class SetAdministratorPermissionAction(BaseAction):
 
 
 
-class SetModeratorPermissionAction(BaseAction):
-    """Sets the user to the "moderator" role,
-    records this in the database.
-    """
-    NAME = "set_moderator_permission"
-
-    async def _handle(self, event: dict, kwargs) -> bool:
-        fields = ("user_permission",)
-        target_id=event["payload"].get("target")
-        lvl = db.execute.select(
-            schema="toaster",
-            table="permissions",
-            fields=fields,
-            user_id=target_id
-        )
-        already_promoted = bool(lvl)
-
-        role = config.PERMISSIONS_DECODING[1]
-        snackbar_message = f"⚒️ Пользователю назначена роль \"{role}\"."
-
-        if already_promoted:
-            lvl = int(lvl[0][0])
-
-            if lvl == 1:
-                role = config.PERMISSIONS_DECODING[lvl]
-                snackbar_message = f"❗Пользователь уже имеет роль \"{role}\"."
-
-                self.snackbar(event, snackbar_message)
-
-                return False
-
-        user_name = self.get_name(target_id)
-
-        db.execute.insert(
-            schema="toaster",
-            table="permissions",
-            on_duplicate="update",
-            conv_id=event.get("peer_id"),
-            user_id=target_id,
-            user_name=user_name,
-            user_permission=1
-        )
-
-        self.snackbar(event, snackbar_message)
-
-        return True
-
-
-    def get_name(self, user_id: int) -> str:
-        """Returns the full name of the user,
-        using its unique ID.
-
-        Args:
-            user_id (int): User ID.
-
-        Returns:
-            str: User full name.
-        """
-        name = self.api.users.get(
-            user_ids=user_id
-        )
-
-        if not bool(name):
-            name = "Unknown"
-
-        else:
-            name = name[0].get("first_name") + \
-                " " + name[0].get("last_name")
-
-        return name
-
-
-
-class SetUserPermissionAction(BaseAction):
+class DropPermissionAction(BaseAction):
     """Sets the user to the "user" role,
     records this in the database.
     """
-    NAME = "set_user_permission"
+    NAME = "drop_permission"
 
     async def _handle(self, event: dict, kwargs) -> bool:
         fields = ("user_permission",)
