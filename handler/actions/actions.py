@@ -904,7 +904,7 @@ class SlowModeDelayAction(BaseAction):
                 snackbar_message = "⚠️ Задержка уменьшена."
 
             elif sub_action == "add_time":
-                delay = (delay - time) if (delay - time) > 0 else 0
+                delay = delay + time
                 snackbar_message = "⚠️ Задержка увеличена."
 
             db.execute.update(
