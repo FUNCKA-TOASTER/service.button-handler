@@ -1,13 +1,10 @@
 from .actions import (
     NotMessageOwnerAction,
     CancelAction,
-    MarkAsChatAction,
-    MarkAsLogAction,
+    MarkAction,
     UpdateConvDataAction,
     DropMarkAction,
-    SetAdministratorPermissionAction,
-    SetModeratorPermissionAction,
-    SetUserPermissionAction,
+    SetPermissionAction,
     GameRollAction,
     GameCoinflipAction,
     SystemSettingsAction,
@@ -21,14 +18,11 @@ action_list = {
     # cancel command ----------------------------
     CancelAction.NAME: CancelAction,
     # mark --------------------------------------
-    MarkAsChatAction.NAME: MarkAsChatAction,
-    MarkAsLogAction.NAME: MarkAsLogAction,
+    MarkAction.NAME: MarkAction,
     UpdateConvDataAction.NAME: UpdateConvDataAction,
     DropMarkAction.NAME: DropMarkAction,
     # permission --------------------------------
-    SetAdministratorPermissionAction.NAME: SetAdministratorPermissionAction,
-    SetModeratorPermissionAction.NAME: SetModeratorPermissionAction,
-    SetUserPermissionAction.NAME: SetUserPermissionAction,
+    SetPermissionAction.NAME: SetPermissionAction,
     # game --------------------------------------
     GameRollAction.NAME: GameRollAction,
     GameCoinflipAction.NAME: GameCoinflipAction,
