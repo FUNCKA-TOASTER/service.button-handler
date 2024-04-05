@@ -182,40 +182,31 @@ class SetPermissionAction(BaseAction):
         )
         already_promoted = bool(lvl)
         user_lvl = int(event.get("payload").get("permission"))
+        role = config.PERMISSIONS_DECODING[user_lvl]
 
         if already_promoted:
-            if user_lvl == 0:
-                role = config.PERMISSIONS_DECODING[user_lvl]
-                snackbar_message = f"⚒️ Пользователю назначена роль \"{role}\"."
+            if user_lvl == int(lvl[0][0]):
+                snackbar_message = f"❗Пользователь уже имеет роль \"{role}\"."
+                self.snackbar(event, snackbar_message)
+                return False
 
+            if user_lvl == 0:
                 db.execute.delete(
                     schema="toaster",
                     table="permissions",
                     user_id=target_id
                 )
 
+                snackbar_message = f"⚒️ Пользователю назначена роль \"{role}\"."
                 self.snackbar(event, snackbar_message)
-
                 return True
 
-            user_lvl = int(lvl[0][0])
-
-            role = config.PERMISSIONS_DECODING[user_lvl]
+        if user_lvl == 0:
             snackbar_message = f"❗Пользователь уже имеет роль \"{role}\"."
-
             self.snackbar(event, snackbar_message)
-
             return False
 
-        else:
-            role = config.PERMISSIONS_DECODING[user_lvl]
-            if user_lvl == 0:
-                snackbar_message = f"❗Пользователь уже имеет роль \"{role}\"."
-                self.snackbar(event, snackbar_message)
-
-                return False
-
-            snackbar_message = f"⚒️ Пользователю назначена роль \"{role}\"."
+        snackbar_message = f"⚒️ Пользователю назначена роль \"{role}\"."
 
         user_name = self.get_name(target_id)
 
