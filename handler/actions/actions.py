@@ -514,67 +514,67 @@ class SystemSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Возраста аккаунта: {'Вкл.' if sys_status['Account_age'] else 'Выкл.'}",
+                        label=f"Возраста аккаунта: {'Вкл.' if sys_status['account_age'] else 'Выкл.'}",
                         payload={
                             "call_action": "systems_settings",
                             "sub_action": "change_setting",
-                            "system_name": "Account_age",
+                            "system_name": "account_age",
                             "page": "1"
                         }
                     ),
-                    color_by_status[sys_status["Account_age"]]
+                    color_by_status[sys_status["account_age"]]
                 )
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Плохие слова: {'Вкл.' if sys_status['Curse_words'] else 'Выкл.'}",
+                        label=f"Плохие слова: {'Вкл.' if sys_status['curse_words'] else 'Выкл.'}",
                         payload={
                             "call_action": "systems_settings",
                             "sub_action": "change_setting",
-                            "system_name": "Curse_words",
+                            "system_name": "curse_words",
                             "page": "1"
                         }
                     ),
-                    color_by_status[sys_status["Curse_words"]]
+                    color_by_status[sys_status["curse_words"]]
                 )
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Усиленый режим: {'Вкл.' if sys_status['Hard_mode'] else 'Выкл.'}",
+                        label=f"Усиленый режим: {'Вкл.' if sys_status['hard_mode'] else 'Выкл.'}",
                         payload={
                             "call_action": "systems_settings",
                             "sub_action": "change_setting",
-                            "system_name": "Hard_mode",
+                            "system_name": "hard_mode",
                             "page": "1"
                         }
                     ),
-                    color_by_status[sys_status["Hard_mode"]]
+                    color_by_status[sys_status["hard_mode"]]
                 )
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Открытое ЛС: {'Вкл.' if sys_status['Open_pm'] else 'Выкл.'}",
+                        label=f"Открытое ЛС: {'Вкл.' if sys_status['open_pm'] else 'Выкл.'}",
                         payload={
                             "call_action": "systems_settings",
                             "sub_action": "change_setting",
-                            "system_name": "Open_pm",
+                            "system_name": "open_pm",
                             "page": "1"
                         }
                     ),
-                    color_by_status[sys_status["Open_pm"]]
+                    color_by_status[sys_status["open_pm"]]
                 )
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Медленный режим: {'Вкл.' if sys_status['Slow_mode'] else 'Выкл.'}",
+                        label=f"Медленный режим: {'Вкл.' if sys_status['slow_mode'] else 'Выкл.'}",
                         payload={
                             "call_action": "systems_settings",
                             "sub_action": "change_setting",
-                            "system_name": "Slow_mode",
+                            "system_name": "slow_mode",
                             "page": "1"
                         }
                     ),
-                    color_by_status[sys_status["Slow_mode"]]
+                    color_by_status[sys_status["slow_mode"]]
                 )
                 .add_row()
                 .add_button(
