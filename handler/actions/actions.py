@@ -181,11 +181,11 @@ class SetPermissionAction(BaseAction):
             user_id=target_id
         )
         already_promoted = bool(lvl)
-        lvl = int(event.get("payload").get("permission"))
+        user_lvl = int(event.get("payload").get("permission"))
 
         if already_promoted:
-            if lvl == 0:
-                role = config.PERMISSIONS_DECODING[lvl]
+            if user_lvl == 0:
+                role = config.PERMISSIONS_DECODING[user_lvl]
                 snackbar_message = f"⚒️ Пользователю назначена роль \"{role}\"."
 
                 db.execute.delete(
@@ -198,9 +198,9 @@ class SetPermissionAction(BaseAction):
 
                 return True
 
-            lvl = int(lvl[0][0])
+            user_lvl = int(lvl[0][0])
 
-            role = config.PERMISSIONS_DECODING[lvl]
+            role = config.PERMISSIONS_DECODING[user_lvl]
             snackbar_message = f"❗Пользователь уже имеет роль \"{role}\"."
 
             self.snackbar(event, snackbar_message)
@@ -208,8 +208,8 @@ class SetPermissionAction(BaseAction):
             return False
 
         else:
-            role = config.PERMISSIONS_DECODING[lvl]
-            if lvl == 0:
+            role = config.PERMISSIONS_DECODING[user_lvl]
+            if user_lvl == 0:
                 snackbar_message = f"❗Пользователь уже имеет роль \"{role}\"."
                 self.snackbar(event, snackbar_message)
 
@@ -226,7 +226,7 @@ class SetPermissionAction(BaseAction):
             conv_id=event.get("peer_id"),
             user_id=target_id,
             user_name=user_name,
-            user_permission=lvl
+            user_permission=user_lvl
         )
 
         self.snackbar(event, snackbar_message)
