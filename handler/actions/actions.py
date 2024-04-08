@@ -1,9 +1,5 @@
 import random
-from tools.keyboards import (
-    Keyboard,
-    Callback,
-    ButtonColor
-)
+from tools.keyboards import Keyboard, Callback, ButtonColor
 from db import db
 import config
 from .base import BaseAction
@@ -15,6 +11,7 @@ class NotMessageOwnerAction(BaseAction):
     unless it belongs to the author
     of the message with keyboard.
     """
+
     NAME = "not_msg_owner"
 
     async def _handle(self, event: dict, kwargs) -> bool:
@@ -25,19 +22,17 @@ class NotMessageOwnerAction(BaseAction):
         return False
 
 
-
 # ------------------------------------------------------------------------
 class CancelAction(BaseAction):
     """Cancels the command, closes the menu,
     and deletes the message.
     """
+
     NAME = "cancel_command"
 
     async def _handle(self, event: dict, kwargs) -> bool:
         self.api.messages.delete(
-            peer_id=event.get("peer_id"),
-            cmids=event.get("cmid"),
-            delete_for_all=1
+            peer_id=event.get("peer_id"), cmids=event.get("cmid"), delete_for_all=1
         )
 
         snackbar_message = "❗Отмена команды."
@@ -47,12 +42,12 @@ class CancelAction(BaseAction):
         return True
 
 
-
 # ------------------------------------------------------------------------
 class MarkAction(BaseAction):
     """Creates a "chat" mark and stores
     data about it in the database.
     """
+
     NAME = "set_mark"
 
     async def _handle(self, event: dict, kwargs) -> bool:
@@ -61,7 +56,7 @@ class MarkAction(BaseAction):
             schema="toaster",
             table="conversations",
             fields=fields,
-            conv_id=event.get("peer_id")
+            conv_id=event.get("peer_id"),
         )
         already_marked = bool(mark)
 
@@ -69,24 +64,22 @@ class MarkAction(BaseAction):
         mark = payload.get("mark")
 
         if not already_marked:
-
             db.execute.insert(
                 schema="toaster",
                 table="conversations",
                 conv_id=event.get("peer_id"),
                 conv_name=event.get("peer_name"),
-                conv_mark=mark
+                conv_mark=mark,
             )
 
-            snackbar_message = f"📝 Беседа помечена как \"{mark}\"."
+            snackbar_message = f'📝 Беседа помечена как "{mark}".'
 
         else:
-            snackbar_message = f"❗Беседа уже имеет метку \"{mark}\"."
+            snackbar_message = f'❗Беседа уже имеет метку "{mark}".'
 
         self.snackbar(event, snackbar_message)
 
         return True
-
 
 
 class UpdateConvDataAction(BaseAction):
@@ -96,6 +89,7 @@ class UpdateConvDataAction(BaseAction):
     of logs when changing the name of the
     conversation.
     """
+
     NAME = "update_conv_data"
 
     async def _handle(self, event: dict, kwargs) -> bool:
@@ -104,7 +98,7 @@ class UpdateConvDataAction(BaseAction):
             schema="toaster",
             table="conversations",
             fields=fields,
-            conv_id=event.get("peer_id")
+            conv_id=event.get("peer_id"),
         )
         already_marked = bool(mark)
 
@@ -116,7 +110,7 @@ class UpdateConvDataAction(BaseAction):
                 schema="toaster",
                 table="conversations",
                 new_data=new_data,
-                conv_id=event.get("peer_id")
+                conv_id=event.get("peer_id"),
             )
 
             snackbar_message = "📝 Данные беседы обновлены."
@@ -129,11 +123,11 @@ class UpdateConvDataAction(BaseAction):
         return True
 
 
-
 class DropMarkAction(BaseAction):
     """Removes the mark from the conversation,
     deleting records about it in the database.
     """
+
     NAME = "drop_mark"
 
     async def _handle(self, event: dict, kwargs) -> bool:
@@ -142,18 +136,16 @@ class DropMarkAction(BaseAction):
             schema="toaster",
             table="conversations",
             fields=fields,
-            conv_id=event.get("peer_id")
+            conv_id=event.get("peer_id"),
         )
         already_marked = bool(mark)
 
         if already_marked:
             db.execute.delete(
-                schema="toaster",
-                table="conversations",
-                conv_id=event.get("peer_id")
+                schema="toaster", table="conversations", conv_id=event.get("peer_id")
             )
 
-            snackbar_message = f"📝 Метка \"{mark[0][0]}\" снята с беседы."
+            snackbar_message = f'📝 Метка "{mark[0][0]}" снята с беседы.'
 
         else:
             snackbar_message = "❗Беседа еще не имеет метку."
@@ -163,22 +155,19 @@ class DropMarkAction(BaseAction):
         return True
 
 
-
 # ------------------------------------------------------------------------
 class SetPermissionAction(BaseAction):
     """Sets the user to the "administrator" role,
     records this in the database.
     """
+
     NAME = "set_permission"
 
     async def _handle(self, event: dict, kwargs) -> bool:
         fields = ("user_permission",)
-        target_id=event["payload"].get("target")
+        target_id = event["payload"].get("target")
         lvl = db.execute.select(
-            schema="toaster",
-            table="permissions",
-            fields=fields,
-            user_id=target_id
+            schema="toaster", table="permissions", fields=fields, user_id=target_id
         )
         already_promoted = bool(lvl)
         user_lvl = int(event.get("payload").get("permission"))
@@ -186,27 +175,25 @@ class SetPermissionAction(BaseAction):
 
         if already_promoted:
             if user_lvl == int(lvl[0][0]):
-                snackbar_message = f"❗Пользователь уже имеет роль \"{role}\"."
+                snackbar_message = f'❗Пользователь уже имеет роль "{role}".'
                 self.snackbar(event, snackbar_message)
                 return False
 
             if user_lvl == 0:
                 db.execute.delete(
-                    schema="toaster",
-                    table="permissions",
-                    user_id=target_id
+                    schema="toaster", table="permissions", user_id=target_id
                 )
 
-                snackbar_message = f"⚒️ Пользователю назначена роль \"{role}\"."
+                snackbar_message = f'⚒️ Пользователю назначена роль "{role}".'
                 self.snackbar(event, snackbar_message)
                 return True
 
         if user_lvl == 0:
-            snackbar_message = f"❗Пользователь уже имеет роль \"{role}\"."
+            snackbar_message = f'❗Пользователь уже имеет роль "{role}".'
             self.snackbar(event, snackbar_message)
             return False
 
-        snackbar_message = f"⚒️ Пользователю назначена роль \"{role}\"."
+        snackbar_message = f'⚒️ Пользователю назначена роль "{role}".'
 
         user_name = self.get_name(target_id)
 
@@ -217,13 +204,12 @@ class SetPermissionAction(BaseAction):
             conv_id=event.get("peer_id"),
             user_id=target_id,
             user_name=user_name,
-            user_permission=user_lvl
+            user_permission=user_lvl,
         )
 
         self.snackbar(event, snackbar_message)
 
         return True
-
 
     def get_name(self, user_id: int) -> str:
         """Returns the full name of the user,
@@ -235,86 +221,73 @@ class SetPermissionAction(BaseAction):
         Returns:
             str: User full name.
         """
-        name = self.api.users.get(
-            user_ids=user_id
-        )
+        name = self.api.users.get(user_ids=user_id)
 
         if not bool(name):
             name = "Unknown"
 
         else:
-            name = name[0].get("first_name") + \
-                " " + name[0].get("last_name")
+            name = name[0].get("first_name") + " " + name[0].get("last_name")
 
         return name
-
 
 
 class DropPermissionAction(BaseAction):
     """Sets the user to the "user" role,
     records this in the database.
     """
+
     NAME = "drop_permission"
 
     async def _handle(self, event: dict, kwargs) -> bool:
         fields = ("user_permission",)
         target_id = event["payload"].get("target")
         lvl = db.execute.select(
-            schema="toaster",
-            table="permissions",
-            fields=fields,
-            user_id=target_id
+            schema="toaster", table="permissions", fields=fields, user_id=target_id
         )
         already_promoted = bool(lvl)
 
         role = config.PERMISSIONS_DECODING[0]
-        snackbar_message = f"⚒️ Пользователю назначена роль \"{role}\"."
+        snackbar_message = f'⚒️ Пользователю назначена роль "{role}".'
 
         if not already_promoted:
             lvl = 0
             role = config.PERMISSIONS_DECODING[lvl]
-            snackbar_message = f"❗Пользователь уже имеет роль \"{role}\"."
+            snackbar_message = f'❗Пользователь уже имеет роль "{role}".'
 
             self.snackbar(event, snackbar_message)
 
             return False
 
-        db.execute.delete(
-            schema="toaster",
-            table="permissions",
-            user_id=target_id
-        )
+        db.execute.delete(schema="toaster", table="permissions", user_id=target_id)
 
         self.snackbar(event, snackbar_message)
 
         return True
 
 
-
 # ------------------------------------------------------------------------
 class GameRollAction(BaseAction):
-    """Starts roll game.
-    """
+    """Starts roll game."""
+
     NAME = "game_roll"
-    EMOJI=['0️⃣', '1️⃣',' 2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣' ,'8️⃣', '9️⃣']
+    EMOJI = ["0️⃣", "1️⃣", " 2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
 
     async def _handle(self, event: dict, kwargs) -> bool:
-        result = random.randint(0,100)
+        result = random.randint(0, 100)
         result = self._convert_to_emoji(result)
 
         tag = f"[id{event.get('user_id')}|{event.get('user_name')}]"
 
         new_msg_text = f"{tag} выбивает число: {result}"
 
-        keyboard = (
-            Keyboard(inline=True, one_time=False, owner_id=None)
-        )
+        keyboard = Keyboard(inline=True, one_time=False, owner_id=None)
 
         self.api.messages.edit(
             peer_id=event.get("peer_id"),
             conversation_message_id=event.get("cmid"),
             message=new_msg_text,
-            keyboard=keyboard.json
+            keyboard=keyboard.json,
         )
 
         snackbar_message = "🎲 Рулетка прокручена!"
@@ -323,9 +296,8 @@ class GameRollAction(BaseAction):
 
         return True
 
-
     def _convert_to_emoji(self, number):
-        result = ''
+        result = ""
 
         for didgit in str(number):
             result += self.EMOJI[int(didgit)]
@@ -334,8 +306,8 @@ class GameRollAction(BaseAction):
 
 
 class GameCoinflipAction(BaseAction):
-    """Starts coinflip game.
-    """
+    """Starts coinflip game."""
+
     NAME = "game_coinflip"
     EMOJI = ["Орёл 🪙", "Решка 🪙"]
 
@@ -347,15 +319,13 @@ class GameCoinflipAction(BaseAction):
 
         new_msg_text = f"{tag} подбрасывает монетку: {result}"
 
-        keyboard = (
-            Keyboard(inline=True, one_time=False, owner_id=None)
-        )
+        keyboard = Keyboard(inline=True, one_time=False, owner_id=None)
 
         self.api.messages.edit(
             peer_id=event.get("peer_id"),
             conversation_message_id=event.get("cmid"),
             message=new_msg_text,
-            keyboard=keyboard.json
+            keyboard=keyboard.json,
         )
 
         snackbar_message = "🎲 Монета брошена!"
@@ -364,16 +334,16 @@ class GameCoinflipAction(BaseAction):
 
         return True
 
-
     def _convert_to_emoji(self, number):
         return self.EMOJI[number]
 
 
 # ------------------------------------------------------------------------
 class SystemSettingsAction(BaseAction):
-    """Sets the value to the 
+    """Sets the value to the
     selected message filter settings field.
     """
+
     NAME = "systems_settings"
 
     async def _handle(self, event: dict, kwargs) -> bool:
@@ -384,23 +354,18 @@ class SystemSettingsAction(BaseAction):
             table="settings",
             fields=("setting_name", "setting_status"),
             conv_id=event.get("peer_id"),
-            setting_destination="system"
+            setting_destination="system",
         )
 
-        sys_status = {
-            row[0]: int(row[1]) for row in systems
-        }
+        sys_status = {row[0]: int(row[1]) for row in systems}
 
-        color_by_status = {
-            0: ButtonColor.NEGATIVE,
-            1: ButtonColor.POSITIVE
-        }
+        color_by_status = {0: ButtonColor.NEGATIVE, 1: ButtonColor.POSITIVE}
 
         page = int(payload.get("page", 1))
 
         if payload.get("sub_action") == "change_setting":
             sys_name = payload.get("system_name")
-            new_status = abs(sys_status[sys_name] - 1) # (0 to 1) or (1 to 0)
+            new_status = abs(sys_status[sys_name] - 1)  # (0 to 1) or (1 to 0)
             sys_status[sys_name] = new_status
             snackbar_message = f"⚠️ Система {'Включена' if new_status else 'Выключена'}."
             db.execute.update(
@@ -409,7 +374,7 @@ class SystemSettingsAction(BaseAction):
                 new_data={"setting_status": new_status},
                 conv_id=event.get("peer_id"),
                 setting_name=sys_name,
-                setting_destination="system"
+                setting_destination="system",
             )
 
         else:
@@ -426,10 +391,10 @@ class SystemSettingsAction(BaseAction):
                             "call_action": "systems_settings",
                             "sub_action": "change_setting",
                             "system_name": "account_age",
-                            "page": "1"
-                        }
+                            "page": "1",
+                        },
                     ),
-                    color_by_status[sys_status["account_age"]]
+                    color_by_status[sys_status["account_age"]],
                 )
                 .add_row()
                 .add_button(
@@ -439,10 +404,10 @@ class SystemSettingsAction(BaseAction):
                             "call_action": "systems_settings",
                             "sub_action": "change_setting",
                             "system_name": "curse_words",
-                            "page": "1"
-                        }
+                            "page": "1",
+                        },
                     ),
-                    color_by_status[sys_status["curse_words"]]
+                    color_by_status[sys_status["curse_words"]],
                 )
                 .add_row()
                 .add_button(
@@ -452,10 +417,10 @@ class SystemSettingsAction(BaseAction):
                             "call_action": "systems_settings",
                             "sub_action": "change_setting",
                             "system_name": "hard_mode",
-                            "page": "1"
-                        }
+                            "page": "1",
+                        },
                     ),
-                    color_by_status[sys_status["hard_mode"]]
+                    color_by_status[sys_status["hard_mode"]],
                 )
                 .add_row()
                 .add_button(
@@ -465,10 +430,10 @@ class SystemSettingsAction(BaseAction):
                             "call_action": "systems_settings",
                             "sub_action": "change_setting",
                             "system_name": "open_pm",
-                            "page": "1"
-                        }
+                            "page": "1",
+                        },
                     ),
-                    color_by_status[sys_status["open_pm"]]
+                    color_by_status[sys_status["open_pm"]],
                 )
                 .add_row()
                 .add_button(
@@ -478,20 +443,17 @@ class SystemSettingsAction(BaseAction):
                             "call_action": "systems_settings",
                             "sub_action": "change_setting",
                             "system_name": "slow_mode",
-                            "page": "1"
-                        }
+                            "page": "1",
+                        },
                     ),
-                    color_by_status[sys_status["slow_mode"]]
+                    color_by_status[sys_status["slow_mode"]],
                 )
                 .add_row()
                 .add_button(
                     Callback(
-                        label="Закрыть меню",
-                        payload={
-                            "call_action": "cancel_command"
-                        }
+                        label="Закрыть меню", payload={"call_action": "cancel_command"}
                     ),
-                    ButtonColor.SECONDARY
+                    ButtonColor.SECONDARY,
                 )
             )
 
@@ -500,7 +462,7 @@ class SystemSettingsAction(BaseAction):
             peer_id=event.get("peer_id"),
             conversation_message_id=event.get("cmid"),
             message=new_msg_text,
-            keyboard=keyboard.json
+            keyboard=keyboard.json,
         )
 
         self.snackbar(event, snackbar_message)
@@ -508,11 +470,11 @@ class SystemSettingsAction(BaseAction):
         return True
 
 
-
 class FilterSettingsAction(BaseAction):
     """Sets the value to the selected
     moderation systems settings field.
     """
+
     NAME = "filters_settings"
 
     async def _handle(self, event: dict, kwargs) -> bool:
@@ -523,32 +485,29 @@ class FilterSettingsAction(BaseAction):
             table="settings",
             fields=("setting_name", "setting_status"),
             conv_id=event.get("peer_id"),
-            setting_destination="filter"
+            setting_destination="filter",
         )
 
-        filt_status = {
-            row[0]: int(row[1]) for row in systems
-        }
+        filt_status = {row[0]: int(row[1]) for row in systems}
 
-        color_by_status = {
-            0: ButtonColor.NEGATIVE,
-            1: ButtonColor.POSITIVE
-        }
+        color_by_status = {0: ButtonColor.NEGATIVE, 1: ButtonColor.POSITIVE}
 
         page = int(payload.get("page", 1))
 
         if payload.get("sub_action") == "change_setting":
             filt_name = payload.get("filter_name")
-            new_status = abs(filt_status[filt_name] - 1) # (0 to 1) or (1 to 0)
+            new_status = abs(filt_status[filt_name] - 1)  # (0 to 1) or (1 to 0)
             filt_status[filt_name] = new_status
-            snackbar_message = f"⚠️ Фильтр {'Включен' if not new_status else 'Выключен'}."
+            snackbar_message = (
+                f"⚠️ Фильтр {'Включен' if not new_status else 'Выключен'}."
+            )
             db.execute.update(
                 schema="toaster_settings",
                 table="settings",
                 new_data={"setting_status": new_status},
                 conv_id=event.get("peer_id"),
                 setting_name=filt_name,
-                setting_destination="filter"
+                setting_destination="filter",
             )
 
         else:
@@ -565,10 +524,10 @@ class FilterSettingsAction(BaseAction):
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
                             "filter_name": "app_action",
-                            "page": "1"
-                        }
+                            "page": "1",
+                        },
                     ),
-                    color_by_status[filt_status["app_action"]]
+                    color_by_status[filt_status["app_action"]],
                 )
                 .add_row()
                 .add_button(
@@ -578,10 +537,10 @@ class FilterSettingsAction(BaseAction):
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
                             "filter_name": "audio",
-                            "page": "1"
-                        }
+                            "page": "1",
+                        },
                     ),
-                    color_by_status[filt_status["audio"]]
+                    color_by_status[filt_status["audio"]],
                 )
                 .add_row()
                 .add_button(
@@ -591,10 +550,10 @@ class FilterSettingsAction(BaseAction):
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
                             "filter_name": "audio_message",
-                            "page": "1"
-                        }
+                            "page": "1",
+                        },
                     ),
-                    color_by_status[filt_status["audio_message"]]
+                    color_by_status[filt_status["audio_message"]],
                 )
                 .add_row()
                 .add_button(
@@ -604,31 +563,25 @@ class FilterSettingsAction(BaseAction):
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
                             "filter_name": "doc",
-                            "page": "1"
-                        }
+                            "page": "1",
+                        },
                     ),
-                    color_by_status[filt_status["doc"]]
+                    color_by_status[filt_status["doc"]],
                 )
                 .add_row()
                 .add_button(
                     Callback(
                         label="-->",
-                        payload={
-                            "call_action": "filters_settings",
-                            "page": "2"
-                        }
+                        payload={"call_action": "filters_settings", "page": "2"},
                     ),
-                    ButtonColor.SECONDARY
+                    ButtonColor.SECONDARY,
                 )
                 .add_row()
                 .add_button(
                     Callback(
-                        label="Закрыть меню",
-                        payload={
-                            "call_action": "cancel_command"
-                        }
+                        label="Закрыть меню", payload={"call_action": "cancel_command"}
                     ),
-                    ButtonColor.SECONDARY
+                    ButtonColor.SECONDARY,
                 )
             )
 
@@ -643,10 +596,10 @@ class FilterSettingsAction(BaseAction):
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
                             "filter_name": "forward",
-                            "page": "2"
-                        }
+                            "page": "2",
+                        },
                     ),
-                    color_by_status[filt_status["forward"]]
+                    color_by_status[filt_status["forward"]],
                 )
                 .add_row()
                 .add_button(
@@ -656,10 +609,10 @@ class FilterSettingsAction(BaseAction):
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
                             "filter_name": "reply",
-                            "page": "2"
-                        }
+                            "page": "2",
+                        },
                     ),
-                    color_by_status[filt_status["reply"]]
+                    color_by_status[filt_status["reply"]],
                 )
                 .add_row()
                 .add_button(
@@ -669,10 +622,10 @@ class FilterSettingsAction(BaseAction):
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
                             "filter_name": "graffiti",
-                            "page": "2"
-                        }
+                            "page": "2",
+                        },
                     ),
-                    color_by_status[filt_status["graffiti"]]
+                    color_by_status[filt_status["graffiti"]],
                 )
                 .add_row()
                 .add_button(
@@ -682,41 +635,32 @@ class FilterSettingsAction(BaseAction):
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
                             "filter_name": "sticker",
-                            "page": "2"
-                        }
+                            "page": "2",
+                        },
                     ),
-                    color_by_status[filt_status["sticker"]]
+                    color_by_status[filt_status["sticker"]],
                 )
                 .add_row()
                 .add_button(
                     Callback(
                         label="<--",
-                        payload={
-                            "call_action": "filters_settings",
-                            "page": "1"
-                        }
+                        payload={"call_action": "filters_settings", "page": "1"},
                     ),
-                    ButtonColor.SECONDARY
+                    ButtonColor.SECONDARY,
                 )
                 .add_button(
                     Callback(
                         label="-->",
-                        payload={
-                            "call_action": "filters_settings",
-                            "page": "3"
-                        }
+                        payload={"call_action": "filters_settings", "page": "3"},
                     ),
-                    ButtonColor.SECONDARY
+                    ButtonColor.SECONDARY,
                 )
                 .add_row()
                 .add_button(
                     Callback(
-                        label="Закрыть меню",
-                        payload={
-                            "call_action": "cancel_command"
-                        }
+                        label="Закрыть меню", payload={"call_action": "cancel_command"}
                     ),
-                    ButtonColor.SECONDARY
+                    ButtonColor.SECONDARY,
                 )
             )
 
@@ -731,10 +675,10 @@ class FilterSettingsAction(BaseAction):
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
                             "filter_name": "link",
-                            "page": "3"
-                        }
+                            "page": "3",
+                        },
                     ),
-                    color_by_status[filt_status["link"]]
+                    color_by_status[filt_status["link"]],
                 )
                 .add_row()
                 .add_button(
@@ -744,10 +688,10 @@ class FilterSettingsAction(BaseAction):
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
                             "filter_name": "photo",
-                            "page": "3"
-                        }
+                            "page": "3",
+                        },
                     ),
-                    color_by_status[filt_status["photo"]]
+                    color_by_status[filt_status["photo"]],
                 )
                 .add_row()
                 .add_button(
@@ -757,10 +701,10 @@ class FilterSettingsAction(BaseAction):
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
                             "filter_name": "poll",
-                            "page": "3"
-                        }
+                            "page": "3",
+                        },
                     ),
-                    color_by_status[filt_status["poll"]]
+                    color_by_status[filt_status["poll"]],
                 )
                 .add_row()
                 .add_button(
@@ -770,41 +714,32 @@ class FilterSettingsAction(BaseAction):
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
                             "filter_name": "video",
-                            "page": "3"
-                        }
+                            "page": "3",
+                        },
                     ),
-                    color_by_status[filt_status["video"]]
+                    color_by_status[filt_status["video"]],
                 )
                 .add_row()
                 .add_button(
                     Callback(
                         label="<--",
-                        payload={
-                            "call_action": "filters_settings",
-                            "page": "2"
-                        }
+                        payload={"call_action": "filters_settings", "page": "2"},
                     ),
-                    ButtonColor.SECONDARY
+                    ButtonColor.SECONDARY,
                 )
                 .add_button(
                     Callback(
                         label="-->",
-                        payload={
-                            "call_action": "filters_settings",
-                            "page": "4"
-                        }
+                        payload={"call_action": "filters_settings", "page": "4"},
                     ),
-                    ButtonColor.SECONDARY
+                    ButtonColor.SECONDARY,
                 )
                 .add_row()
                 .add_button(
                     Callback(
-                        label="Закрыть меню",
-                        payload={
-                            "call_action": "cancel_command"
-                        }
+                        label="Закрыть меню", payload={"call_action": "cancel_command"}
                     ),
-                    ButtonColor.SECONDARY
+                    ButtonColor.SECONDARY,
                 )
             )
 
@@ -819,10 +754,10 @@ class FilterSettingsAction(BaseAction):
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
                             "filter_name": "Wall",
-                            "page": "4"
-                        }
+                            "page": "4",
+                        },
                     ),
-                    color_by_status[filt_status["Wall"]]
+                    color_by_status[filt_status["Wall"]],
                 )
                 .add_row()
                 .add_button(
@@ -832,31 +767,25 @@ class FilterSettingsAction(BaseAction):
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
                             "filter_name": "geo",
-                            "page": "4"
-                        }
+                            "page": "4",
+                        },
                     ),
-                    color_by_status[filt_status["geo"]]
+                    color_by_status[filt_status["geo"]],
                 )
                 .add_row()
                 .add_button(
                     Callback(
                         label="<--",
-                        payload={
-                            "call_action": "filters_settings",
-                            "page": "3"
-                        }
+                        payload={"call_action": "filters_settings", "page": "3"},
                     ),
-                    ButtonColor.SECONDARY
+                    ButtonColor.SECONDARY,
                 )
                 .add_row()
                 .add_button(
                     Callback(
-                        label="Закрыть меню",
-                        payload={
-                            "call_action": "cancel_command"
-                        }
+                        label="Закрыть меню", payload={"call_action": "cancel_command"}
                     ),
-                    ButtonColor.SECONDARY
+                    ButtonColor.SECONDARY,
                 )
             )
 
@@ -865,7 +794,7 @@ class FilterSettingsAction(BaseAction):
             peer_id=event.get("peer_id"),
             conversation_message_id=event.get("cmid"),
             message=new_msg_text,
-            keyboard=keyboard.json
+            keyboard=keyboard.json,
         )
 
         self.snackbar(event, snackbar_message)
@@ -873,13 +802,12 @@ class FilterSettingsAction(BaseAction):
         return True
 
 
-
-
 # ------------------------------------------------------------------------
 class SlowModeDelayAction(BaseAction):
     """Sets the value to slow mode delay
     in minutes.
     """
+
     NAME = "slow_mode_delay"
 
     async def _handle(self, event: dict, kwargs) -> bool:
@@ -890,7 +818,7 @@ class SlowModeDelayAction(BaseAction):
             table="delay",
             fields=("delay",),
             conv_id=event.get("peer_id"),
-            setting_name="slow_mode"
+            setting_name="slow_mode",
         )
 
         delay = int(delay[0][0])
@@ -912,7 +840,7 @@ class SlowModeDelayAction(BaseAction):
                 table="delay",
                 new_data={"delay": delay},
                 conv_id=event.get("peer_id"),
-                setting_name="slow_mode"
+                setting_name="slow_mode",
             )
 
         else:
@@ -928,9 +856,9 @@ class SlowModeDelayAction(BaseAction):
                         "call_action": "slow_mode_delay",
                         "sub_action": "subtract_time",
                         "time": 1,
-                    }
+                    },
                 ),
-                ButtonColor.NEGATIVE
+                ButtonColor.NEGATIVE,
             )
             .add_button(
                 Callback(
@@ -939,9 +867,9 @@ class SlowModeDelayAction(BaseAction):
                         "call_action": "slow_mode_delay",
                         "sub_action": "add_time",
                         "time": 1,
-                    }
+                    },
                 ),
-                ButtonColor.POSITIVE
+                ButtonColor.POSITIVE,
             )
             .add_row()
             .add_button(
@@ -951,9 +879,9 @@ class SlowModeDelayAction(BaseAction):
                         "call_action": "slow_mode_delay",
                         "sub_action": "subtract_time",
                         "time": 10,
-                    }
+                    },
                 ),
-                ButtonColor.NEGATIVE
+                ButtonColor.NEGATIVE,
             )
             .add_button(
                 Callback(
@@ -962,36 +890,34 @@ class SlowModeDelayAction(BaseAction):
                         "call_action": "slow_mode_delay",
                         "sub_action": "add_time",
                         "time": 10,
-                    }
+                    },
                 ),
-                ButtonColor.POSITIVE
+                ButtonColor.POSITIVE,
             )
             .add_row()
             .add_button(
                 Callback(
-                    label="Закрыть меню",
-                    payload={
-                        "call_action": "cancel_command"
-                    }
+                    label="Закрыть меню", payload={"call_action": "cancel_command"}
                 ),
-                ButtonColor.SECONDARY
+                ButtonColor.SECONDARY,
             )
         )
 
-        new_msg_text = "⚙️ Задержка для данного чата установлена на " \
+        new_msg_text = (
+            "⚙️ Задержка для данного чата установлена на "
             f"{delay} {self._get_min_declension(delay)}."
+        )
 
         self.api.messages.edit(
             peer_id=event.get("peer_id"),
             conversation_message_id=event.get("cmid"),
             message=new_msg_text,
-            keyboard=keyboard.json
+            keyboard=keyboard.json,
         )
 
         self.snackbar(event, snackbar_message)
 
         return True
-
 
     @staticmethod
     def _get_min_declension(minutes: int) -> str:
@@ -1008,11 +934,11 @@ class SlowModeDelayAction(BaseAction):
         return timename
 
 
-
 class AccountAgeDelayAction(BaseAction):
     """Sets the value to account age delay
     in days.
     """
+
     NAME = "account_age_delay"
 
     async def _handle(self, event: dict, kwargs) -> bool:
@@ -1023,7 +949,7 @@ class AccountAgeDelayAction(BaseAction):
             table="delay",
             fields=("delay",),
             conv_id=event.get("peer_id"),
-            setting_name="account_age"
+            setting_name="account_age",
         )
 
         delay = int(delay[0][0])
@@ -1045,7 +971,7 @@ class AccountAgeDelayAction(BaseAction):
                 table="delay",
                 new_data={"delay": delay},
                 conv_id=event.get("peer_id"),
-                setting_name="account_age"
+                setting_name="account_age",
             )
 
         else:
@@ -1061,9 +987,9 @@ class AccountAgeDelayAction(BaseAction):
                         "call_action": "account_age_delay",
                         "sub_action": "subtract_time",
                         "time": 1,
-                    }
+                    },
                 ),
-                ButtonColor.NEGATIVE
+                ButtonColor.NEGATIVE,
             )
             .add_button(
                 Callback(
@@ -1072,9 +998,9 @@ class AccountAgeDelayAction(BaseAction):
                         "call_action": "account_age_delay",
                         "sub_action": "add_time",
                         "time": 1,
-                    }
+                    },
                 ),
-                ButtonColor.POSITIVE
+                ButtonColor.POSITIVE,
             )
             .add_row()
             .add_button(
@@ -1084,9 +1010,9 @@ class AccountAgeDelayAction(BaseAction):
                         "call_action": "account_age_delay",
                         "sub_action": "subtract_time",
                         "time": 10,
-                    }
+                    },
                 ),
-                ButtonColor.NEGATIVE
+                ButtonColor.NEGATIVE,
             )
             .add_button(
                 Callback(
@@ -1095,36 +1021,34 @@ class AccountAgeDelayAction(BaseAction):
                         "call_action": "account_age_delay",
                         "sub_action": "add_time",
                         "time": 10,
-                    }
+                    },
                 ),
-                ButtonColor.POSITIVE
+                ButtonColor.POSITIVE,
             )
             .add_row()
             .add_button(
                 Callback(
-                    label="Закрыть меню",
-                    payload={
-                        "call_action": "cancel_command"
-                    }
+                    label="Закрыть меню", payload={"call_action": "cancel_command"}
                 ),
-                ButtonColor.SECONDARY
+                ButtonColor.SECONDARY,
             )
         )
 
-        new_msg_text = "⚙️ Критерий новизны аккаунта для данного чата установлен на " \
+        new_msg_text = (
+            "⚙️ Критерий новизны аккаунта для данного чата установлен на "
             f"{delay} {self._get_day_declension(delay)}."
+        )
 
         self.api.messages.edit(
             peer_id=event.get("peer_id"),
             conversation_message_id=event.get("cmid"),
             message=new_msg_text,
-            keyboard=keyboard.json
+            keyboard=keyboard.json,
         )
 
         self.snackbar(event, snackbar_message)
 
         return True
-
 
     @staticmethod
     def _get_day_declension(minutes: int) -> str:

@@ -10,7 +10,7 @@ from .actions import (
     SystemSettingsAction,
     FilterSettingsAction,
     SlowModeDelayAction,
-    AccountAgeDelayAction
+    AccountAgeDelayAction,
 )
 
 
@@ -33,10 +33,8 @@ action_list = {
     FilterSettingsAction.NAME: FilterSettingsAction,
     # delay -------------------------------------
     SlowModeDelayAction.NAME: SlowModeDelayAction,
-    AccountAgeDelayAction.NAME: AccountAgeDelayAction
+    AccountAgeDelayAction.NAME: AccountAgeDelayAction,
 }
 
 
-__all__ = (
-    "action_list",
-)
+__all__ = ("action_list",)

@@ -4,13 +4,12 @@ from .abc import ABCHandler
 
 
 class BaseAction(ABCHandler):
-    """Command handler base class.
-    """
+    """Command handler base class."""
+
     NAME = "None"
 
     def __init__(self, api: VkApi):
         self.api = api
-
 
     def snackbar(self, event: dict, text: str):
         """Sends a snackbar to the user.
@@ -23,9 +22,8 @@ class BaseAction(ABCHandler):
             event_id=event.get("button_event_id"),
             user_id=event.get("user_id"),
             peer_id=event.get("peer_id"),
-            event_data=SnackbarAnswer(text).data
+            event_data=SnackbarAnswer(text).data,
         )
-
 
     async def log(self):
         """Sends a log of command execution
