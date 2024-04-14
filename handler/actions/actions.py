@@ -7,11 +7,6 @@ from .base import BaseAction
 
 # ------------------------------------------------------------------------
 class NotMessageOwnerAction(BaseAction):
-    """Action that denies force
-    unless it belongs to the author
-    of the message with keyboard.
-    """
-
     NAME = "not_msg_owner"
 
     async def _handle(self, event: dict, kwargs) -> bool:
@@ -24,10 +19,6 @@ class NotMessageOwnerAction(BaseAction):
 
 # ------------------------------------------------------------------------
 class CancelAction(BaseAction):
-    """Cancels the command, closes the menu,
-    and deletes the message.
-    """
-
     NAME = "cancel_command"
 
     async def _handle(self, event: dict, kwargs) -> bool:
@@ -44,10 +35,6 @@ class CancelAction(BaseAction):
 
 # ------------------------------------------------------------------------
 class MarkAction(BaseAction):
-    """Creates a "chat" mark and stores
-    data about it in the database.
-    """
-
     NAME = "set_mark"
 
     async def _handle(self, event: dict, kwargs) -> bool:
@@ -83,13 +70,6 @@ class MarkAction(BaseAction):
 
 
 class UpdateConvDataAction(BaseAction):
-    """Updates the data of a conversation
-    that already has a label. First of all,
-    it is necessary for the correct display
-    of logs when changing the name of the
-    conversation.
-    """
-
     NAME = "update_conv_data"
 
     async def _handle(self, event: dict, kwargs) -> bool:
@@ -124,10 +104,6 @@ class UpdateConvDataAction(BaseAction):
 
 
 class DropMarkAction(BaseAction):
-    """Removes the mark from the conversation,
-    deleting records about it in the database.
-    """
-
     NAME = "drop_mark"
 
     async def _handle(self, event: dict, kwargs) -> bool:
@@ -157,10 +133,6 @@ class DropMarkAction(BaseAction):
 
 # ------------------------------------------------------------------------
 class SetPermissionAction(BaseAction):
-    """Sets the user to the "administrator" role,
-    records this in the database.
-    """
-
     NAME = "set_permission"
 
     async def _handle(self, event: dict, kwargs) -> bool:
@@ -233,10 +205,6 @@ class SetPermissionAction(BaseAction):
 
 
 class DropPermissionAction(BaseAction):
-    """Sets the user to the "user" role,
-    records this in the database.
-    """
-
     NAME = "drop_permission"
 
     async def _handle(self, event: dict, kwargs) -> bool:
@@ -268,8 +236,6 @@ class DropPermissionAction(BaseAction):
 
 # ------------------------------------------------------------------------
 class GameRollAction(BaseAction):
-    """Starts roll game."""
-
     NAME = "game_roll"
     EMOJI = ["0️⃣", "1️⃣", " 2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
 
@@ -306,8 +272,6 @@ class GameRollAction(BaseAction):
 
 
 class GameCoinflipAction(BaseAction):
-    """Starts coinflip game."""
-
     NAME = "game_coinflip"
     EMOJI = ["Орёл 🪙", "Решка 🪙"]
 
@@ -340,10 +304,6 @@ class GameCoinflipAction(BaseAction):
 
 # ------------------------------------------------------------------------
 class SystemSettingsAction(BaseAction):
-    """Sets the value to the
-    selected message filter settings field.
-    """
-
     NAME = "systems_settings"
 
     async def _handle(self, event: dict, kwargs) -> bool:
@@ -471,10 +431,6 @@ class SystemSettingsAction(BaseAction):
 
 
 class FilterSettingsAction(BaseAction):
-    """Sets the value to the selected
-    moderation systems settings field.
-    """
-
     NAME = "filters_settings"
 
     async def _handle(self, event: dict, kwargs) -> bool:
@@ -804,10 +760,6 @@ class FilterSettingsAction(BaseAction):
 
 # ------------------------------------------------------------------------
 class SlowModeDelayAction(BaseAction):
-    """Sets the value to slow mode delay
-    in minutes.
-    """
-
     NAME = "slow_mode_delay"
 
     async def _handle(self, event: dict, kwargs) -> bool:
@@ -935,10 +887,6 @@ class SlowModeDelayAction(BaseAction):
 
 
 class AccountAgeDelayAction(BaseAction):
-    """Sets the value to account age delay
-    in days.
-    """
-
     NAME = "account_age_delay"
 
     async def _handle(self, event: dict, kwargs) -> bool:
