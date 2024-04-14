@@ -11,6 +11,9 @@ from .actions import (
     FilterSettingsAction,
     SlowModeDelayAction,
     AccountAgeDelayAction,
+    GreenZoneDelayAction,
+    YellowZoneDelayAction,
+    RedZoneDelayAction,
 )
 
 
@@ -34,6 +37,10 @@ action_list = {
     # delay -------------------------------------
     SlowModeDelayAction.NAME: SlowModeDelayAction,
     AccountAgeDelayAction.NAME: AccountAgeDelayAction,
+    # expire ------------------------------------
+    GreenZoneDelayAction.NAME: GreenZoneDelayAction,
+    YellowZoneDelayAction.NAME: YellowZoneDelayAction,
+    RedZoneDelayAction.NAME: RedZoneDelayAction,
 }
 
 

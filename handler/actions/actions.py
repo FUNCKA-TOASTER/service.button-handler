@@ -1063,3 +1063,385 @@ class AccountAgeDelayAction(BaseAction):
             timename = "дня"
 
         return timename
+
+
+# ------------------------------------------------------------------------
+class GreenZoneDelayAction(BaseAction):
+    NAME = "green_zone_delay"
+
+    async def _handle(self, event: dict, kwargs) -> bool:
+        payload = event["payload"]
+
+        delay = db.execute.select(
+            schema="toaster_settings",
+            table="delay",
+            fields=("delay",),
+            conv_id=event.get("peer_id"),
+            setting_name="green_zone",
+        )
+
+        delay = int(delay[0][0])
+        sub_action = payload.get("sub_action")
+
+        if sub_action is not None:
+            time = payload.get("time")
+
+            if sub_action == "subtract_time":
+                delay = (delay - time) if (delay - time) > 0 else 0
+                snackbar_message = "⚠️ Время уменьшено."
+
+            elif sub_action == "add_time":
+                delay = delay + time
+                snackbar_message = "⚠️ Время увеличено."
+
+            db.execute.update(
+                schema="toaster_settings",
+                table="delay",
+                new_data={"delay": delay},
+                conv_id=event.get("peer_id"),
+                setting_name="green_zone",
+            )
+
+        else:
+            snackbar_message = "⚙️ Меню установки времени."
+
+        keyboard = (
+            Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
+            .add_row()
+            .add_button(
+                Callback(
+                    label="- 1 день",
+                    payload={
+                        "call_action": "green_zone_delay",
+                        "sub_action": "subtract_time",
+                        "time": 1,
+                    },
+                ),
+                ButtonColor.NEGATIVE,
+            )
+            .add_button(
+                Callback(
+                    label="+ 1 день",
+                    payload={
+                        "call_action": "green_zone_delay",
+                        "sub_action": "add_time",
+                        "time": 1,
+                    },
+                ),
+                ButtonColor.POSITIVE,
+            )
+            .add_row()
+            .add_button(
+                Callback(
+                    label="- 10 дней",
+                    payload={
+                        "call_action": "green_zone_delay",
+                        "sub_action": "subtract_time",
+                        "time": 10,
+                    },
+                ),
+                ButtonColor.NEGATIVE,
+            )
+            .add_button(
+                Callback(
+                    label="+ 10 дней",
+                    payload={
+                        "call_action": "green_zone_delay",
+                        "sub_action": "add_time",
+                        "time": 10,
+                    },
+                ),
+                ButtonColor.POSITIVE,
+            )
+            .add_row()
+            .add_button(
+                Callback(
+                    label="Закрыть меню", payload={"call_action": "cancel_command"}
+                ),
+                ButtonColor.SECONDARY,
+            )
+        )
+
+        new_msg_text = (
+            "⚙️ Время истечения срока наказания для зелёной зоны выставлен на: "
+            f"{delay} {self._get_day_declension(delay)}."
+        )
+
+        self.api.messages.edit(
+            peer_id=event.get("peer_id"),
+            conversation_message_id=event.get("cmid"),
+            message=new_msg_text,
+            keyboard=keyboard.json,
+        )
+
+        self.snackbar(event, snackbar_message)
+
+        return True
+
+    @staticmethod
+    def _get_day_declension(minutes: int) -> str:
+        timename = "дней"
+        if 11 <= minutes and minutes <= 14:
+            timename = "дней"
+
+        elif minutes % 10 == 1:
+            timename = "день"
+
+        elif 2 <= (minutes % 10) and (minutes % 10) <= 4:
+            timename = "дня"
+
+        return timename
+
+
+class YellowZoneDelayAction(BaseAction):
+    NAME = "yellow_zone_delay"
+
+    async def _handle(self, event: dict, kwargs) -> bool:
+        payload = event["payload"]
+
+        delay = db.execute.select(
+            schema="toaster_settings",
+            table="delay",
+            fields=("delay",),
+            conv_id=event.get("peer_id"),
+            setting_name="yellow_zone",
+        )
+
+        delay = int(delay[0][0])
+        sub_action = payload.get("sub_action")
+
+        if sub_action is not None:
+            time = payload.get("time")
+
+            if sub_action == "subtract_time":
+                delay = (delay - time) if (delay - time) > 0 else 0
+                snackbar_message = "⚠️ Время уменьшено."
+
+            elif sub_action == "add_time":
+                delay = delay + time
+                snackbar_message = "⚠️ Время увеличено."
+
+            db.execute.update(
+                schema="toaster_settings",
+                table="delay",
+                new_data={"delay": delay},
+                conv_id=event.get("peer_id"),
+                setting_name="green_zone",
+            )
+
+        else:
+            snackbar_message = "⚙️ Меню установки времени."
+
+        keyboard = (
+            Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
+            .add_row()
+            .add_button(
+                Callback(
+                    label="- 1 день",
+                    payload={
+                        "call_action": "yellow_zone_delay",
+                        "sub_action": "subtract_time",
+                        "time": 1,
+                    },
+                ),
+                ButtonColor.NEGATIVE,
+            )
+            .add_button(
+                Callback(
+                    label="+ 1 день",
+                    payload={
+                        "call_action": "yellow_zone_delay",
+                        "sub_action": "add_time",
+                        "time": 1,
+                    },
+                ),
+                ButtonColor.POSITIVE,
+            )
+            .add_row()
+            .add_button(
+                Callback(
+                    label="- 10 дней",
+                    payload={
+                        "call_action": "yellow_zone_delay",
+                        "sub_action": "subtract_time",
+                        "time": 10,
+                    },
+                ),
+                ButtonColor.NEGATIVE,
+            )
+            .add_button(
+                Callback(
+                    label="+ 10 дней",
+                    payload={
+                        "call_action": "yellow_zone_delay",
+                        "sub_action": "add_time",
+                        "time": 10,
+                    },
+                ),
+                ButtonColor.POSITIVE,
+            )
+            .add_row()
+            .add_button(
+                Callback(
+                    label="Закрыть меню", payload={"call_action": "cancel_command"}
+                ),
+                ButtonColor.SECONDARY,
+            )
+        )
+
+        new_msg_text = (
+            "⚙️ Время истечения срока наказания для жёлтой зоны выставлен на: "
+            f"{delay} {self._get_day_declension(delay)}."
+        )
+
+        self.api.messages.edit(
+            peer_id=event.get("peer_id"),
+            conversation_message_id=event.get("cmid"),
+            message=new_msg_text,
+            keyboard=keyboard.json,
+        )
+
+        self.snackbar(event, snackbar_message)
+
+        return True
+
+    @staticmethod
+    def _get_day_declension(minutes: int) -> str:
+        timename = "дней"
+        if 11 <= minutes and minutes <= 14:
+            timename = "дней"
+
+        elif minutes % 10 == 1:
+            timename = "день"
+
+        elif 2 <= (minutes % 10) and (minutes % 10) <= 4:
+            timename = "дня"
+
+        return timename
+
+
+class RedZoneDelayAction(BaseAction):
+    NAME = "red_zone_delay"
+
+    async def _handle(self, event: dict, kwargs) -> bool:
+        payload = event["payload"]
+
+        delay = db.execute.select(
+            schema="toaster_settings",
+            table="delay",
+            fields=("delay",),
+            conv_id=event.get("peer_id"),
+            setting_name="red_zone",
+        )
+
+        delay = int(delay[0][0])
+        sub_action = payload.get("sub_action")
+
+        if sub_action is not None:
+            time = payload.get("time")
+
+            if sub_action == "subtract_time":
+                delay = (delay - time) if (delay - time) > 0 else 0
+                snackbar_message = "⚠️ Время уменьшено."
+
+            elif sub_action == "add_time":
+                delay = delay + time
+                snackbar_message = "⚠️ Время увеличено."
+
+            db.execute.update(
+                schema="toaster_settings",
+                table="delay",
+                new_data={"delay": delay},
+                conv_id=event.get("peer_id"),
+                setting_name="red_zone",
+            )
+
+        else:
+            snackbar_message = "⚙️ Меню установки времени."
+
+        keyboard = (
+            Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
+            .add_row()
+            .add_button(
+                Callback(
+                    label="- 1 день",
+                    payload={
+                        "call_action": "red_zone_delay",
+                        "sub_action": "subtract_time",
+                        "time": 1,
+                    },
+                ),
+                ButtonColor.NEGATIVE,
+            )
+            .add_button(
+                Callback(
+                    label="+ 1 день",
+                    payload={
+                        "call_action": "red_zone_delay",
+                        "sub_action": "add_time",
+                        "time": 1,
+                    },
+                ),
+                ButtonColor.POSITIVE,
+            )
+            .add_row()
+            .add_button(
+                Callback(
+                    label="- 10 дней",
+                    payload={
+                        "call_action": "red_zone_delay",
+                        "sub_action": "subtract_time",
+                        "time": 10,
+                    },
+                ),
+                ButtonColor.NEGATIVE,
+            )
+            .add_button(
+                Callback(
+                    label="+ 10 дней",
+                    payload={
+                        "call_action": "red_zone_delay",
+                        "sub_action": "add_time",
+                        "time": 10,
+                    },
+                ),
+                ButtonColor.POSITIVE,
+            )
+            .add_row()
+            .add_button(
+                Callback(
+                    label="Закрыть меню", payload={"call_action": "cancel_command"}
+                ),
+                ButtonColor.SECONDARY,
+            )
+        )
+
+        new_msg_text = (
+            "⚙️ Время истечения срока наказания для красной зоны выставлен на: "
+            f"{delay} {self._get_day_declension(delay)}."
+        )
+
+        self.api.messages.edit(
+            peer_id=event.get("peer_id"),
+            conversation_message_id=event.get("cmid"),
+            message=new_msg_text,
+            keyboard=keyboard.json,
+        )
+
+        self.snackbar(event, snackbar_message)
+
+        return True
+
+    @staticmethod
+    def _get_day_declension(minutes: int) -> str:
+        timename = "дней"
+        if 11 <= minutes and minutes <= 14:
+            timename = "дней"
+
+        elif minutes % 10 == 1:
+            timename = "день"
+
+        elif 2 <= (minutes % 10) and (minutes % 10) <= 4:
+            timename = "дня"
+
+        return timename
