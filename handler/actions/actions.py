@@ -1226,7 +1226,7 @@ class YellowZoneDelayAction(BaseAction):
                 table="delay",
                 new_data={"delay": delay},
                 conv_id=event.get("peer_id"),
-                setting_name="green_zone",
+                setting_name="yellow_zone",
             )
 
         else:
