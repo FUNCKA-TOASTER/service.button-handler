@@ -372,19 +372,6 @@ class SystemSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Усиленый режим: {'Вкл.' if sys_status['hard_mode'] else 'Выкл.'}",
-                        payload={
-                            "call_action": "systems_settings",
-                            "sub_action": "change_setting",
-                            "system_name": "hard_mode",
-                            "page": "1",
-                        },
-                    ),
-                    color_by_status[sys_status["hard_mode"]],
-                )
-                .add_row()
-                .add_button(
-                    Callback(
                         label=f"Открытое ЛС: {'Вкл.' if sys_status['open_pm'] else 'Выкл.'}",
                         payload={
                             "call_action": "systems_settings",
@@ -407,6 +394,73 @@ class SystemSettingsAction(BaseAction):
                         },
                     ),
                     color_by_status[sys_status["slow_mode"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="-->",
+                        payload={"call_action": "systems_settings", "page": "2"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Закрыть меню", payload={"call_action": "cancel_command"}
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+            )
+
+        if page == 2:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Фильтрация URL: {'Вкл.' if sys_status['url_filter'] else 'Выкл.'}",
+                        payload={
+                            "call_action": "systems_settings",
+                            "sub_action": "change_setting",
+                            "system_name": "url_filter",
+                            "page": "1",
+                        },
+                    ),
+                    color_by_status[sys_status["url_filter"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Усиленная фильтрация URL: {'Вкл.' if sys_status['hard_url_filter'] else 'Выкл.'}",
+                        payload={
+                            "call_action": "systems_settings",
+                            "sub_action": "change_setting",
+                            "system_name": "hard_url_filter",
+                            "page": "1",
+                        },
+                    ),
+                    color_by_status[sys_status["hard_url_filter"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Медленный режим: {'Вкл.' if sys_status['slow_mode'] else 'Выкл.'}",
+                        payload={
+                            "call_action": "systems_settings",
+                            "sub_action": "change_setting",
+                            "system_name": "slow_mode",
+                            "page": "1",
+                        },
+                    ),
+                    color_by_status[sys_status["slow_mode"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="<--",
+                        payload={"call_action": "systems_settings", "page": "2"},
+                    ),
+                    ButtonColor.SECONDARY,
                 )
                 .add_row()
                 .add_button(
