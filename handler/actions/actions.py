@@ -418,28 +418,28 @@ class SystemSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Фильтрация URL: {'Вкл.' if sys_status['url_filter'] else 'Выкл.'}",
+                        label=f"Фильтрация URL: {'Вкл.' if sys_status['url_filtering'] else 'Выкл.'}",
                         payload={
                             "call_action": "systems_settings",
                             "sub_action": "change_setting",
-                            "system_name": "url_filter",
+                            "system_name": "url_filtering",
                             "page": "1",
                         },
                     ),
-                    color_by_status[sys_status["url_filter"]],
+                    color_by_status[sys_status["url_filtering"]],
                 )
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Усиленная фильтрация URL: {'Вкл.' if sys_status['hard_url_filter'] else 'Выкл.'}",
+                        label=f"Усиленная фильтрация URL: {'Вкл.' if sys_status['hard_url_filtering'] else 'Выкл.'}",
                         payload={
                             "call_action": "systems_settings",
                             "sub_action": "change_setting",
-                            "system_name": "hard_url_filter",
+                            "system_name": "hard_url_filtering",
                             "page": "1",
                         },
                     ),
-                    color_by_status[sys_status["hard_url_filter"]],
+                    color_by_status[sys_status["hard_url_filtering"]],
                 )
                 .add_row()
                 .add_button(
