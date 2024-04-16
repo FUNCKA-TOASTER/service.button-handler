@@ -346,7 +346,7 @@ class SystemSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Возраста аккаунта: {'Вкл.' if sys_status['account_age'] else 'Выкл.'}",
+                        label=f"Возраст аккаунта: {'Вкл.' if sys_status['account_age'] else 'Выкл.'}",
                         payload={
                             "call_action": "systems_settings",
                             "sub_action": "change_setting",
@@ -359,7 +359,7 @@ class SystemSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Плохие слова: {'Вкл.' if sys_status['curse_words'] else 'Выкл.'}",
+                        label=f"Запрещенные слова: {'Вкл.' if sys_status['curse_words'] else 'Выкл.'}",
                         payload={
                             "call_action": "systems_settings",
                             "sub_action": "change_setting",
@@ -529,7 +529,7 @@ class FilterSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Приложения: {'Вкл.' if filt_status['app_action'] else 'Выкл.'}",
+                        label=f"Приложения: {'Выкл.' if filt_status['app_action'] else 'Вкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
@@ -542,7 +542,7 @@ class FilterSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Музыка: {'Вкл.' if filt_status['audio'] else 'Выкл.'}",
+                        label=f"Музыка: {'Выкл.' if filt_status['audio'] else 'Вкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
@@ -555,7 +555,7 @@ class FilterSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Аудио: {'Вкл.' if filt_status['audio_message'] else 'Выкл.'}",
+                        label=f"Аудио: {'Выкл.' if filt_status['audio_message'] else 'Вкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
@@ -568,7 +568,7 @@ class FilterSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Файлы: {'Вкл.' if filt_status['doc'] else 'Выкл.'}",
+                        label=f"Файлы: {'Выкл.' if filt_status['doc'] else 'Вкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
@@ -601,7 +601,7 @@ class FilterSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Пересыл: {'Вкл.' if filt_status['forward'] else 'Выкл.'}",
+                        label=f"Пересыл: {'Выкл.' if filt_status['forward'] else 'Вкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
@@ -614,7 +614,7 @@ class FilterSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Ответ: {'Вкл.' if filt_status['reply'] else 'Выкл.'}",
+                        label=f"Ответ: {'Выкл.' if filt_status['reply'] else 'Вкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
@@ -627,7 +627,7 @@ class FilterSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Граффити: {'Вкл.' if filt_status['graffiti'] else 'Выкл.'}",
+                        label=f"Граффити: {'Выкл.' if filt_status['graffiti'] else 'Вкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
@@ -640,7 +640,7 @@ class FilterSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Стикеры: {'Вкл.' if filt_status['sticker'] else 'Выкл.'}",
+                        label=f"Стикеры: {'Выкл.' if filt_status['sticker'] else 'Вкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
@@ -680,7 +680,7 @@ class FilterSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Линки: {'Вкл.' if filt_status['link'] else 'Выкл.'}",
+                        label=f"Линки: {'Выкл.' if filt_status['link'] else 'Вкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
@@ -693,7 +693,7 @@ class FilterSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Изображения: {'Вкл.' if filt_status['photo'] else 'Выкл.'}",
+                        label=f"Изображения: {'Выкл.' if filt_status['photo'] else 'Вкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
@@ -706,7 +706,7 @@ class FilterSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Опросы: {'Вкл.' if filt_status['poll'] else 'Выкл.'}",
+                        label=f"Опросы: {'Выкл.' if filt_status['poll'] else 'Вкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
@@ -719,7 +719,7 @@ class FilterSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Видео: {'Вкл.' if filt_status['video'] else 'Выкл.'}",
+                        label=f"Видео: {'Выкл.' if filt_status['video'] else 'Вкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
@@ -759,7 +759,7 @@ class FilterSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Записи: {'Вкл.' if filt_status['Wall'] else 'Выкл.'}",
+                        label=f"Записи: {'Выкл.' if filt_status['Wall'] else 'Вкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
@@ -772,7 +772,7 @@ class FilterSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Геопозиция: {'Вкл.' if filt_status['geo'] else 'Выкл.'}",
+                        label=f"Геопозиция: {'Выкл.' if filt_status['geo'] else 'Вкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
