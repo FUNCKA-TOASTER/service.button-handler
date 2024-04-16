@@ -338,7 +338,7 @@ class SystemSettingsAction(BaseAction):
             )
 
         else:
-            snackbar_message = f"⚙️ Меню систем модерации ({page}/1).."
+            snackbar_message = f"⚙️ Меню систем модерации ({page}/2).."
 
         if page == 1:
             keyboard = (
@@ -444,21 +444,8 @@ class SystemSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Медленный режим: {'Вкл.' if sys_status['slow_mode'] else 'Выкл.'}",
-                        payload={
-                            "call_action": "systems_settings",
-                            "sub_action": "change_setting",
-                            "system_name": "slow_mode",
-                            "page": "1",
-                        },
-                    ),
-                    color_by_status[sys_status["slow_mode"]],
-                )
-                .add_row()
-                .add_button(
-                    Callback(
                         label="<--",
-                        payload={"call_action": "systems_settings", "page": "2"},
+                        payload={"call_action": "systems_settings", "page": "1"},
                     ),
                     ButtonColor.SECONDARY,
                 )
