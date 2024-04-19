@@ -24,9 +24,3 @@ class BaseAction(ABCHandler):
             peer_id=event.get("peer_id"),
             event_data=SnackbarAnswer(text).data,
         )
-
-    async def log(self):
-        """Sends a log of command execution
-        in log-convs.
-        """
-        # TODO: write me
