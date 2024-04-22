@@ -14,6 +14,9 @@ from .actions import (
     GreenZoneDelayAction,
     YellowZoneDelayAction,
     RedZoneDelayAction,
+    SystemsPunishmentAction,
+    FiltersPunishmentAction,
+    ChangePunishmentAction,
 )
 
 
@@ -41,6 +44,10 @@ action_list = {
     GreenZoneDelayAction.NAME: GreenZoneDelayAction,
     YellowZoneDelayAction.NAME: YellowZoneDelayAction,
     RedZoneDelayAction.NAME: RedZoneDelayAction,
+    # punishment --------------------------------
+    SystemsPunishmentAction.NAME: SystemsPunishmentAction,
+    FiltersPunishmentAction.NAME: FiltersPunishmentAction,
+    ChangePunishmentAction.NAME: ChangePunishmentAction,
 }
 
 
