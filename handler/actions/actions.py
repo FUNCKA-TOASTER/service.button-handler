@@ -750,7 +750,7 @@ class FiltersSettingsAction(BaseAction):
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
-                            "filter_name": "Wall",
+                            "filter_name": "wall",
                             "page": "4",
                         },
                     ),
