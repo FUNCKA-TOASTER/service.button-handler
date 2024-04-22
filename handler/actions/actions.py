@@ -1434,3 +1434,138 @@ class RedZoneDelayAction(BaseAction):
             timename = "дня"
 
         return timename
+
+
+# ------------------------------------------------------------------------
+class SystemsPunishmentAction(BaseAction):
+    NAME = "systems_punishment"
+
+    async def _handle(self, event: dict, kwargs) -> bool:
+        payload = event["payload"]
+
+        page = int(payload.get("page", 1))
+        snackbar_message = f"⚙️ Меню систем модерации ({page}/2).."
+
+        if page == 1:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Возраст аккаунта",
+                        payload={
+                            "call_action": "change_punishment",
+                            "system_name": "account_age",
+                            "page": "1",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Запрещенные слова",
+                        payload={
+                            "call_action": "change_punishment",
+                            "system_name": "curse_words",
+                            "page": "1",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Открытое ЛС",
+                        payload={
+                            "call_action": "change_punishment",
+                            "system_name": "open_pm",
+                            "page": "1",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Медленный режим",
+                        payload={
+                            "call_action": "change_punishment",
+                            "system_name": "slow_mode",
+                            "page": "1",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="-->",
+                        payload={"call_action": "systems_punishment", "page": "2"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Закрыть меню", payload={"call_action": "cancel_command"}
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+            )
+
+        if page == 2:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Фильтрация URL",
+                        payload={
+                            "call_action": "change_punishment",
+                            "system_name": "url_filtering",
+                            "page": "2",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Усиленная фильтрация URL",
+                        payload={
+                            "call_action": "change_punishment",
+                            "system_name": "hard_url_filtering",
+                            "page": "2",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="<--",
+                        payload={"call_action": "systems_punishment", "page": "1"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Закрыть меню", payload={"call_action": "cancel_command"}
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+            )
+
+        new_msg_text = "⚙️ Выберете необходимую систему:"
+        self.api.messages.edit(
+            peer_id=event.get("peer_id"),
+            conversation_message_id=event.get("cmid"),
+            message=new_msg_text,
+            keyboard=keyboard.json,
+        )
+
+        self.snackbar(event, snackbar_message)
+
+        return True
