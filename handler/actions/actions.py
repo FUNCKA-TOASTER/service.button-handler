@@ -303,7 +303,7 @@ class GameCoinflipAction(BaseAction):
 
 
 # ------------------------------------------------------------------------
-class SystemSettingsAction(BaseAction):
+class SystemsSettingsAction(BaseAction):
     NAME = "systems_settings"
 
     async def _handle(self, event: dict, kwargs) -> bool:
@@ -471,7 +471,7 @@ class SystemSettingsAction(BaseAction):
         return True
 
 
-class FilterSettingsAction(BaseAction):
+class FiltersSettingsAction(BaseAction):
     NAME = "filters_settings"
 
     async def _handle(self, event: dict, kwargs) -> bool:

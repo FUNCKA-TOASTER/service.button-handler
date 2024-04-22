@@ -7,8 +7,8 @@ from .actions import (
     SetPermissionAction,
     GameRollAction,
     GameCoinflipAction,
-    SystemSettingsAction,
-    FilterSettingsAction,
+    SystemsSettingsAction,
+    FiltersSettingsAction,
     SlowModeDelayAction,
     AccountAgeDelayAction,
     GreenZoneDelayAction,
@@ -32,8 +32,8 @@ action_list = {
     GameRollAction.NAME: GameRollAction,
     GameCoinflipAction.NAME: GameCoinflipAction,
     # settings ----------------------------------
-    SystemSettingsAction.NAME: SystemSettingsAction,
-    FilterSettingsAction.NAME: FilterSettingsAction,
+    SystemsSettingsAction.NAME: SystemsSettingsAction,
+    FiltersSettingsAction.NAME: FiltersSettingsAction,
     # delay -------------------------------------
     SlowModeDelayAction.NAME: SlowModeDelayAction,
     AccountAgeDelayAction.NAME: AccountAgeDelayAction,
