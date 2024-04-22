@@ -1455,7 +1455,7 @@ class SystemsPunishmentAction(BaseAction):
                         label="Возраст аккаунта",
                         payload={
                             "call_action": "change_punishment",
-                            "system_name": "account_age",
+                            "setting_name": "account_age",
                             "page": "1",
                         },
                     ),
@@ -1467,7 +1467,7 @@ class SystemsPunishmentAction(BaseAction):
                         label="Запрещенные слова",
                         payload={
                             "call_action": "change_punishment",
-                            "system_name": "curse_words",
+                            "setting_name": "curse_words",
                             "page": "1",
                         },
                     ),
@@ -1479,7 +1479,7 @@ class SystemsPunishmentAction(BaseAction):
                         label="Открытое ЛС",
                         payload={
                             "call_action": "change_punishment",
-                            "system_name": "open_pm",
+                            "setting_name": "open_pm",
                             "page": "1",
                         },
                     ),
@@ -1491,7 +1491,7 @@ class SystemsPunishmentAction(BaseAction):
                         label="Медленный режим",
                         payload={
                             "call_action": "change_punishment",
-                            "system_name": "slow_mode",
+                            "setting_name": "slow_mode",
                             "page": "1",
                         },
                     ),
@@ -1523,7 +1523,7 @@ class SystemsPunishmentAction(BaseAction):
                         label="Фильтрация URL",
                         payload={
                             "call_action": "change_punishment",
-                            "system_name": "url_filtering",
+                            "setting_name": "url_filtering",
                             "page": "2",
                         },
                     ),
@@ -1535,7 +1535,7 @@ class SystemsPunishmentAction(BaseAction):
                         label="Усиленная фильтрация URL",
                         payload={
                             "call_action": "change_punishment",
-                            "system_name": "hard_url_filtering",
+                            "setting_name": "hard_url_filtering",
                             "page": "2",
                         },
                     ),
@@ -1559,6 +1559,290 @@ class SystemsPunishmentAction(BaseAction):
             )
 
         new_msg_text = "⚙️ Выберете необходимую систему:"
+        self.api.messages.edit(
+            peer_id=event.get("peer_id"),
+            conversation_message_id=event.get("cmid"),
+            message=new_msg_text,
+            keyboard=keyboard.json,
+        )
+
+        self.snackbar(event, snackbar_message)
+
+        return True
+
+
+class FiltersPunishmentAction(BaseAction):
+    NAME = "filters_punishment"
+
+    async def _handle(self, event: dict, kwargs) -> bool:
+        payload = event["payload"]
+
+        page = int(payload.get("page", 1))
+        snackbar_message = f"⚙️ Меню фильтров сообщений ({page}/4)."
+
+        if page == 1:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Приложения",
+                        payload={
+                            "call_action": "change_punishment",
+                            "setting_name": "app_action",
+                            "page": "1",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Музыка",
+                        payload={
+                            "call_action": "change_punishment",
+                            "filter_name": "audio",
+                            "page": "1",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Аудио",
+                        payload={
+                            "call_action": "change_punishment",
+                            "filter_name": "audio_message",
+                            "page": "1",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Файлы",
+                        payload={
+                            "call_action": "change_punishment",
+                            "filter_name": "doc",
+                            "page": "1",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="-->",
+                        payload={"call_action": "filters_punishment", "page": "2"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Закрыть меню", payload={"call_action": "cancel_command"}
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+            )
+
+        elif page == 2:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Пересыл",
+                        payload={
+                            "call_action": "change_punishment",
+                            "setting_name": "forward",
+                            "page": "2",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Ответ",
+                        payload={
+                            "call_action": "change_punishment",
+                            "setting_name": "reply",
+                            "page": "2",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Граффити",
+                        payload={
+                            "call_action": "change_punishment",
+                            "setting_name": "graffiti",
+                            "page": "2",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Стикеры",
+                        payload={
+                            "call_action": "change_punishment",
+                            "setting_name": "sticker",
+                            "page": "2",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="<--",
+                        payload={"call_action": "filters_punishment", "page": "1"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_button(
+                    Callback(
+                        label="-->",
+                        payload={"call_action": "filters_punishment", "page": "3"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Закрыть меню", payload={"call_action": "cancel_command"}
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+            )
+
+        elif page == 3:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Линки",
+                        payload={
+                            "call_action": "change_punishment",
+                            "setting_name": "link",
+                            "page": "3",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Изображения",
+                        payload={
+                            "call_action": "change_punishment",
+                            "setting_name": "photo",
+                            "page": "3",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Опросы",
+                        payload={
+                            "call_action": "change_punishment",
+                            "setting_name": "poll",
+                            "page": "3",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Видео",
+                        payload={
+                            "call_action": "change_punishment",
+                            "setting_name": "video",
+                            "page": "3",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="<--",
+                        payload={"call_action": "filters_punishment", "page": "2"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_button(
+                    Callback(
+                        label="-->",
+                        payload={"call_action": "filters_punishment", "page": "4"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Закрыть меню", payload={"call_action": "cancel_command"}
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+            )
+
+        elif page == 4:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Записи",
+                        payload={
+                            "call_action": "change_punishment",
+                            "setting_name": "Wall",
+                            "page": "4",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Геопозиция",
+                        payload={
+                            "call_action": "change_punishment",
+                            "setting_name": "geo",
+                            "page": "4",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="<--",
+                        payload={"call_action": "filters_punishment", "page": "3"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Закрыть меню", payload={"call_action": "cancel_command"}
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+            )
+
+        new_msg_text = "⚙️ Выберете необходимый фильтр:"
         self.api.messages.edit(
             peer_id=event.get("peer_id"),
             conversation_message_id=event.get("cmid"),
