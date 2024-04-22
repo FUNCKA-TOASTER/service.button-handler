@@ -1881,7 +1881,7 @@ class ChangePunishmentAction(BaseAction):
                 snackbar_message = "⚠️ Наказание уменьшено."
 
             elif sub_action == "add_points":
-                warns = warns + points
+                warns = (warns + points) if (warns + points) <= 10 else 10
                 snackbar_message = "⚠️ Наказание увеличено."
 
             db.execute.update(
