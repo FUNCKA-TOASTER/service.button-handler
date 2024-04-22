@@ -1601,7 +1601,7 @@ class FiltersPunishmentAction(BaseAction):
                         label="Музыка",
                         payload={
                             "call_action": "change_punishment",
-                            "filter_name": "audio",
+                            "setting_name": "audio",
                             "page": "1",
                         },
                     ),
@@ -1613,7 +1613,7 @@ class FiltersPunishmentAction(BaseAction):
                         label="Аудио",
                         payload={
                             "call_action": "change_punishment",
-                            "filter_name": "audio_message",
+                            "setting_name": "audio_message",
                             "page": "1",
                         },
                     ),
@@ -1625,7 +1625,7 @@ class FiltersPunishmentAction(BaseAction):
                         label="Файлы",
                         payload={
                             "call_action": "change_punishment",
-                            "filter_name": "doc",
+                            "setting_name": "doc",
                             "page": "1",
                         },
                     ),
@@ -1807,7 +1807,7 @@ class FiltersPunishmentAction(BaseAction):
                         label="Записи",
                         payload={
                             "call_action": "change_punishment",
-                            "setting_name": "Wall",
+                            "setting_name": "wall",
                             "page": "4",
                         },
                     ),
@@ -1903,6 +1903,7 @@ class ChangePunishmentAction(BaseAction):
                     label="- 1 пред.",
                     payload={
                         "call_action": "change_punishment",
+                        "setting_name": setting,
                         "sub_action": "subtract_points",
                         "time": 1,
                     },
@@ -1914,6 +1915,7 @@ class ChangePunishmentAction(BaseAction):
                     label="+ 1 пред.",
                     payload={
                         "call_action": "change_punishment",
+                        "setting_name": setting,
                         "sub_action": "add_points",
                         "time": 1,
                     },
@@ -1926,6 +1928,7 @@ class ChangePunishmentAction(BaseAction):
                     label="- 3 пред.",
                     payload={
                         "call_action": "change_punishment",
+                        "setting_name": setting,
                         "sub_action": "subtract_points",
                         "time": 3,
                     },
@@ -1937,6 +1940,7 @@ class ChangePunishmentAction(BaseAction):
                     label="+ 3 пред.",
                     payload={
                         "call_action": "change_punishment",
+                        "setting_name": setting,
                         "sub_action": "add_points",
                         "time": 3,
                     },
