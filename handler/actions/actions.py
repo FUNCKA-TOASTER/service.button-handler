@@ -1853,3 +1853,131 @@ class FiltersPunishmentAction(BaseAction):
         self.snackbar(event, snackbar_message)
 
         return True
+
+
+class ChangePunishmentAction(BaseAction):
+    NAME = "change_punishment"
+
+    async def _handle(self, event: dict, kwargs) -> bool:
+        payload = event["payload"]
+        setting = payload.get("setting_name")
+
+        warns = db.execute.select(
+            schema="toaster_settings",
+            table="settings",
+            fields=("warn_point",),
+            conv_id=event.get("peer_id"),
+            setting_name=setting,
+        )
+
+        warns = int(warns[0][0])
+        sub_action = payload.get("sub_action")
+
+        if sub_action is not None:
+            points = payload.get("points")
+
+            if sub_action == "subtract_points":
+                warns = (warns - points) if (warns - points) > 0 else 0
+                snackbar_message = "⚠️ Наказание уменьшено."
+
+            elif sub_action == "add_points":
+                warns = warns + points
+                snackbar_message = "⚠️ Наказание увеличено."
+
+            db.execute.update(
+                schema="toaster_settings",
+                table="settings",
+                new_data={"warn_point": warns},
+                conv_id=event.get("peer_id"),
+                setting_name=setting,
+            )
+
+        else:
+            snackbar_message = "⚙️ Меню установки наказания."
+
+        keyboard = (
+            Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
+            .add_row()
+            .add_button(
+                Callback(
+                    label="- 1 пред.",
+                    payload={
+                        "call_action": "change_punishment",
+                        "sub_action": "subtract_points",
+                        "time": 1,
+                    },
+                ),
+                ButtonColor.NEGATIVE,
+            )
+            .add_button(
+                Callback(
+                    label="+ 1 пред.",
+                    payload={
+                        "call_action": "change_punishment",
+                        "sub_action": "add_points",
+                        "time": 1,
+                    },
+                ),
+                ButtonColor.POSITIVE,
+            )
+            .add_row()
+            .add_button(
+                Callback(
+                    label="- 3 пред.",
+                    payload={
+                        "call_action": "change_punishment",
+                        "sub_action": "subtract_points",
+                        "time": 3,
+                    },
+                ),
+                ButtonColor.NEGATIVE,
+            )
+            .add_button(
+                Callback(
+                    label="+ 3 пред.",
+                    payload={
+                        "call_action": "change_punishment",
+                        "sub_action": "add_points",
+                        "time": 3,
+                    },
+                ),
+                ButtonColor.POSITIVE,
+            )
+            .add_row()
+            .add_button(
+                Callback(
+                    label="Закрыть меню", payload={"call_action": "cancel_command"}
+                ),
+                ButtonColor.SECONDARY,
+            )
+        )
+
+        new_msg_text = (
+            f"⚙️ Наказание для настройки {setting} установлено на: "
+            f"{warns} {self._get_warn_declension(warns)}."
+        )
+
+        self.api.messages.edit(
+            peer_id=event.get("peer_id"),
+            conversation_message_id=event.get("cmid"),
+            message=new_msg_text,
+            keyboard=keyboard.json,
+        )
+
+        self.snackbar(event, snackbar_message)
+
+        return True
+
+    @staticmethod
+    def _get_warn_declension(minutes: int) -> str:
+        timename = "предупреждений"
+        if 11 <= minutes and minutes <= 14:
+            timename = "предупреждений"
+
+        elif minutes % 10 == 1:
+            timename = "предупреждение"
+
+        elif 2 <= (minutes % 10) and (minutes % 10) <= 4:
+            timename = "предупреждения"
+
+        return timename
