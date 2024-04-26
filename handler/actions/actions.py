@@ -834,7 +834,7 @@ class ChangeDelayAction(BaseAction):
                 table="delay",
                 new_data={"delay": delay},
                 conv_id=event.get("peer_id"),
-                setting_name="slow_mode",
+                setting_name=setting,
             )
 
         else:
