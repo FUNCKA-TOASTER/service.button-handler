@@ -27,7 +27,9 @@ class CancelAction(BaseAction):
             peer_id=event.get("peer_id"), cmids=event.get("cmid"), delete_for_all=1
         )
 
-        snackbar_message = "❗Отмена команды."
+        snackbar_message = (
+            "❗Отмена команды. " + str(event.get("cmid")) + str(event.get("peer_id"))
+        )
 
         self.snackbar(event, snackbar_message)
         self._close_session(event)
