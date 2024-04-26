@@ -10,9 +10,6 @@ from .actions import (
     SystemsSettingsAction,
     FiltersSettingsAction,
     ChangeDelayAction,
-    GreenZoneDelayAction,
-    YellowZoneDelayAction,
-    RedZoneDelayAction,
     SystemsPunishmentAction,
     FiltersPunishmentAction,
     ChangePunishmentAction,
@@ -36,12 +33,8 @@ action_list = {
     # settings ----------------------------------
     SystemsSettingsAction.NAME: SystemsSettingsAction,
     FiltersSettingsAction.NAME: FiltersSettingsAction,
-    # delay -------------------------------------
+    # delay\expire ------------------------------
     ChangeDelayAction.NAME: ChangeDelayAction,
-    # expire ------------------------------------
-    GreenZoneDelayAction.NAME: GreenZoneDelayAction,
-    YellowZoneDelayAction.NAME: YellowZoneDelayAction,
-    RedZoneDelayAction.NAME: RedZoneDelayAction,
     # punishment --------------------------------
     SystemsPunishmentAction.NAME: SystemsPunishmentAction,
     FiltersPunishmentAction.NAME: FiltersPunishmentAction,
