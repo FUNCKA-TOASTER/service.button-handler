@@ -9,8 +9,7 @@ from .actions import (
     GameCoinflipAction,
     SystemsSettingsAction,
     FiltersSettingsAction,
-    SlowModeDelayAction,
-    AccountAgeDelayAction,
+    ChangeDelayAction,
     GreenZoneDelayAction,
     YellowZoneDelayAction,
     RedZoneDelayAction,
@@ -38,8 +37,7 @@ action_list = {
     SystemsSettingsAction.NAME: SystemsSettingsAction,
     FiltersSettingsAction.NAME: FiltersSettingsAction,
     # delay -------------------------------------
-    SlowModeDelayAction.NAME: SlowModeDelayAction,
-    AccountAgeDelayAction.NAME: AccountAgeDelayAction,
+    ChangeDelayAction.NAME: ChangeDelayAction,
     # expire ------------------------------------
     GreenZoneDelayAction.NAME: GreenZoneDelayAction,
     YellowZoneDelayAction.NAME: YellowZoneDelayAction,
