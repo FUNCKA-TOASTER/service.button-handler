@@ -18,6 +18,7 @@ class NotMessageOwnerAction(BaseAction):
 
 
 # ------------------------------------------------------------------------
+# TODO: Добавить удаление записи сесси меню из БД
 class CancelAction(BaseAction):
     NAME = "cancel_command"
 
@@ -29,8 +30,17 @@ class CancelAction(BaseAction):
         snackbar_message = "❗Отмена команды."
 
         self.snackbar(event, snackbar_message)
+        self._close_session(event)
 
         return True
+
+    def _close_session(self, event):
+        db.execute.delete(
+            schema="toaster",
+            table="menu_sessions",
+            conv_id=event.get("peer_id"),
+            cm_id=event.get("cmid"),
+        )
 
 
 # ------------------------------------------------------------------------
