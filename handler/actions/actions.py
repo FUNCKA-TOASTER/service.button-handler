@@ -855,7 +855,7 @@ class ChangeDelayAction(BaseAction):
             .add_row()
             .add_button(
                 Callback(
-                    label="- 1",
+                    label="- 1 ед.",
                     payload={
                         "call_action": "change_delay",
                         "sub_action": "subtract_time",
@@ -867,7 +867,7 @@ class ChangeDelayAction(BaseAction):
             )
             .add_button(
                 Callback(
-                    label="+ 1",
+                    label="+ 1 ед.",
                     payload={
                         "call_action": "change_delay",
                         "sub_action": "add_time",
@@ -880,7 +880,7 @@ class ChangeDelayAction(BaseAction):
             .add_row()
             .add_button(
                 Callback(
-                    label="- 10",
+                    label="- 10 ед.",
                     payload={
                         "call_action": "change_delay",
                         "sub_action": "subtract_time",
@@ -892,7 +892,7 @@ class ChangeDelayAction(BaseAction):
             )
             .add_button(
                 Callback(
-                    label="+ 10",
+                    label="+ 10 ед.",
                     payload={
                         "call_action": "change_delay",
                         "sub_action": "add_time",
@@ -924,7 +924,7 @@ class ChangeDelayAction(BaseAction):
 
         elif setting == "menu_session":
             new_msg_text = (
-                "⚙️ Время жизни сесси меню установлена на: "
+                "⚙️ Время жизни сессии меню установлена на: "
                 f"{delay} {self._get_min_declension(delay)}."
             )
 
