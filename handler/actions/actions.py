@@ -257,7 +257,14 @@ class GameRollAction(BaseAction):
 
         new_msg_text = f"{tag} выбивает число: {result}"
 
-        keyboard = Keyboard(inline=True, one_time=False, owner_id=None)
+        keyboard = (
+            Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
+            .add_row()
+            .add_button(
+                Callback(label="Закрыть", payload={"call_action": "cancel_command"}),
+                ButtonColor.SECONDARY,
+            )
+        )
 
         self.api.messages.edit(
             peer_id=event.get("peer_id"),
@@ -293,7 +300,14 @@ class GameCoinflipAction(BaseAction):
 
         new_msg_text = f"{tag} подбрасывает монетку: {result}"
 
-        keyboard = Keyboard(inline=True, one_time=False, owner_id=None)
+        keyboard = (
+            Keyboard(inline=True, one_time=False, owner_id=event.get("user_id"))
+            .add_row()
+            .add_button(
+                Callback(label="Закрыть", payload={"call_action": "cancel_command"}),
+                ButtonColor.SECONDARY,
+            )
+        )
 
         self.api.messages.edit(
             peer_id=event.get("peer_id"),
