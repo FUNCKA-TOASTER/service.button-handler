@@ -778,7 +778,7 @@ class FiltersSettingsAction(BaseAction):
                             "page": "4",
                         },
                     ),
-                    color_by_status[filt_status["Wall"]],
+                    color_by_status[filt_status["wall"]],
                 )
                 .add_row()
                 .add_button(
