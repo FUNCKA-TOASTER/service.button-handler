@@ -770,7 +770,7 @@ class FiltersSettingsAction(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Записи: {'Выкл.' if filt_status['Wall'] else 'Вкл.'}",
+                        label=f"Записи: {'Выкл.' if filt_status['wall'] else 'Вкл.'}",
                         payload={
                             "call_action": "filters_settings",
                             "sub_action": "change_setting",
