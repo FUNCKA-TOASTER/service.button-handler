@@ -149,7 +149,11 @@ class SetPermissionAction(BaseAction):
         fields = ("user_permission",)
         target_id = event["payload"].get("target")
         lvl = db.execute.select(
-            schema="toaster", table="permissions", fields=fields, user_id=target_id
+            schema="toaster",
+            table="permissions",
+            fields=fields,
+            user_id=target_id,
+            conv_id=event.get("peer_id"),
         )
         already_promoted = bool(lvl)
         user_lvl = int(event.get("payload").get("permission"))
