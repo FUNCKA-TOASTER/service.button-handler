@@ -20,7 +20,6 @@ class Error(BaseAction):
         return False
 
 
-# ------------------------------------------------------------------------
 class RejectAccess(BaseAction):
     NAME = "reject_access"
 
@@ -31,7 +30,6 @@ class RejectAccess(BaseAction):
         return False
 
 
-# ------------------------------------------------------------------------
 class CloseMenu(BaseAction):
     NAME = "close_menu"
 
@@ -94,7 +92,7 @@ class DropMark(BaseAction):
     NAME = "drop_mark"
 
     def _handle(self, event: Event) -> bool:
-        mark = get_peer_mark(TOASTER_DB, event.peer.bpid)
+        mark = get_peer_mark(TOASTER_DB, event)
 
         if mark is not None:
             drop_peer_mark(TOASTER_DB, event)
@@ -106,3 +104,6 @@ class DropMark(BaseAction):
         self.snackbar(event, snackbar_message)
 
         return True
+
+
+# ------------------------------------------------------------------------
