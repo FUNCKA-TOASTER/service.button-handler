@@ -3,6 +3,8 @@ from .actions import (
     RejectAccess,
     CloseMenu,
     SetMark,
+    UpdatePeerData,
+    DropMark,
 )
 
 
@@ -13,6 +15,8 @@ action_list = {
     CloseMenu.NAME: CloseMenu,
     # mark --------------------------------------
     SetMark.NAME: SetMark,
+    UpdatePeerData.NAME: UpdatePeerData,
+    DropMark.NAME: DropMark,
 }
 
 
