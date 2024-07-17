@@ -27,3 +27,10 @@ def update_peer_data(session: Session, name: str, event: Event) -> None:
     peer = session.get(Peer, {"id": event.peer.bpid})
     peer.name = name
     session.commit()
+
+
+@script(auto_commit=False)
+def drop_peer_mark(session: Session, event: Event) -> None:
+    peer = session.get(Peer, {"id": event.peer.bpid})
+    session.delete(peer)
+    session.commit()
