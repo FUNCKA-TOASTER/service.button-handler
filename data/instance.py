@@ -6,5 +6,6 @@ from config import ALCHEMY_SETUP, DBMS_CREDS
 
 # Инстанция базы данных
 TOASTER_DB = Database(build_connection_uri(ALCHEMY_SETUP, DBMS_CREDS))
+TOASTER_DB.create_tables()
 
 # TODO: Translate to eng

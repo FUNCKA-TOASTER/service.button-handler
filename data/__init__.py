@@ -21,7 +21,7 @@ from .enums import (
     SettingStatus,
     StaffRole,
 )
-from .connections import TOASTER_DB
+from .instance import TOASTER_DB
 
 __all__ = (
     "BaseModel",
