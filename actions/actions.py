@@ -12,6 +12,7 @@ class Error(BaseAction):
 
         return False
 
+
 # ------------------------------------------------------------------------
 class RejectAccess(BaseAction):
     NAME = "reject_access"
@@ -30,7 +31,7 @@ class CloseMenu(BaseAction):
     def _handle(self, event: Event) -> bool:
         self.api.messages.delete(
             peer_id=event.peer.bpid,
-            cmids=event.message.cmid,
+            cmids=event.button.cmid,
             delete_for_all=1,
         )
 
