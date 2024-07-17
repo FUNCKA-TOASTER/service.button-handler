@@ -30,7 +30,7 @@ class ButtonHandler:
         except Exception as error:
             logger.error(error)
 
-    def _execute(self, action_name: str, event: Event) -> ExecResult:
+    def _execute(self, action_name: str) -> ExecResult:
         selected = action_list.get(action_name)
         if selected is None:
             raise ValueError(f"Could not call action '{action_name}'.")
@@ -40,7 +40,7 @@ class ButtonHandler:
 
     @staticmethod
     def get_payload(event: Event):
-        payload = event.get("payload")
+        payload = event.button.payload
         if payload is None:
             raise ValueError("Event does not contains payload.")
 
