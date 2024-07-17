@@ -6,6 +6,9 @@ from .peer import (
 )
 from .user import (
     get_user_permission,
+    set_user_permission,
+    update_user_permission,
+    drop_user_permission,
 )
 
 __all__ = (
@@ -14,4 +17,7 @@ __all__ = (
     "update_peer_data",
     "drop_peer_mark",
     "get_user_permission",
+    "set_user_permission",
+    "update_user_permission",
+    "drop_user_permission",
 )

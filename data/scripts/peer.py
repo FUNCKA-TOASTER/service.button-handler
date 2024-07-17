@@ -1,6 +1,5 @@
 from typing import Optional
 from sqlalchemy.orm import Session
-from toaster.broker.events import Event
 from toaster.database import script
 from data import Peer, PeerMark
 
