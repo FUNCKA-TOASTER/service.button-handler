@@ -1,4 +1,5 @@
 from .actions import (
+    Error,
     RejectAccess,
     CloseMenu,
     # SetMark,
@@ -7,6 +8,7 @@ from .actions import (
 
 action_list = {
     # system ------------------------------------
+    Error.NAME: Error,
     RejectAccess.NAME: RejectAccess,
     CloseMenu.NAME: CloseMenu,
     # mark --------------------------------------

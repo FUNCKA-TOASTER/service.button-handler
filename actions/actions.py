@@ -3,6 +3,16 @@ from .base import BaseAction
 
 
 # ------------------------------------------------------------------------
+class Error(BaseAction):
+    NAME = "error"
+
+    def _handle(self, event: Event) -> bool:
+        snackbar_message = "⚠️ Что-то пошло не так."
+        self.snackbar(event, snackbar_message)
+
+        return False
+
+# ------------------------------------------------------------------------
 class RejectAccess(BaseAction):
     NAME = "reject_access"
 

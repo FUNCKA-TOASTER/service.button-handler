@@ -28,6 +28,7 @@ class ButtonHandler:
             logger.error(f"Access rejected: {error}")
 
         except Exception as error:
+            self._execute("error")
             logger.error(error)
 
     def _execute(self, action_name: str) -> ExecResult:
