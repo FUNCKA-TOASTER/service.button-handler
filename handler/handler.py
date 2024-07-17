@@ -17,14 +17,14 @@ class ButtonHandler:
         try:
             payload = self.get_payload(event)
 
-            self.check_owner(payload)
+            self.check_owner(payload, event)
 
             action_name = payload.get("call_action")
-            if self._execute(action_name, event):
+            if self._execute(action_name):
                 logger.info(f"Action '{action_name}' executed.")
 
         except PermissionError as error:
-            self._execute("reject_access", event)
+            self._execute("reject_access")
             logger.error(f"Access rejected: {error}")
 
         except Exception as error:
