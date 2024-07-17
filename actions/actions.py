@@ -3,6 +3,8 @@ from data import TOASTER_DB
 from data.scripts import (
     get_peer_mark,
     set_peer_mark,
+    drop_peer_mark,
+    update_peer_data,
 )
 from .base import BaseAction
 
@@ -64,6 +66,44 @@ class SetMark(BaseAction):
 
         else:
             snackbar_message = f'❗Беседа уже имеет метку "{mark}".'
+
+        self.snackbar(event, snackbar_message)
+
+        return True
+
+
+class UpdatePeerData(BaseAction):
+    NAME = "update_peer_data"
+
+    def _handle(self, event: Event) -> bool:
+        mark = get_peer_mark(TOASTER_DB, event.peer.bpid)
+
+        if mark is not None:
+            peer_name = event.peer.name
+
+            update_peer_data(TOASTER_DB, peer_name, event)
+            snackbar_message = "📝 Данные беседы обновлены."
+
+        else:
+            snackbar_message = "❗Беседа еще не имеет метку."
+
+        self.snackbar(event, snackbar_message)
+
+        return True
+
+
+class DropMark(BaseAction):
+    NAME = "drop_mark"
+
+    def _handle(self, event: Event) -> bool:
+        mark = get_peer_mark(TOASTER_DB, event.peer.bpid)
+
+        if mark is not None:
+            drop_peer_mark(TOASTER_DB, event)
+            snackbar_message = f'📝 Метка "{mark}" снята с беседы.'
+
+        else:
+            snackbar_message = "❗Беседа еще не имеет метку."
 
         self.snackbar(event, snackbar_message)
 
