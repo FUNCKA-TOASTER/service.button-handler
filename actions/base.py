@@ -27,8 +27,8 @@ class BaseAction(ABC):
             text (str): Sncakbar text.
         """
         self.api.messages.sendMessageEventAnswer(
-            event_id=event.get("button_event_id"),
-            user_id=event.get("user_id"),
-            peer_id=event.get("peer_id"),
+            event_id=event.button.beid,
+            user_id=event.user.uuid,
+            peer_id=event.peer.bpid,
             event_data=SnackbarAnswer(text).data,
         )
