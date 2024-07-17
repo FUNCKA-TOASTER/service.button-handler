@@ -23,14 +23,17 @@ class ButtonHandler:
             if self._execute(action_name, event):
                 logger.info(f"Action '{action_name}' executed.")
 
+        except PermissionError as error:
+            self._execute("reject_access", event)
+            logger.error(f"Access rejected: {error}")
+
         except Exception as error:
             logger.error(error)
 
     def _execute(self, action_name: str, event: Event) -> ExecResult:
         selected = action_list.get(action_name)
         if selected is None:
-            # TODO: fix exeption
-            raise Exception(f"Could not call action '{action_name}'.")
+            raise ValueError(f"Could not call action '{action_name}'.")
 
         action_obj = selected(self._get_api())
         return action_obj()
@@ -47,9 +50,8 @@ class ButtonHandler:
     def check_owner(payload: Payload, event: Event):
         owner = payload.get("keyboard_owner")
         if owner != event.user.uuid:
-            # TODO: call  not_msg_owner action
-            # TODO: fix text and exeption
-            raise Exception("Not message owner")
+            # TODO: fix text
+            raise PermissionError("Not message owner")
 
     def _get_api(self) -> Any:
         session = VkApi(
