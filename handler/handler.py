@@ -1,55 +1,59 @@
-from logger import logger
-from .abc import ABCHandler
-from .actions import action_list
+from typing import NoReturn, Optional, Any, Union, Dict
+from loguru import logger
+from vk_api import VkApi
+from toaster.broker.events import Event
+from actions import action_list
+import config
 
 
-class ButtonHandler(ABCHandler):
-    """Event handler class that recognizes commands
-    in the message and executing attached to each command
-    actions.
-    """
+Payload = Dict[str, Union[str, int]]
+ExecResult = Optional[Union[bool, NoReturn]]
 
-    async def _handle(self, event: dict, kwargs) -> bool:
-        if not bool(event.get("payload")):
-            log_text = f"Missing payload <{event.get('event_id')}>"
-            await logger.info(log_text)
 
-            return False
+class ButtonHandler:
+    """DOCSTRING"""
 
-        payload = event.get("payload")
-        call_action = payload.get("call_action")
+    def __call__(self, event: Event) -> None:
+        try:
+            payload = self.get_payload(event)
 
-        kbd_owner = await self.__get_kbdowner(event)
+            self.check_owner(payload)
 
-        if event.get("user_id") == kbd_owner:
-            selected = action_list.get(call_action)
+            action_name = payload.get("call_action")
+            if self._execute(action_name, event):
+                logger.info(f"Action '{action_name}' executed.")
 
-        else:
-            selected = action_list.get("not_msg_owner")
+        except Exception as error:
+            logger.error(error)
 
+    def _execute(self, action_name: str, event: Event) -> ExecResult:
+        selected = action_list.get(action_name)
         if selected is None:
-            log_text = f'Could not call action "{call_action}"'
-            await logger.info(log_text)
+            # TODO: fix exeption
+            raise Exception(f"Could not call action '{action_name}'.")
 
-            return False
+        action_obj = selected(self._get_api())
+        return action_obj()
 
-        selected = selected(super().api)
-        result = await selected(event)
-
-        log_text = f"Event <{event.get('event_id')}> "
-
-        if result:
-            log_text += f'triggered "{selected.NAME}" action.'
-
-        else:
-            log_text += "did not triggered any action."
-
-        await logger.info(log_text)
-        return result
-
-    async def __get_kbdowner(self, event: dict) -> int:
+    @staticmethod
+    def get_payload(event: Event):
         payload = event.get("payload")
-        return payload.get("keyboard_owner")
+        if payload is None:
+            raise ValueError("Event does not contains payload.")
 
+        return payload
 
-button_handler = ButtonHandler()
+    @staticmethod
+    def check_owner(payload: Payload, event: Event):
+        owner = payload.get("keyboard_owner")
+        if owner != event.user.uuid:
+            # TODO: call  not_msg_owner action
+            # TODO: fix text and exeption
+            raise Exception("Not message owner")
+
+    def _get_api(self) -> Any:
+        session = VkApi(
+            token=config.TOKEN,
+            api_version=config.API_VERSION,
+        )
+        return session.get_api()
