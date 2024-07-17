@@ -55,7 +55,7 @@ class SetMark(BaseAction):
     NAME = "set_mark"
 
     def _handle(self, event: Event) -> bool:
-        mark = get_peer_mark(TOASTER_DB, event.peer.bpid)
+        mark = get_peer_mark(TOASTER_DB, event)
 
         if mark is None:
             payload = event.button.payload
@@ -76,12 +76,10 @@ class UpdatePeerData(BaseAction):
     NAME = "update_peer_data"
 
     def _handle(self, event: Event) -> bool:
-        mark = get_peer_mark(TOASTER_DB, event.peer.bpid)
+        mark = get_peer_mark(TOASTER_DB, event)
 
         if mark is not None:
-            peer_name = event.peer.name
-
-            update_peer_data(TOASTER_DB, peer_name, event)
+            update_peer_data(TOASTER_DB, event)
             snackbar_message = "📝 Данные беседы обновлены."
 
         else:
