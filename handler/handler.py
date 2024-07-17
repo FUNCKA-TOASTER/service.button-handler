@@ -20,7 +20,7 @@ class ButtonHandler:
             self.check_owner(payload, event)
 
             action_name = payload.get("call_action")
-            if self._execute(action_name):
+            if self._execute(action_name, event):
                 logger.info(f"Action '{action_name}' executed.")
 
         except PermissionError as error:
@@ -28,16 +28,16 @@ class ButtonHandler:
             logger.error(f"Access rejected: {error}")
 
         except Exception as error:
-            self._execute("error")
+            self._execute("error", event)
             logger.error(error)
 
-    def _execute(self, action_name: str) -> ExecResult:
+    def _execute(self, action_name: str, event: Event) -> ExecResult:
         selected = action_list.get(action_name)
         if selected is None:
             raise ValueError(f"Could not call action '{action_name}'.")
 
         action_obj = selected(self._get_api())
-        return action_obj()
+        return action_obj(event)
 
     @staticmethod
     def get_payload(event: Event):
