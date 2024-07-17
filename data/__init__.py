@@ -21,6 +21,7 @@ from .enums import (
     SettingStatus,
     StaffRole,
 )
+from .connections import TOASTER_DB
 
 __all__ = (
     "BaseModel",
@@ -41,4 +42,5 @@ __all__ = (
     "SettingDestination",
     "SettingStatus",
     "StaffRole",
+    "TOASTER_DB",
 )
