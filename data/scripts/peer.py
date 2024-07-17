@@ -19,3 +19,4 @@ def set_peer_mark(session: Session, mark: str, event: Event) -> Optional[str]:
         mark=PeerMark(mark),
     )
     session.add(new_mark)
+    session.commit()
