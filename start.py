@@ -1,29 +1,42 @@
-"""Service "toaster.comman-handling-service".
-About:
-    ...
+"""Service "toaster.button-handling-service".
 
-Author:
-    Oidaho (Ruslan Bashinskii)
-    oidahomain@gmail.com
+File:
+    start.py
+
+About:
+    This service is responsible for receiving custom
+    events from the Redis channel "button", processing
+    these events, and executing actions based on the
+    button action name specified in the payload.
 """
 
-import asyncio
-from consumer import consumer
-from handler import button_handler
-from logger import logger
+import sys
+from loguru import logger
+from toaster.broker import Subscriber, build_connection
+from handler import ButtonHandler
+import config
 
 
-async def main():
+def setup_logger() -> None:
+    logger.remove()
+    logger.add(
+        sys.stdout,
+        colorize=True,
+        format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <red>{module}</red> | <level>{level}</level> | {message}",
+        level="DEBUG",
+    )
+
+
+def main():
     """Entry point."""
-    log_text = "Awaiting button events..."
-    await logger.info(log_text)
 
-    for data in consumer.listen_queue("buttons"):
-        log_text = f"Recived new event: {data}"
-        await logger.info(log_text)
+    setup_logger()
+    subscriber = Subscriber(client=build_connection(config.REDIS_CREDS))
+    handler = ButtonHandler()
 
-        await button_handler(data)
+    for event in subscriber.listen(channel_name=config.CHANNEL_NAME):
+        handler(event)
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
