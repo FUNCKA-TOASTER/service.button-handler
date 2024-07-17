@@ -1,7 +1,7 @@
 from .actions import (
     RejectAccess,
     CloseMenu,
-    SetMark,
+    # SetMark,
 )
 
 
@@ -10,7 +10,7 @@ action_list = {
     RejectAccess.NAME: RejectAccess,
     CloseMenu.NAME: CloseMenu,
     # mark --------------------------------------
-    SetMark.NAME: SetMark,
+    # SetMark.NAME: SetMark,
 }
 
 
