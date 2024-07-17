@@ -55,7 +55,7 @@ class SetMark(BaseAction):
     def _handle(self, event: Event) -> bool:
         mark = get_peer_mark(TOASTER_DB, event.peer.bpid)
 
-        if mark is not None:
+        if mark is None:
             payload = event.button.payload
             mark = payload.get("mark")
 
