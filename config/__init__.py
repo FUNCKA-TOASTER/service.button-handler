@@ -1,31 +1,35 @@
 """Module "config".
+
+File:
+    __init__.py
+
 About:
-    Service configurations and settings.
+    This file initializes the configuration variables
+    used throughout the service. It imports and exposes
+    key configuration constants such as API token,
+    service name, and other settings required for proper
+    operation.
 """
 
 from .config import (
-    QUEUE_BROKER_IP,
-    TOKEN,
-    GROUP_ID,
-    SERVICE_NAME,
-    API_VERSION,
-    MY_SQL_HOST,
-    MY_SQL_PORT,
-    MY_SQL_PSWD,
-    MY_SQL_USER,
-    PERMISSIONS_DECODING,
+    REDIS_CREDS,  # Redis (broker) credentials
+    CHANNEL_NAME,  # Broker subscription channel name
+    TOKEN,  # API token
+    GROUP_ID,  # ID of the group
+    SERVICE_NAME,  # Name of the service
+    API_VERSION,  # Version of the API
+    ALCHEMY_SETUP,  # Setup for sqlalchemy. Driver, Database and DBMS.
+    DBMS_CREDS,  # DBMS credentials includes host, port, user, password.
 )
 
 
 __all__ = (
-    "QUEUE_BROKER_IP",
+    "REDIS_CREDS",
+    "CHANNEL_NAME",
     "TOKEN",
     "GROUP_ID",
     "SERVICE_NAME",
     "API_VERSION",
-    "MY_SQL_HOST",
-    "MY_SQL_PORT",
-    "MY_SQL_PSWD",
-    "MY_SQL_USER",
-    "PERMISSIONS_DECODING",
+    "ALCHEMY_SETUP",
+    "DBMS_CREDS",
 )
