@@ -19,7 +19,7 @@ class ButtonHandler:
 
             self.check_owner(payload, event)
 
-            action_name = payload.get("call_action")
+            action_name = payload.get("action_name")
             if self._execute(action_name, event):
                 logger.info(f"Action '{action_name}' executed.")
 
