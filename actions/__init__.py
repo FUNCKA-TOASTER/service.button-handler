@@ -5,6 +5,8 @@ from .actions import (
     SetMark,
     UpdatePeerData,
     DropMark,
+    SetPermission,
+    DropPermission,
 )
 
 
@@ -17,6 +19,9 @@ action_list = {
     SetMark.NAME: SetMark,
     UpdatePeerData.NAME: UpdatePeerData,
     DropMark.NAME: DropMark,
+    # permission --------------------------------
+    SetPermission.NAME: SetPermission,
+    DropPermission.NAME: DropPermission,
 }
 
 
