@@ -12,11 +12,18 @@ def get_peer_mark(session: Session, bpid: int) -> Optional[str]:
 
 
 @script(auto_commit=False)
-def set_peer_mark(session: Session, mark: str, event: Event) -> Optional[str]:
+def set_peer_mark(session: Session, mark: str, event: Event) -> None:
     new_mark = Peer(
         id=event.peer.bpid,
         name=event.peer.name,
         mark=PeerMark(mark),
     )
     session.add(new_mark)
+    session.commit()
+
+
+@script(auto_commit=False)
+def update_peer_data(session: Session, name: str, event: Event) -> None:
+    peer = session.get(Peer, {"id": event.peer.bpid})
+    peer.name = name
     session.commit()
