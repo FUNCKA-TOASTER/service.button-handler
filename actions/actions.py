@@ -1,4 +1,9 @@
 from toaster.broker.events import Event
+from data import TOASTER_DB
+from data.scripts import (
+    get_peer_mark,
+    set_peer_mark,
+)
 from .base import BaseAction
 
 
@@ -35,7 +40,7 @@ class CloseMenu(BaseAction):
             delete_for_all=1,
         )
 
-        snackbar_message = "❗Отмена команды."
+        snackbar_message = "❌ Меню закрыто."
         self.snackbar(event, snackbar_message)
 
         # TODO: Удаление сессии меню из БД
@@ -44,36 +49,22 @@ class CloseMenu(BaseAction):
 
 
 # ------------------------------------------------------------------------
-# class SetMark(BaseAction):
-#     NAME = "set_mark"
+class SetMark(BaseAction):
+    NAME = "set_mark"
 
-#     def _handle(self, event: Event) -> bool:
-#         fields = ("conv_mark",)
-#         mark = db.execute.select(
-#             schema="toaster",
-#             table="conversations",
-#             fields=fields,
-#             conv_id=event.get("peer_id"),
-#         )
-#         already_marked = bool(mark)
+    def _handle(self, event: Event) -> bool:
+        mark = get_peer_mark(TOASTER_DB, event.peer.bpid)
 
-#         payload = event.get("payload")
-#         mark = payload.get("mark")
+        if mark is not None:
+            payload = event.button.payload
+            mark = payload.get("mark")
 
-#         if not already_marked:
-#             db.execute.insert(
-#                 schema="toaster",
-#                 table="conversations",
-#                 conv_id=event.get("peer_id"),
-#                 conv_name=event.get("peer_name"),
-#                 conv_mark=mark,
-#             )
+            set_peer_mark(TOASTER_DB, mark, event)
+            snackbar_message = f'📝 Беседа помечена как "{mark}".'
 
-#             snackbar_message = f'📝 Беседа помечена как "{mark}".'
+        else:
+            snackbar_message = f'❗Беседа уже имеет метку "{mark}".'
 
-#         else:
-#             snackbar_message = f'❗Беседа уже имеет метку "{mark}".'
+        self.snackbar(event, snackbar_message)
 
-#         self.snackbar(event, snackbar_message)
-
-#         return True
+        return True
