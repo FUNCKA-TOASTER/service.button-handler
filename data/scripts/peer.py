@@ -6,8 +6,8 @@ from data import Peer, PeerMark
 
 
 @script(auto_commit=False)
-def get_peer_mark(session: Session, bpid: int) -> Optional[str]:
-    peer = session.get(Peer, {"id": bpid})
+def get_peer_mark(session: Session, event: Event) -> Optional[str]:
+    peer = session.get(Peer, {"id": event.peer.bpid})
     return peer.mark.value if peer else None
 
 
@@ -23,9 +23,9 @@ def set_peer_mark(session: Session, mark: str, event: Event) -> None:
 
 
 @script(auto_commit=False)
-def update_peer_data(session: Session, name: str, event: Event) -> None:
+def update_peer_data(session: Session, event: Event) -> None:
     peer = session.get(Peer, {"id": event.peer.bpid})
-    peer.name = name
+    peer.name = event.peer.name
     session.commit()
 
 
