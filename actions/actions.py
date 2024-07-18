@@ -148,7 +148,7 @@ class SetPermission(BaseAction):
         new_permission = int(payload.get("permission"))
         role = UserPermission(current_permission)
 
-        if current_permission is None:
+        if current_permission == 0:
             role = UserPermission(new_permission)
             set_user_permission(
                 db_instance=TOASTER_DB,
