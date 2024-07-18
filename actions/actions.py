@@ -224,7 +224,7 @@ class GameRoll(BaseAction):
 
         self.api.messages.edit(
             peer_id=event.peer.bpid,
-            conversation_message_id=event.message.cmid,
+            conversation_message_id=event.button.cmid,
             message=new_msg_text,
             keyboard=keyboard.json,
         )
@@ -239,7 +239,7 @@ class GameCoinflip(BaseAction):
     NAME = "game_coinflip"
     EMOJI = ["Орёл 🪙", "Решка 🪙"]
 
-    async def _handle(self, event: dict, kwargs) -> bool:
+    def _handle(self, event: Event) -> bool:
         num = random.randint(0, 1)
         result = self.EMOJI[num]
 
@@ -257,7 +257,7 @@ class GameCoinflip(BaseAction):
 
         self.api.messages.edit(
             peer_id=event.peer.bpid,
-            conversation_message_id=event.message.cmid,
+            conversation_message_id=event.button.cmid,
             message=new_msg_text,
             keyboard=keyboard.json,
         )
