@@ -210,7 +210,7 @@ class GameRoll(BaseAction):
         for didgit in str(num):
             result += self.EMOJI[int(didgit)]
 
-        tag = f"[id{event.get('user_id')}|{event.get('user_name')}]"
+        tag = f"[id{event.user.uuid}|{event.user.name}]"
         new_msg_text = f"{tag} выбивает число: {result}"
 
         keyboard = (
@@ -243,7 +243,7 @@ class GameCoinflip(BaseAction):
         num = random.randint(0, 1)
         result = self.EMOJI[num]
 
-        tag = f"[id{event.get('user_id')}|{event.get('user_name')}]"
+        tag = f"[id{event.user.uuid}|{event.user.name}]"
         new_msg_text = f"{tag} подбрасывает монетку: {result}"
 
         keyboard = (
