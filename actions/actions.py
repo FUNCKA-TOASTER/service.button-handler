@@ -1,4 +1,6 @@
+import random
 from toaster.broker.events import Event
+from toaster.keyboards import Keyboard, ButtonColor, Callback
 from data import TOASTER_DB
 from data import UserPermission
 from data.scripts import (
@@ -195,3 +197,72 @@ class DropPermission(BaseAction):
             snackbar_message = "❗ Пользователь не имеет роли."
             self.snackbar(event, snackbar_message)
             return False
+
+
+# ------------------------------------------------------------------------
+class GameRoll(BaseAction):
+    NAME = "game_roll"
+    EMOJI = ["0️⃣", "1️⃣", " 2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
+
+    def _handle(self, event: Event) -> bool:
+        num = random.randint(0, 100)
+        result = ""
+        for didgit in str(num):
+            result += self.EMOJI[int(didgit)]
+
+        tag = f"[id{event.get('user_id')}|{event.get('user_name')}]"
+        new_msg_text = f"{tag} выбивает число: {result}"
+
+        keyboard = (
+            Keyboard(inline=True, one_time=False, owner_id=event.user.uuid)
+            .add_row()
+            .add_button(
+                Callback(label="Скрыть", payload={"action_name": "close_menu"}),
+                ButtonColor.SECONDARY,
+            )
+        )
+
+        self.api.messages.edit(
+            peer_id=event.peer.bpid,
+            conversation_message_id=event.message.cmid,
+            message=new_msg_text,
+            keyboard=keyboard.json,
+        )
+
+        snackbar_message = "🎲 Рулетка прокручена!"
+        self.snackbar(event, snackbar_message)
+
+        return True
+
+
+class GameCoinflip(BaseAction):
+    NAME = "game_coinflip"
+    EMOJI = ["Орёл 🪙", "Решка 🪙"]
+
+    async def _handle(self, event: dict, kwargs) -> bool:
+        num = random.randint(0, 1)
+        result = self.EMOJI[num]
+
+        tag = f"[id{event.get('user_id')}|{event.get('user_name')}]"
+        new_msg_text = f"{tag} подбрасывает монетку: {result}"
+
+        keyboard = (
+            Keyboard(inline=True, one_time=False, owner_id=event.user.uuid)
+            .add_row()
+            .add_button(
+                Callback(label="Скрыть", payload={"action_name": "close_menu"}),
+                ButtonColor.SECONDARY,
+            )
+        )
+
+        self.api.messages.edit(
+            peer_id=event.peer.bpid,
+            conversation_message_id=event.message.cmid,
+            message=new_msg_text,
+            keyboard=keyboard.json,
+        )
+
+        snackbar_message = "🎲 Монета брошена!"
+        self.snackbar(event, snackbar_message)
+
+        return True

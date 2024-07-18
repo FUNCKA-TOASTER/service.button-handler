@@ -7,6 +7,8 @@ from .actions import (
     DropMark,
     SetPermission,
     DropPermission,
+    GameCoinflip,
+    GameRoll,
 )
 
 
@@ -22,6 +24,9 @@ action_list = {
     # permission --------------------------------
     SetPermission.NAME: SetPermission,
     DropPermission.NAME: DropPermission,
+    # Game  -------------------------------------
+    GameCoinflip.NAME: GameCoinflip,
+    GameRoll.NAME: GameRoll,
 }
 
 
