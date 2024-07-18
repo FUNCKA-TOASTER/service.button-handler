@@ -4,10 +4,13 @@ from data import Permission, Staff, StaffRole, UserPermission
 
 
 @script(auto_commit=False)
-def get_user_permission(session: Session, uuid: int, bpid: int) -> int:
-    staff = session.get(Staff, {"uuid": uuid})
-    if (staff is not None) and (StaffRole.TECH == staff.role):
-        return 2
+def get_user_permission(
+    session: Session, uuid: int, bpid: int, ignore_staff: bool = False
+) -> int:
+    if not ignore_staff:
+        staff = session.get(Staff, {"uuid": uuid})
+        if (staff is not None) and (StaffRole.TECH == staff.role):
+            return 2
 
     permission = session.get(Permission, {"uuid": uuid, "bpid": bpid})
     return permission.permission.value if permission else 0
