@@ -22,6 +22,7 @@ class ButtonHandler:
             action_name = payload.get("action_name")
             if self._execute(action_name, event):
                 logger.info(f"Action '{action_name}' executed.")
+                return
 
         except PermissionError as error:
             self._execute("reject_access", event)
@@ -30,6 +31,9 @@ class ButtonHandler:
         except Exception as error:
             self._execute("error", event)
             logger.error(error)
+
+        else:
+            logger.info("Not a single action was executed.")
 
     def _execute(self, action_name: str, event: Event) -> ExecResult:
         selected = action_list.get(action_name)
