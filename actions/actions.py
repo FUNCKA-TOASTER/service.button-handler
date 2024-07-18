@@ -57,13 +57,21 @@ class SetMark(BaseAction):
     NAME = "set_mark"
 
     def _handle(self, event: Event) -> bool:
-        mark = get_peer_mark(TOASTER_DB, event.peer.bpid)
+        mark = get_peer_mark(
+            db_instance=TOASTER_DB,
+            bpid=event.peer.bpid,
+        )
 
         if mark is None:
             payload = event.button.payload
             mark = payload.get("mark")
 
-            set_peer_mark(TOASTER_DB, mark, event.peer.bpid, event.peer.name)
+            set_peer_mark(
+                db_instance=TOASTER_DB,
+                mark=mark,
+                bpid=event.peer.bpid,
+                bpn=event.peer.name,
+            )
             snackbar_message = f'📝 Беседа помечена как "{mark}".'
 
         else:
@@ -78,10 +86,17 @@ class UpdatePeerData(BaseAction):
     NAME = "update_peer_data"
 
     def _handle(self, event: Event) -> bool:
-        mark = get_peer_mark(TOASTER_DB, event.peer.bpid)
+        mark = get_peer_mark(
+            db_instance=TOASTER_DB,
+            bpid=event.peer.bpid,
+        )
 
         if mark is not None:
-            update_peer_data(TOASTER_DB, event.peer.bpid, event.peer.name)
+            update_peer_data(
+                db_instance=TOASTER_DB,
+                bpid=event.peer.bpid,
+                name=event.peer.name,
+            )
             snackbar_message = "📝 Данные беседы обновлены."
 
         else:
@@ -96,10 +111,16 @@ class DropMark(BaseAction):
     NAME = "drop_mark"
 
     def _handle(self, event: Event) -> bool:
-        mark = get_peer_mark(TOASTER_DB, event.peer.bpid)
+        mark = get_peer_mark(
+            db_instance=TOASTER_DB,
+            bpid=event.peer.bpid,
+        )
 
         if mark is not None:
-            drop_peer_mark(TOASTER_DB, event.peer.bpid)
+            drop_peer_mark(
+                db_instance=TOASTER_DB,
+                bpid=event.peer.bpid,
+            )
             snackbar_message = f'📝 Метка "{mark}" снята с беседы.'
 
         else:
@@ -119,7 +140,9 @@ class SetPermission(BaseAction):
         target_uuid = payload.get("target")
 
         current_permission = get_user_permission(
-            TOASTER_DB, target_uuid, event.peer.bpid
+            db_instance=TOASTER_DB,
+            uuid=target_uuid,
+            bpid=event.peer.bpid,
         )
 
         new_permission = int(payload.get("permission"))
@@ -128,10 +151,10 @@ class SetPermission(BaseAction):
         if current_permission is None:
             role = UserPermission(new_permission)
             set_user_permission(
-                TOASTER_DB,
-                target_uuid,
-                event.peer.bpid,
-                new_permission,
+                db_instance=TOASTER_DB,
+                uuid=target_uuid,
+                bpid=event.peer.bpid,
+                lvl=new_permission,
             )
             snackbar_message = f'⚒️ Пользователю назначена роль "{role.name}".'
             self.snackbar(event, snackbar_message)
@@ -152,11 +175,18 @@ class DropPermission(BaseAction):
         target_uuid = payload.get("target")
 
         current_permission = get_user_permission(
-            TOASTER_DB, target_uuid, event.peer.bpid
+            db_instance=TOASTER_DB,
+            uuid=target_uuid,
+            bpid=event.peer.bpid,
+            ignore_staff=True,
         )
 
-        if current_permission is not None:
-            drop_user_permission(TOASTER_DB, target_uuid, event.peer.bpid)
+        if current_permission > 0:
+            drop_user_permission(
+                db_instance=TOASTER_DB,
+                uuid=target_uuid,
+                bpid=event.peer.bpid,
+            )
             snackbar_message = "⚒️ Роль пользователя сброшена."
             self.snackbar(event, snackbar_message)
             return True
