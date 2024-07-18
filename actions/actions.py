@@ -232,6 +232,8 @@ class GameRoll(BaseAction):
         snackbar_message = "🎲 Рулетка прокручена!"
         self.snackbar(event, snackbar_message)
 
+        # TODO: Создать сессию меню
+
         return True
 
 
@@ -265,4 +267,9 @@ class GameCoinflip(BaseAction):
         snackbar_message = "🎲 Монета брошена!"
         self.snackbar(event, snackbar_message)
 
+        # TODO: Создать сессию меню
+
         return True
+
+
+# ------------------------------------------------------------------------
