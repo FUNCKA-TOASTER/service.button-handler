@@ -443,7 +443,7 @@ class SystemsSettings(BaseAction):
 class FiltersSettings(BaseAction):
     NAME = "filters_settings"
 
-    async def _handle(self, event: dict, kwargs) -> bool:
+    def _handle(self, event: Event) -> bool:
         payload = event.button.payload
 
         filters = get_destinated_settings(
