@@ -485,7 +485,7 @@ class FiltersSettings(BaseAction):
                         label=f"Приложения: {'Выкл.' if filters['app_action'].value else 'Вкл.'}",
                         payload={
                             "action_name": "filters_settings",
-                            "action_context": "change_setting",
+                            "action_context": "change_status",
                             "filter_name": "app_action",
                             "page": "1",
                         },
@@ -498,7 +498,7 @@ class FiltersSettings(BaseAction):
                         label=f"Музыка: {'Выкл.' if filters['audio'].value else 'Вкл.'}",
                         payload={
                             "action_name": "filters_settings",
-                            "action_context": "change_setting",
+                            "action_context": "change_status",
                             "filter_name": "audio",
                             "page": "1",
                         },
@@ -511,7 +511,7 @@ class FiltersSettings(BaseAction):
                         label=f"Аудио: {'Выкл.' if filters['audio_message'].value else 'Вкл.'}",
                         payload={
                             "action_name": "filters_settings",
-                            "action_context": "change_setting",
+                            "action_context": "change_status",
                             "filter_name": "audio_message",
                             "page": "1",
                         },
@@ -524,7 +524,7 @@ class FiltersSettings(BaseAction):
                         label=f"Файлы: {'Выкл.' if filters['doc'].value else 'Вкл.'}",
                         payload={
                             "action_name": "filters_settings",
-                            "action_context": "change_setting",
+                            "action_context": "change_status",
                             "filter_name": "doc",
                             "page": "1",
                         },
@@ -555,7 +555,7 @@ class FiltersSettings(BaseAction):
                         label=f"Пересыл: {'Выкл.' if filters['forward'].value else 'Вкл.'}",
                         payload={
                             "action_name": "filters_settings",
-                            "action_context": "change_setting",
+                            "action_context": "change_status",
                             "filter_name": "forward",
                             "page": "2",
                         },
@@ -568,7 +568,7 @@ class FiltersSettings(BaseAction):
                         label=f"Ответ: {'Выкл.' if filters['reply'].value else 'Вкл.'}",
                         payload={
                             "action_name": "filters_settings",
-                            "action_context": "change_setting",
+                            "action_context": "change_status",
                             "filter_name": "reply",
                             "page": "2",
                         },
@@ -581,7 +581,7 @@ class FiltersSettings(BaseAction):
                         label=f"Граффити: {'Выкл.' if filters['graffiti'].value else 'Вкл.'}",
                         payload={
                             "action_name": "filters_settings",
-                            "action_context": "change_setting",
+                            "action_context": "change_status",
                             "filter_name": "graffiti",
                             "page": "2",
                         },
@@ -594,7 +594,7 @@ class FiltersSettings(BaseAction):
                         label=f"Стикеры: {'Выкл.' if filters['sticker'].value else 'Вкл.'}",
                         payload={
                             "action_name": "filters_settings",
-                            "action_context": "change_setting",
+                            "action_context": "change_status",
                             "filter_name": "sticker",
                             "page": "2",
                         },
@@ -632,7 +632,7 @@ class FiltersSettings(BaseAction):
                         label=f"Линки: {'Выкл.' if filters['link'].value else 'Вкл.'}",
                         payload={
                             "action_name": "filters_settings",
-                            "action_context": "change_setting",
+                            "action_context": "change_status",
                             "filter_name": "link",
                             "page": "3",
                         },
@@ -645,7 +645,7 @@ class FiltersSettings(BaseAction):
                         label=f"Изображения: {'Выкл.' if filters['photo'].value else 'Вкл.'}",
                         payload={
                             "action_name": "filters_settings",
-                            "action_context": "change_setting",
+                            "action_context": "change_status",
                             "filter_name": "photo",
                             "page": "3",
                         },
@@ -658,7 +658,7 @@ class FiltersSettings(BaseAction):
                         label=f"Опросы: {'Выкл.' if filters['poll'].value else 'Вкл.'}",
                         payload={
                             "action_name": "filters_settings",
-                            "action_context": "change_setting",
+                            "action_context": "change_status",
                             "filter_name": "poll",
                             "page": "3",
                         },
@@ -671,7 +671,7 @@ class FiltersSettings(BaseAction):
                         label=f"Видео: {'Выкл.' if filters['video'].value else 'Вкл.'}",
                         payload={
                             "action_name": "filters_settings",
-                            "action_context": "change_setting",
+                            "action_context": "change_status",
                             "filter_name": "video",
                             "page": "3",
                         },
@@ -709,7 +709,7 @@ class FiltersSettings(BaseAction):
                         label=f"Записи: {'Выкл.' if filters['wall'].value else 'Вкл.'}",
                         payload={
                             "action_name": "filters_settings",
-                            "action_context": "change_setting",
+                            "action_context": "change_status",
                             "filter_name": "wall",
                             "page": "4",
                         },
@@ -722,7 +722,7 @@ class FiltersSettings(BaseAction):
                         label=f"Геопозиция: {'Выкл.' if filters['geo'].value else 'Вкл.'}",
                         payload={
                             "action_name": "filters_settings",
-                            "action_context": "change_setting",
+                            "action_context": "change_status",
                             "filter_name": "geo",
                             "page": "4",
                         },
