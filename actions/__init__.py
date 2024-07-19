@@ -10,6 +10,7 @@ from .actions import (
     GameCoinflip,
     GameRoll,
     SystemsSettings,
+    FiltersSettings,
 )
 
 
@@ -30,6 +31,7 @@ action_list = {
     GameRoll.NAME: GameRoll,
     # Settings ----------------------------------
     SystemsSettings.NAME: SystemsSettings,
+    FiltersSettings.NAME: FiltersSettings,
 }
 
 

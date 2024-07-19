@@ -312,7 +312,7 @@ class SystemsSettings(BaseAction):
             )
 
         else:
-            snackbar_message = f"⚙️ Меню систем модерации ({page}/2).."
+            snackbar_message = f"⚙️ Меню систем модерации ({page}/2)."
 
         if page == 1:
             keyboard = (
@@ -438,3 +438,323 @@ class SystemsSettings(BaseAction):
         self.snackbar(event, snackbar_message)
 
         return True
+
+
+class FiltersSettings(BaseAction):
+    NAME = "filters_settings"
+
+    async def _handle(self, event: dict, kwargs) -> bool:
+        payload = event.button.payload
+
+        filters = get_destinated_settings(
+            db_instance=TOASTER_DB,
+            destination=SettingDestination.filter,
+            bpid=event.peer.bpid,
+        )
+        color_by_status = {
+            SettingStatus.inactive: ButtonColor.NEGATIVE,
+            SettingStatus.active: ButtonColor.POSITIVE,
+        }
+
+        page = int(payload.get("page", 1))
+
+        if payload.get("action_context") == "change_status":
+            filter_name = payload.get("filter_name")
+            new_status = SettingStatus(not filters[filter_name].value)
+            filter_name[filter_name] = new_status
+
+            snackbar_message = (
+                f"⚠️ Система {'Включена' if not new_status.value else 'Выключена'}."
+            )
+            update_setting_status(
+                db_instance=TOASTER_DB,
+                status=new_status,
+                bpid=event.peer.bpid,
+                name=filter_name,
+            )
+
+        else:
+            snackbar_message = f"⚙️ Меню фильтров сообщений ({page}/4)."
+
+        if page == 1:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.user.uuid)
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Приложения: {'Выкл.' if filters['app_action'].value else 'Вкл.'}",
+                        payload={
+                            "action_name": "filters_settings",
+                            "action_context": "change_setting",
+                            "filter_name": "app_action",
+                            "page": "1",
+                        },
+                    ),
+                    color_by_status[filters["app_action"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Музыка: {'Выкл.' if filters['audio'].value else 'Вкл.'}",
+                        payload={
+                            "action_name": "filters_settings",
+                            "action_context": "change_setting",
+                            "filter_name": "audio",
+                            "page": "1",
+                        },
+                    ),
+                    color_by_status[filters["audio"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Аудио: {'Выкл.' if filters['audio_message'].value else 'Вкл.'}",
+                        payload={
+                            "action_name": "filters_settings",
+                            "action_context": "change_setting",
+                            "filter_name": "audio_message",
+                            "page": "1",
+                        },
+                    ),
+                    color_by_status[filters["audio_message"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Файлы: {'Выкл.' if filters['doc'].value else 'Вкл.'}",
+                        payload={
+                            "action_name": "filters_settings",
+                            "action_context": "change_setting",
+                            "filter_name": "doc",
+                            "page": "1",
+                        },
+                    ),
+                    color_by_status[filters["doc"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="-->",
+                        payload={"action_name": "filters_settings", "page": "2"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(label="Закрыть", payload={"action_name": "close_menu"}),
+                    ButtonColor.SECONDARY,
+                )
+            )
+
+        elif page == 2:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.user.uuid)
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Пересыл: {'Выкл.' if filters['forward'].value else 'Вкл.'}",
+                        payload={
+                            "action_name": "filters_settings",
+                            "action_context": "change_setting",
+                            "filter_name": "forward",
+                            "page": "2",
+                        },
+                    ),
+                    color_by_status[filters["forward"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Ответ: {'Выкл.' if filters['reply'].value else 'Вкл.'}",
+                        payload={
+                            "action_name": "filters_settings",
+                            "action_context": "change_setting",
+                            "filter_name": "reply",
+                            "page": "2",
+                        },
+                    ),
+                    color_by_status[filters["reply"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Граффити: {'Выкл.' if filters['graffiti'].value else 'Вкл.'}",
+                        payload={
+                            "action_name": "filters_settings",
+                            "action_context": "change_setting",
+                            "filter_name": "graffiti",
+                            "page": "2",
+                        },
+                    ),
+                    color_by_status[filters["graffiti"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Стикеры: {'Выкл.' if filters['sticker'].value else 'Вкл.'}",
+                        payload={
+                            "action_name": "filters_settings",
+                            "action_context": "change_setting",
+                            "filter_name": "sticker",
+                            "page": "2",
+                        },
+                    ),
+                    color_by_status[filters["sticker"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="<--",
+                        payload={"action_name": "filters_settings", "page": "1"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_button(
+                    Callback(
+                        label="-->",
+                        payload={"action_name": "filters_settings", "page": "3"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(label="Закрыть", payload={"action_name": "close_menu"}),
+                    ButtonColor.SECONDARY,
+                )
+            )
+
+        elif page == 3:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.user.uuid)
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Линки: {'Выкл.' if filters['link'].value else 'Вкл.'}",
+                        payload={
+                            "action_name": "filters_settings",
+                            "action_context": "change_setting",
+                            "filter_name": "link",
+                            "page": "3",
+                        },
+                    ),
+                    color_by_status[filters["link"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Изображения: {'Выкл.' if filters['photo'].value else 'Вкл.'}",
+                        payload={
+                            "action_name": "filters_settings",
+                            "action_context": "change_setting",
+                            "filter_name": "photo",
+                            "page": "3",
+                        },
+                    ),
+                    color_by_status[filters["photo"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Опросы: {'Выкл.' if filters['poll'].value else 'Вкл.'}",
+                        payload={
+                            "action_name": "filters_settings",
+                            "action_context": "change_setting",
+                            "filter_name": "poll",
+                            "page": "3",
+                        },
+                    ),
+                    color_by_status[filters["poll"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Видео: {'Выкл.' if filters['video'].value else 'Вкл.'}",
+                        payload={
+                            "action_name": "filters_settings",
+                            "action_context": "change_setting",
+                            "filter_name": "video",
+                            "page": "3",
+                        },
+                    ),
+                    color_by_status[filters["video"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="<--",
+                        payload={"action_name": "filters_settings", "page": "2"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_button(
+                    Callback(
+                        label="-->",
+                        payload={"action_name": "filters_settings", "page": "4"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(label="Закрыть", payload={"action_name": "close_menu"}),
+                    ButtonColor.SECONDARY,
+                )
+            )
+
+        elif page == 4:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.user.uuid)
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Записи: {'Выкл.' if filters['wall'].value else 'Вкл.'}",
+                        payload={
+                            "action_name": "filters_settings",
+                            "action_context": "change_setting",
+                            "filter_name": "wall",
+                            "page": "4",
+                        },
+                    ),
+                    color_by_status[filters["wall"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Геопозиция: {'Выкл.' if filters['geo'].value else 'Вкл.'}",
+                        payload={
+                            "action_name": "filters_settings",
+                            "action_context": "change_setting",
+                            "filter_name": "geo",
+                            "page": "4",
+                        },
+                    ),
+                    color_by_status[filters["geo"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="<--",
+                        payload={"action_name": "filters_settings", "page": "3"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(label="Закрыть", payload={"action_name": "close_menu"}),
+                    ButtonColor.SECONDARY,
+                )
+            )
+
+        new_msg_text = "⚙️ Включение\\Выключение фильтров сообщений:"
+        self.api.messages.edit(
+            peer_id=event.peer.bpid,
+            conversation_message_id=event.button.cmid,
+            message=new_msg_text,
+            keyboard=keyboard.json,
+        )
+
+        self.snackbar(event, snackbar_message)
+
+        return True
+
+
+# ------------------------------------------------------------------------
