@@ -10,6 +10,10 @@ from .user import (
     update_user_permission,
     drop_user_permission,
 )
+from .settings import (
+    get_destinated_settings,
+    update_setting_status,
+)
 
 __all__ = (
     "get_peer_mark",
@@ -20,4 +24,6 @@ __all__ = (
     "set_user_permission",
     "update_user_permission",
     "drop_user_permission",
+    "get_destinated_settings",
+    "update_setting_status",
 )

@@ -5,19 +5,19 @@ from data import Peer, PeerMark
 
 
 @script(auto_commit=False)
-def get_peer_mark(session: Session, bpid: int) -> Optional[str]:
+def get_peer_mark(session: Session, bpid: int) -> Optional[PeerMark]:
     peer = session.get(Peer, {"id": bpid})
-    return peer.mark.value if peer else None
+    return peer.mark if peer else None
 
 
 @script(auto_commit=False, debug=True)
-def set_peer_mark(session: Session, mark: str, bpid: int, name: str) -> None:
-    new_mark = Peer(
+def set_peer_mark(session: Session, mark: PeerMark, bpid: int, name: str) -> None:
+    new_peer = Peer(
         id=bpid,
         name=name,
-        mark=PeerMark(mark),
+        mark=mark,
     )
-    session.add(new_mark)
+    session.add(new_peer)
     session.commit()
 
 

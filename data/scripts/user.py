@@ -6,36 +6,40 @@ from data import Permission, Staff, StaffRole, UserPermission
 @script(auto_commit=False, debug=True)
 def get_user_permission(
     session: Session, uuid: int, bpid: int, ignore_staff: bool = False
-) -> int:
+) -> UserPermission:
     if not ignore_staff:
         staff = session.get(Staff, {"uuid": uuid})
         if (staff is not None) and (StaffRole.TECH == staff.role):
-            return 2
+            return UserPermission.administrator
 
-    permission = session.get(Permission, {"uuid": uuid, "bpid": bpid})
-    return permission.permission.value if permission else 0
+    user = session.get(Permission, {"uuid": uuid, "bpid": bpid})
+    return user.permission if user else UserPermission.user
 
 
 @script(auto_commit=False, debug=True)
-def set_user_permission(session: Session, uuid: int, bpid: int, lvl: int) -> int:
-    new_permission = Permission(
+def set_user_permission(
+    session: Session, lvl: UserPermission, uuid: int, bpid: int
+) -> None:
+    new_user = Permission(
         bpid=bpid,
         uuid=uuid,
-        permission=UserPermission(lvl),
+        permission=lvl,
     )
-    session.add(new_permission)
+    session.add(new_user)
     session.commit()
 
 
 @script(auto_commit=False, debug=True)
-def update_user_permission(session: Session, uuid: int, bpid: int, lvl: int) -> int:
-    permission = session.get(Permission, {"uuid": uuid, "bpid": bpid})
-    permission.permission(lvl)
+def update_user_permission(
+    session: Session, lvl: UserPermission, uuid: int, bpid: int
+) -> int:
+    user = session.get(Permission, {"uuid": uuid, "bpid": bpid})
+    user.permission = lvl
     session.commit()
 
 
 @script(auto_commit=False, debug=True)
 def drop_user_permission(session: Session, uuid: int, bpid: int) -> int:
-    permission = session.get(Permission, {"uuid": uuid, "bpid": bpid})
-    session.delete(permission)
+    user = session.get(Permission, {"uuid": uuid, "bpid": bpid})
+    session.delete(user)
     session.commit()
