@@ -2,7 +2,12 @@ import random
 from toaster.broker.events import Event
 from toaster.keyboards import Keyboard, ButtonColor, Callback
 from data import TOASTER_DB
-from data import UserPermission
+from data import (
+    UserPermission,
+    SettingDestination,
+    SettingStatus,
+    PeerMark,
+)
 from data.scripts import (
     get_peer_mark,
     set_peer_mark,
@@ -11,6 +16,8 @@ from data.scripts import (
     get_user_permission,
     set_user_permission,
     drop_user_permission,
+    get_destinated_settings,
+    update_setting_status,
 )
 from .base import BaseAction
 
@@ -66,7 +73,7 @@ class SetMark(BaseAction):
 
         if mark is None:
             payload = event.button.payload
-            mark = payload.get("mark")
+            mark = PeerMark(payload.get("mark"))
 
             set_peer_mark(
                 db_instance=TOASTER_DB,
@@ -74,10 +81,10 @@ class SetMark(BaseAction):
                 bpid=event.peer.bpid,
                 name=event.peer.name,
             )
-            snackbar_message = f'📝 Беседа помечена как "{mark}".'
+            snackbar_message = f'📝 Беседа помечена как "{mark.name}".'
 
         else:
-            snackbar_message = f'❗Беседа уже имеет метку "{mark}".'
+            snackbar_message = f'❗Беседа уже имеет метку "{mark.name}".'
 
         self.snackbar(event, snackbar_message)
 
@@ -123,7 +130,7 @@ class DropMark(BaseAction):
                 db_instance=TOASTER_DB,
                 bpid=event.peer.bpid,
             )
-            snackbar_message = f'📝 Метка "{mark}" снята с беседы.'
+            snackbar_message = f'📝 Метка "{mark.name}" снята с беседы.'
 
         else:
             snackbar_message = "❗Беседа еще не имеет метку."
@@ -146,25 +153,23 @@ class SetPermission(BaseAction):
             uuid=target_uuid,
             bpid=event.peer.bpid,
         )
+        new_permission = UserPermission(int(payload.get("permission")))
 
-        new_permission = int(payload.get("permission"))
-        role = UserPermission(current_permission)
-
-        if current_permission == 0:
-            role = UserPermission(new_permission)
+        if current_permission == UserPermission.user:
             set_user_permission(
                 db_instance=TOASTER_DB,
                 uuid=target_uuid,
                 bpid=event.peer.bpid,
                 lvl=new_permission,
             )
-            snackbar_message = f'⚒️ Пользователю назначена роль "{role.name}".'
+            snackbar_message = f'⚒️ Пользователю назначена роль "{new_permission.name}".'
             self.snackbar(event, snackbar_message)
             return True
 
         else:
-            role = UserPermission(current_permission)
-            snackbar_message = f'❗Пользователь уже имеет роль "{role.name}".'
+            snackbar_message = (
+                f'❗Пользователь уже имеет роль "{current_permission.name}".'
+            )
             self.snackbar(event, snackbar_message)
             return False
 
@@ -183,7 +188,7 @@ class DropPermission(BaseAction):
             ignore_staff=True,
         )
 
-        if current_permission > 0:
+        if current_permission != UserPermission.user:
             drop_user_permission(
                 db_instance=TOASTER_DB,
                 uuid=target_uuid,
@@ -273,3 +278,163 @@ class GameCoinflip(BaseAction):
 
 
 # ------------------------------------------------------------------------
+class SystemsSettingsAction(BaseAction):
+    NAME = "systems_settings"
+
+    def _handle(self, event: Event) -> bool:
+        payload = event.button.payload
+
+        systems = get_destinated_settings(
+            db_instance=TOASTER_DB,
+            destination=SettingDestination.system,
+            bpid=event.peer.bpid,
+        )
+        color_by_status = {
+            SettingStatus.inactive: ButtonColor.NEGATIVE,
+            SettingStatus.active: ButtonColor.POSITIVE,
+        }
+
+        page = int(payload.get("page", 1))
+
+        if payload.get("action_context") == "change_status":
+            system_name = payload.get("system_name")
+            new_status = SettingStatus(not systems[system_name].value)
+            systems[system_name] = new_status
+
+            snackbar_message = (
+                f"⚠️ Система {'Включена' if new_status.value else 'Выключена'}."
+            )
+            update_setting_status(
+                db_instance=TOASTER_DB,
+                status=new_status,
+                bpid=event.peer.bpid,
+                name=system_name,
+            )
+
+        else:
+            snackbar_message = f"⚙️ Меню систем модерации ({page}/2).."
+
+        if page == 1:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.user.uuid)
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Возраст аккаунта: {'Вкл.' if systems['account_age'].value else 'Выкл.'}",
+                        payload={
+                            "action_name": "systems_settings",
+                            "action_context": "change_status",
+                            "system_name": "account_age",
+                            "page": "1",
+                        },
+                    ),
+                    color_by_status[systems["account_age"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Запрещенные слова: {'Вкл.' if systems['curse_words'].value else 'Выкл.'}",
+                        payload={
+                            "action_name": "systems_settings",
+                            "action_context": "change_status",
+                            "system_name": "curse_words",
+                            "page": "1",
+                        },
+                    ),
+                    color_by_status[systems["curse_words"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Открытое ЛС: {'Вкл.' if systems['open_pm'].value else 'Выкл.'}",
+                        payload={
+                            "action_name": "systems_settings",
+                            "action_context": "change_status",
+                            "system_name": "open_pm",
+                            "page": "1",
+                        },
+                    ),
+                    color_by_status[systems["open_pm"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Медленный режим: {'Вкл.' if systems['slow_mode'].value else 'Выкл.'}",
+                        payload={
+                            "action_name": "systems_settings",
+                            "action_context": "change_status",
+                            "system_name": "slow_mode",
+                            "page": "1",
+                        },
+                    ),
+                    color_by_status[systems["slow_mode"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="-->",
+                        payload={"action_name": "systems_settings", "page": "2"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(label="Закрыть", payload={"action_name": "close_menu"}),
+                    ButtonColor.SECONDARY,
+                )
+            )
+
+        if page == 2:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.user.uuid)
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Фильтрация URL: {'Вкл.' if systems['url_filtering'].value else 'Выкл.'}",
+                        payload={
+                            "action_name": "systems_settings",
+                            "action_context": "change_status",
+                            "system_name": "url_filtering",
+                            "page": "2",
+                        },
+                    ),
+                    color_by_status[systems["url_filtering"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label=f"Усиленная фильтрация URL: {'Вкл.' if systems['hard_url_filtering'].value else 'Выкл.'}",
+                        payload={
+                            "action_name": "systems_settings",
+                            "action_context": "change_status",
+                            "system_name": "hard_url_filtering",
+                            "page": "2",
+                        },
+                    ),
+                    color_by_status[systems["hard_url_filtering"]],
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="<--",
+                        payload={"action_name": "systems_settings", "page": "1"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(label="Закрыть", payload={"action_name": "close_menu"}),
+                    ButtonColor.SECONDARY,
+                )
+            )
+
+        new_msg_text = "⚙️ Включение\\Выключение систем модерации:"
+        self.api.messages.edit(
+            peer_id=event.peer.bpid,
+            conversation_message_id=event.button.cmid,
+            message=new_msg_text,
+            keyboard=keyboard.json,
+        )
+        self.snackbar(event, snackbar_message)
+
+        return True
