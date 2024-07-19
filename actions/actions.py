@@ -72,7 +72,7 @@ class SetMark(BaseAction):
                 db_instance=TOASTER_DB,
                 mark=mark,
                 bpid=event.peer.bpid,
-                bpn=event.peer.name,
+                name=event.peer.name,
             )
             snackbar_message = f'📝 Беседа помечена как "{mark}".'
 
