@@ -278,7 +278,7 @@ class GameCoinflip(BaseAction):
 
 
 # ------------------------------------------------------------------------
-class SystemsSettingsAction(BaseAction):
+class SystemsSettings(BaseAction):
     NAME = "systems_settings"
 
     def _handle(self, event: Event) -> bool:

@@ -9,6 +9,7 @@ from .actions import (
     DropPermission,
     GameCoinflip,
     GameRoll,
+    SystemsSettings,
 )
 
 
@@ -27,6 +28,8 @@ action_list = {
     # Game  -------------------------------------
     GameCoinflip.NAME: GameCoinflip,
     GameRoll.NAME: GameRoll,
+    # Settings ----------------------------------
+    SystemsSettings.NAME: SystemsSettings,
 }
 
 
