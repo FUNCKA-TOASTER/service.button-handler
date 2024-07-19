@@ -461,7 +461,7 @@ class FiltersSettings(BaseAction):
         if payload.get("action_context") == "change_status":
             filter_name = payload.get("filter_name")
             new_status = SettingStatus(not filters[filter_name].value)
-            filter_name[filter_name] = new_status
+            filters[filter_name] = new_status
 
             snackbar_message = (
                 f"⚠️ Система {'Включена' if not new_status.value else 'Выключена'}."
