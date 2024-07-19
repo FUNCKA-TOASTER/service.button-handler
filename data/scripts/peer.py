@@ -10,7 +10,7 @@ def get_peer_mark(session: Session, bpid: int) -> Optional[str]:
     return peer.mark.value if peer else None
 
 
-@script(auto_commit=False)
+@script(auto_commit=False, debug=True)
 def set_peer_mark(session: Session, mark: str, bpid: int, name: str) -> None:
     new_mark = Peer(
         id=bpid,
