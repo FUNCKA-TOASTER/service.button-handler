@@ -883,18 +883,18 @@ class ChangeDelay(BaseAction):
         )
         from loguru import logger
 
-        logger.debug(setting_name)
-        logger.debug(delay)
-        creds = descriptions[setting_name]
-        logger.debug(creds)
-        # new_msg_text = f"{text} {delay} {declension(delay)}"
+        text, declension = descriptions[setting_name]
+        logger.debug(text)
+        logger.debug(declension)
+        new_msg_text = f"{text} {delay} {declension(delay)}"
+        logger.debug(new_msg_text)
 
-        # self.api.messages.edit(
-        #     peer_id=event.peer.bpid,
-        #     conversation_message_id=event.button.cmid,
-        #     message=new_msg_text,
-        #     keyboard=keyboard.json,
-        # )
+        self.api.messages.edit(
+            peer_id=event.peer.bpid,
+            conversation_message_id=event.button.cmid,
+            message=new_msg_text,
+            keyboard=keyboard.json,
+        )
 
         self.snackbar(event, snackbar_message)
 
