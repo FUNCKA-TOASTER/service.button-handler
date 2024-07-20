@@ -1057,7 +1057,7 @@ class SystemsPunishment(BaseAction):
 class FiltersPunishment(BaseAction):
     NAME = "filters_punishment"
 
-    async def _handle(self, event: dict, kwargs) -> bool:
+    def _handle(self, event: Event) -> bool:
         payload = event.button.payload
         page = int(payload.get("page", 1))
 
@@ -1333,7 +1333,7 @@ class FiltersPunishment(BaseAction):
 class ChangePunishment(BaseAction):
     NAME = "change_punishment"
 
-    async def _handle(self, event: dict, kwargs) -> bool:
+    def _handle(self, event: Event) -> bool:
         payload = event.button.payload
         setting_name = payload.get("setting_name")
 
