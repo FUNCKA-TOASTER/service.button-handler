@@ -877,7 +877,7 @@ class ChangeDelay(BaseAction):
             )
             .add_row()
             .add_button(
-                Callback(label="Закрыть", payload={"action_name": "close_command"}),
+                Callback(label="Закрыть", payload={"action_name": "close_menu"}),
                 ButtonColor.SECONDARY,
             )
         )
