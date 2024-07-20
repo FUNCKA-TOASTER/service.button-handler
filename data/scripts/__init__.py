@@ -11,8 +11,10 @@ from .user import (
     drop_user_permission,
 )
 from .setting import (
-    get_destinated_settings,
+    get_destinated_settings_status,
     update_setting_status,
+    get_setting_points,
+    update_setting_points,
 )
 from .delay import (
     get_setting_delay,
@@ -28,8 +30,10 @@ __all__ = (
     "set_user_permission",
     "update_user_permission",
     "drop_user_permission",
-    "get_destinated_settings",
+    "get_destinated_settings_status",
     "update_setting_status",
+    "get_setting_points",
+    "update_setting_points",
     "get_setting_delay",
     "update_setting_delay",
 )

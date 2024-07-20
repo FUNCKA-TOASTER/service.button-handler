@@ -1,11 +1,11 @@
-from typing import Dict
+from typing import Dict, Optional
 from sqlalchemy.orm import Session
 from toaster.database import script
 from data import Setting, SettingDestination, SettingStatus
 
 
 @script(auto_commit=False, debug=True)
-def get_destinated_settings(
+def get_destinated_settings_status(
     session: Session, destination: SettingDestination, bpid: int
 ) -> Dict[str, SettingStatus]:
     settings = (
@@ -18,6 +18,19 @@ def get_destinated_settings(
     )
     result = {setting.name: setting.status for setting in settings}
     return result
+
+
+@script(auto_commit=False, debug=True)
+def get_setting_points(session: Session, bpid: int, name: str) -> Optional[int]:
+    setting = session.get(Setting, {"bpid": bpid, "name": name})
+    return setting.points if setting else None
+
+
+@script(auto_commit=False, debug=True)
+def update_setting_points(session: Session, bpid: int, name: str, points: int) -> None:
+    setting = session.get(Setting, {"bpid": bpid, "name": name})
+    setting.points = points
+    session.commit()
 
 
 @script(auto_commit=False, debug=True)
