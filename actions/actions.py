@@ -796,6 +796,33 @@ class ChangeDelay(BaseAction):
         else:
             snackbar_message = "⚙️ Меню установки задержки."
 
+        descriptions = {
+            "slow_mode": (
+                "⚙️ Задержка для данного чата установлена на:",
+                self._get_min_declension,
+            ),
+            "account_age": (
+                "⚙️ Критерий новизны аккаунта для данного чата установлен на:",
+                self._get_day_declension,
+            ),
+            "menu_session": (
+                "⚙️ Время жизни сессии меню установлена на:",
+                self._get_min_declension,
+            ),
+            "red_zone": (
+                "⚙️ Время истечения срока наказания для красной зоны выставлен на:",
+                self._get_day_declension,
+            ),
+            "yellow_zone": (
+                "⚙️ Время истечения срока наказания для жёлтой зоны выставлен на:",
+                self._get_day_declension,
+            ),
+            "green_zone": (
+                "⚙️ Время истечения срока наказания для зелёной зоны выставлен на:",
+                self._get_day_declension,
+            ),
+        }
+
         keyboard = (
             Keyboard(inline=True, one_time=False, owner_id=event.user.uuid)
             .add_row()
@@ -855,17 +882,8 @@ class ChangeDelay(BaseAction):
             )
         )
 
-        if setting_name in ("slow_mode", "menu_session"):
-            new_msg_text = (
-                "⚙️ Задержка для данного чата установлена на "
-                f"{delay} {self._get_min_declension(delay)}."
-            )
-
-        elif setting_name == ("account_age", "red_zone", "yellow_zone", "green_zone"):
-            new_msg_text = (
-                "⚙️ Критерий новизны аккаунта для данного чата установлен на "
-                f"{delay} {self._get_day_declension(delay)}."
-            )
+        text, declension = descriptions[setting_name]
+        new_msg_text = f"{text} {delay} {declension(delay)}"
 
         self.api.messages.edit(
             peer_id=event.peer.bpid,
