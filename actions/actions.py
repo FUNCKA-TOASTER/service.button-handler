@@ -16,8 +16,10 @@ from data.scripts import (
     get_user_permission,
     set_user_permission,
     drop_user_permission,
-    get_destinated_settings,
+    get_destinated_settings_status,
     update_setting_status,
+    get_setting_points,
+    update_setting_points,
     get_setting_delay,
     update_setting_delay,
 )
@@ -286,7 +288,7 @@ class SystemsSettings(BaseAction):
     def _handle(self, event: Event) -> bool:
         payload = event.button.payload
 
-        systems = get_destinated_settings(
+        systems = get_destinated_settings_status(
             db_instance=TOASTER_DB,
             destination=SettingDestination.system,
             bpid=event.peer.bpid,
@@ -448,7 +450,7 @@ class FiltersSettings(BaseAction):
     def _handle(self, event: Event) -> bool:
         payload = event.button.payload
 
-        filters = get_destinated_settings(
+        filters = get_destinated_settings_status(
             db_instance=TOASTER_DB,
             destination=SettingDestination.filter,
             bpid=event.peer.bpid,
@@ -918,4 +920,535 @@ class ChangeDelay(BaseAction):
         elif 2 <= (minutes % 10) and (minutes % 10) <= 4:
             timename = "дня"
 
+        return timename
+
+
+# ------------------------------------------------------------------------
+class SystemsPunishment(BaseAction):
+    NAME = "systems_punishment"
+
+    def _handle(self, event: Event) -> bool:
+        payload = event.button.payload
+        page = int(payload.get("page", 1))
+
+        snackbar_message = f"⚙️ Меню систем модерации ({page}/2).."
+
+        if page == 1:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.user.uuid)
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Возраст аккаунта",
+                        payload={
+                            "action_name": "change_punishment",
+                            "setting_name": "account_age",
+                            "page": "1",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Запрещенные слова",
+                        payload={
+                            "action_name": "change_punishment",
+                            "setting_name": "curse_words",
+                            "page": "1",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Открытое ЛС",
+                        payload={
+                            "action_name": "change_punishment",
+                            "setting_name": "open_pm",
+                            "page": "1",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Медленный режим",
+                        payload={
+                            "action_name": "change_punishment",
+                            "setting_name": "slow_mode",
+                            "page": "1",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="-->",
+                        payload={"action_name": "systems_punishment", "page": "2"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(label="Закрыть", payload={"action_name": "close_menu"}),
+                    ButtonColor.SECONDARY,
+                )
+            )
+
+        if page == 2:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.user.uuid)
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Фильтрация URL",
+                        payload={
+                            "action_name": "change_punishment",
+                            "setting_name": "url_filtering",
+                            "page": "2",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Усиленная фильтрация URL",
+                        payload={
+                            "action_name": "change_punishment",
+                            "setting_name": "hard_url_filtering",
+                            "page": "2",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="<--",
+                        payload={"action_name": "systems_punishment", "page": "1"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(label="Закрыть", payload={"action_name": "close_menu"}),
+                    ButtonColor.SECONDARY,
+                )
+            )
+
+        new_msg_text = "⚙️ Выберете необходимую систему:"
+        self.api.messages.edit(
+            peer_id=event.peer.bpid,
+            conversation_message_id=event.button.cmid,
+            message=new_msg_text,
+            keyboard=keyboard.json,
+        )
+
+        self.snackbar(event, snackbar_message)
+
+        return True
+
+
+class FiltersPunishment(BaseAction):
+    NAME = "filters_punishment"
+
+    async def _handle(self, event: dict, kwargs) -> bool:
+        payload = event.button.payload
+        page = int(payload.get("page", 1))
+
+        snackbar_message = f"⚙️ Меню фильтров сообщений ({page}/4)."
+
+        if page == 1:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.user.uuid)
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Приложения",
+                        payload={
+                            "action_name": "change_punishment",
+                            "setting_name": "app_action",
+                            "page": "1",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Музыка",
+                        payload={
+                            "action_name": "change_punishment",
+                            "setting_name": "audio",
+                            "page": "1",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Аудио",
+                        payload={
+                            "action_name": "change_punishment",
+                            "setting_name": "audio_message",
+                            "page": "1",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Файлы",
+                        payload={
+                            "action_name": "change_punishment",
+                            "setting_name": "doc",
+                            "page": "1",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="-->",
+                        payload={"action_name": "filters_punishment", "page": "2"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(label="Закрыть", payload={"action_name": "close_menu"}),
+                    ButtonColor.SECONDARY,
+                )
+            )
+
+        elif page == 2:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.user.uuid)
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Пересыл",
+                        payload={
+                            "action_name": "change_punishment",
+                            "setting_name": "forward",
+                            "page": "2",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Ответ",
+                        payload={
+                            "action_name": "change_punishment",
+                            "setting_name": "reply",
+                            "page": "2",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Граффити",
+                        payload={
+                            "action_name": "change_punishment",
+                            "setting_name": "graffiti",
+                            "page": "2",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Стикеры",
+                        payload={
+                            "action_name": "change_punishment",
+                            "setting_name": "sticker",
+                            "page": "2",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="<--",
+                        payload={"action_name": "filters_punishment", "page": "1"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_button(
+                    Callback(
+                        label="-->",
+                        payload={"action_name": "filters_punishment", "page": "3"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(label="Закрыть", payload={"action_name": "close_menu"}),
+                    ButtonColor.SECONDARY,
+                )
+            )
+
+        elif page == 3:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.user.uudi)
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Линки",
+                        payload={
+                            "action_name": "change_punishment",
+                            "setting_name": "link",
+                            "page": "3",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Изображения",
+                        payload={
+                            "action_name": "change_punishment",
+                            "setting_name": "photo",
+                            "page": "3",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Опросы",
+                        payload={
+                            "action_name": "change_punishment",
+                            "setting_name": "poll",
+                            "page": "3",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Видео",
+                        payload={
+                            "action_name": "change_punishment",
+                            "setting_name": "video",
+                            "page": "3",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="<--",
+                        payload={"action_name": "filters_punishment", "page": "2"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_button(
+                    Callback(
+                        label="-->",
+                        payload={"action_name": "filters_punishment", "page": "4"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(label="Закрыть", payload={"action_name": "close_menu"}),
+                    ButtonColor.SECONDARY,
+                )
+            )
+
+        elif page == 4:
+            keyboard = (
+                Keyboard(inline=True, one_time=False, owner_id=event.user.uuid)
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Записи",
+                        payload={
+                            "action_name": "change_punishment",
+                            "setting_name": "wall",
+                            "page": "4",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="Геопозиция",
+                        payload={
+                            "action_name": "change_punishment",
+                            "setting_name": "geo",
+                            "page": "4",
+                        },
+                    ),
+                    ButtonColor.PRIMARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(
+                        label="<--",
+                        payload={"action_name": "filters_punishment", "page": "3"},
+                    ),
+                    ButtonColor.SECONDARY,
+                )
+                .add_row()
+                .add_button(
+                    Callback(label="Закрыть", payload={"action_name": "close_menu"}),
+                    ButtonColor.SECONDARY,
+                )
+            )
+
+        new_msg_text = "⚙️ Выберете необходимый фильтр:"
+        self.api.messages.edit(
+            peer_id=event.peer.bpid,
+            conversation_message_id=event.button.cmid,
+            message=new_msg_text,
+            keyboard=keyboard.json,
+        )
+
+        self.snackbar(event, snackbar_message)
+
+        return True
+
+
+class ChangePunishment(BaseAction):
+    NAME = "change_punishment"
+
+    async def _handle(self, event: dict, kwargs) -> bool:
+        payload = event.button.payload
+        setting_name = payload.get("setting_name")
+
+        current_points = get_setting_points(
+            db_instance=TOASTER_DB,
+            bpid=event.peer.bpid,
+            name=setting_name,
+        )
+
+        action_context = payload.get("action_context")
+        if action_context is not None:
+            points_delta = payload.get("points")
+
+            if action_context == "subtract_points":
+                points = current_points - points_delta
+                points = points if points > 0 else 0
+                snackbar_message = "⚠️ Наказание уменьшено."
+
+            elif action_context == "add_points":
+                points = current_points + points_delta
+                points = points if points <= 10 else 10
+                snackbar_message = "⚠️ Наказание увеличено."
+
+            update_setting_points(
+                db_instance=TOASTER_DB,
+                bpid=event.peer.bpid,
+                name=setting_name,
+                points=points,
+            )
+
+        else:
+            snackbar_message = "⚙️ Меню установки наказания."
+
+        keyboard = (
+            Keyboard(inline=True, one_time=False, owner_id=event.user.uuid)
+            .add_row()
+            .add_button(
+                Callback(
+                    label="- 1 пред.",
+                    payload={
+                        "action_name": "change_punishment",
+                        "setting_name": setting_name,
+                        "action_context": "subtract_points",
+                        "points": 1,
+                    },
+                ),
+                ButtonColor.NEGATIVE,
+            )
+            .add_button(
+                Callback(
+                    label="+ 1 пред.",
+                    payload={
+                        "action_name": "change_punishment",
+                        "setting_name": setting_name,
+                        "action_context": "add_points",
+                        "points": 1,
+                    },
+                ),
+                ButtonColor.POSITIVE,
+            )
+            .add_row()
+            .add_button(
+                Callback(
+                    label="- 3 пред.",
+                    payload={
+                        "action_name": "change_punishment",
+                        "setting_name": setting_name,
+                        "action_context": "subtract_points",
+                        "points": 3,
+                    },
+                ),
+                ButtonColor.NEGATIVE,
+            )
+            .add_button(
+                Callback(
+                    label="+ 3 пред.",
+                    payload={
+                        "action_name": "change_punishment",
+                        "setting_name": setting_name,
+                        "action_context": "add_points",
+                        "points": 3,
+                    },
+                ),
+                ButtonColor.POSITIVE,
+            )
+            .add_row()
+            .add_button(
+                Callback(label="Закрыть", payload={"action_name": "close_menu"}),
+                ButtonColor.SECONDARY,
+            )
+        )
+
+        new_msg_text = (
+            f"⚙️ Наказание для настройки {setting_name} установлено на: "
+            f"{points} {self._get_warn_declension(points)}."
+        )
+
+        self.api.messages.edit(
+            peer_id=event.peer.bpid,
+            conversation_message_id=event.button.cmid,
+            message=new_msg_text,
+            keyboard=keyboard.json,
+        )
+
+        self.snackbar(event, snackbar_message)
+
+        return True
+
+    @staticmethod
+    def _get_warn_declension(minutes: int) -> str:
+        timename = "предупреждений"
+        if 11 <= minutes and minutes <= 14:
+            timename = "предупреждений"
+        elif minutes % 10 == 1:
+            timename = "предупреждение"
+        elif 2 <= (minutes % 10) and (minutes % 10) <= 4:
+            timename = "предупреждения"
         return timename

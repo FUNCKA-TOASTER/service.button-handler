@@ -12,6 +12,9 @@ from .actions import (
     SystemsSettings,
     FiltersSettings,
     ChangeDelay,
+    SystemsPunishment,
+    FiltersPunishment,
+    ChangePunishment,
 )
 
 
@@ -33,8 +36,12 @@ action_list = {
     # Settings ----------------------------------
     SystemsSettings.NAME: SystemsSettings,
     FiltersSettings.NAME: FiltersSettings,
-    # Delay -------------------------------------
+    # Delay\Expire ------------------------------
     ChangeDelay.NAME: ChangeDelay,
+    # Punishment --------------------------------
+    SystemsPunishment.NAME: SystemsPunishment,
+    FiltersPunishment.NAME: FiltersPunishment,
+    ChangePunishment.NAME: ChangePunishment,
 }
 
 
