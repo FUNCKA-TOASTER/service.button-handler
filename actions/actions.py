@@ -869,7 +869,7 @@ class ChangeDelay(BaseAction):
 
         self.api.messages.edit(
             peer_id=event.peer.bpid,
-            conversation_message_id=event.gbutton.cmid,
+            conversation_message_id=event.button.cmid,
             message=new_msg_text,
             keyboard=keyboard.json,
         )
