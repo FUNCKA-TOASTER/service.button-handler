@@ -10,7 +10,7 @@ from .user import (
     update_user_permission,
     drop_user_permission,
 )
-from .settings import (
+from .setting import (
     get_destinated_settings,
     update_setting_status,
 )
