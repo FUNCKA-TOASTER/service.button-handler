@@ -32,14 +32,14 @@ def set_user_permission(
 @script(auto_commit=False, debug=True)
 def update_user_permission(
     session: Session, lvl: UserPermission, uuid: int, bpid: int
-) -> int:
+) -> None:
     user = session.get(Permission, {"uuid": uuid, "bpid": bpid})
     user.permission = lvl
     session.commit()
 
 
 @script(auto_commit=False, debug=True)
-def drop_user_permission(session: Session, uuid: int, bpid: int) -> int:
+def drop_user_permission(session: Session, uuid: int, bpid: int) -> None:
     user = session.get(Permission, {"uuid": uuid, "bpid": bpid})
     session.delete(user)
     session.commit()

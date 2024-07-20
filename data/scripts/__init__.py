@@ -14,6 +14,10 @@ from .settings import (
     get_destinated_settings,
     update_setting_status,
 )
+from .delay import (
+    get_setting_delay,
+    update_setting_delay,
+)
 
 __all__ = (
     "get_peer_mark",
@@ -26,4 +30,6 @@ __all__ = (
     "drop_user_permission",
     "get_destinated_settings",
     "update_setting_status",
+    "get_setting_delay",
+    "update_setting_delay",
 )
