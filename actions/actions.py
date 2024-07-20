@@ -18,6 +18,8 @@ from data.scripts import (
     drop_user_permission,
     get_destinated_settings,
     update_setting_status,
+    get_setting_delay,
+    update_setting_delay,
 )
 from .base import BaseAction
 
@@ -758,3 +760,144 @@ class FiltersSettings(BaseAction):
 
 
 # ------------------------------------------------------------------------
+class ChangeDelay(BaseAction):
+    NAME = "change_delay"
+
+    def _handle(self, event: Event) -> bool:
+        payload = event.button.payload
+        setting_name = payload.get("setting_name")
+
+        delay = get_setting_delay(
+            db_instance=TOASTER_DB,
+            name=setting_name,
+            bpid=event.peer.bpid,
+        )
+
+        action_context = payload.get("action_context")
+        if action_context is not None:
+            time = int(payload.get("time"))
+
+            if action_context == "subtract_time":
+                delay = delay - time
+                delay = delay if delay > 0 else 0
+                snackbar_message = "⚠️ Время уменьшено."
+
+            elif action_context == "add_time":
+                delay = delay + time
+                snackbar_message = "⚠️ Время увеличено."
+
+            update_setting_delay(
+                db_instance=TOASTER_DB,
+                name=setting_name,
+                bpid=event.peer.bpid,
+                delay=delay,
+            )
+
+        else:
+            snackbar_message = "⚙️ Меню установки задержки."
+
+        keyboard = (
+            Keyboard(inline=True, one_time=False, owner_id=event.user.uuid)
+            .add_row()
+            .add_button(
+                Callback(
+                    label="- 1 ед.",
+                    payload={
+                        "action_name": "change_delay",
+                        "action_context": "subtract_time",
+                        "setting_name": setting_name,
+                        "time": 1,
+                    },
+                ),
+                ButtonColor.NEGATIVE,
+            )
+            .add_button(
+                Callback(
+                    label="+ 1 ед.",
+                    payload={
+                        "action_name": "change_delay",
+                        "action_context": "add_time",
+                        "setting_name": setting_name,
+                        "time": 1,
+                    },
+                ),
+                ButtonColor.POSITIVE,
+            )
+            .add_row()
+            .add_button(
+                Callback(
+                    label="- 10 ед.",
+                    payload={
+                        "action_name": "change_delay",
+                        "action_context": "subtract_time",
+                        "setting_name": setting_name,
+                        "time": 10,
+                    },
+                ),
+                ButtonColor.NEGATIVE,
+            )
+            .add_button(
+                Callback(
+                    label="+ 10 ед.",
+                    payload={
+                        "action_name": "change_delay",
+                        "action_context": "add_time",
+                        "setting_name": setting_name,
+                        "time": 10,
+                    },
+                ),
+                ButtonColor.POSITIVE,
+            )
+            .add_row()
+            .add_button(
+                Callback(label="Закрыть", payload={"action_name": "close_command"}),
+                ButtonColor.SECONDARY,
+            )
+        )
+
+        if setting_name in ("slow_mode", "menu_session"):
+            new_msg_text = (
+                "⚙️ Задержка для данного чата установлена на "
+                f"{delay} {self._get_min_declension(delay)}."
+            )
+
+        elif setting_name == ("account_age", "red_zone", "yellow_zone", "green_zone"):
+            new_msg_text = (
+                "⚙️ Критерий новизны аккаунта для данного чата установлен на "
+                f"{delay} {self._get_day_declension(delay)}."
+            )
+
+        self.api.messages.edit(
+            peer_id=event.peer.bpid,
+            conversation_message_id=event.gbutton.cmid,
+            message=new_msg_text,
+            keyboard=keyboard.json,
+        )
+
+        self.snackbar(event, snackbar_message)
+
+        return True
+
+    @staticmethod
+    def _get_min_declension(minutes: int) -> str:
+        timename = "минут"
+        if 11 <= minutes and minutes <= 14:
+            timename = "минут"
+        elif minutes % 10 == 1:
+            timename = "минуту"
+        elif 2 <= (minutes % 10) and (minutes % 10) <= 4:
+            timename = "минуты"
+
+        return timename
+
+    @staticmethod
+    def _get_day_declension(minutes: int) -> str:
+        timename = "дней"
+        if 11 <= minutes and minutes <= 14:
+            timename = "дней"
+        elif minutes % 10 == 1:
+            timename = "день"
+        elif 2 <= (minutes % 10) and (minutes % 10) <= 4:
+            timename = "дня"
+
+        return timename

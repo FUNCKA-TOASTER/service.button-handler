@@ -11,6 +11,7 @@ from .actions import (
     GameRoll,
     SystemsSettings,
     FiltersSettings,
+    ChangeDelay,
 )
 
 
@@ -32,6 +33,8 @@ action_list = {
     # Settings ----------------------------------
     SystemsSettings.NAME: SystemsSettings,
     FiltersSettings.NAME: FiltersSettings,
+    # Delay -------------------------------------
+    ChangeDelay.NAME: ChangeDelay,
 }
 
 
