@@ -1337,7 +1337,7 @@ class ChangePunishment(BaseAction):
         payload = event.button.payload
         setting_name = payload.get("setting_name")
 
-        current_points = get_setting_points(
+        points = get_setting_points(
             db_instance=TOASTER_DB,
             bpid=event.peer.bpid,
             name=setting_name,
@@ -1348,12 +1348,12 @@ class ChangePunishment(BaseAction):
             points_delta = payload.get("points")
 
             if action_context == "subtract_points":
-                points = current_points - points_delta
+                points = points - points_delta
                 points = points if points > 0 else 0
                 snackbar_message = "⚠️ Наказание уменьшено."
 
             elif action_context == "add_points":
-                points = current_points + points_delta
+                points = points + points_delta
                 points = points if points <= 10 else 10
                 snackbar_message = "⚠️ Наказание увеличено."
 
