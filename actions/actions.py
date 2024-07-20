@@ -881,13 +881,9 @@ class ChangeDelay(BaseAction):
                 ButtonColor.SECONDARY,
             )
         )
-        from loguru import logger
 
         text, declension = descriptions[setting_name]
-        logger.debug(text)
-        logger.debug(declension)
         new_msg_text = f"{text} {delay} {declension(delay)}"
-        logger.debug(new_msg_text)
 
         self.api.messages.edit(
             peer_id=event.peer.bpid,
