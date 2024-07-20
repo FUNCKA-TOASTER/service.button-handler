@@ -773,13 +773,15 @@ class ChangeDelay(BaseAction):
             bpid=event.peer.bpid,
         )
 
+        from loguru import logger
+
+        logger.debug(1)
         action_context = payload.get("action_context")
         if action_context is not None:
             time = int(payload.get("time"))
 
             if action_context == "subtract_time":
-                delay = delay - time
-                delay = delay if delay > 0 else 0
+                delay = (delay - time) if (delay - time) > 0 else 0
                 snackbar_message = "⚠️ Время уменьшено."
 
             elif action_context == "add_time":
@@ -796,6 +798,7 @@ class ChangeDelay(BaseAction):
         else:
             snackbar_message = "⚙️ Меню установки задержки."
 
+        logger.debug(2)
         descriptions = {
             "slow_mode": (
                 "⚙️ Задержка для данного чата установлена на:",
@@ -881,10 +884,11 @@ class ChangeDelay(BaseAction):
                 ButtonColor.SECONDARY,
             )
         )
-
+        logger.debug(3)
         text, declension = descriptions[setting_name]
         new_msg_text = f"{text} {delay} {declension(delay)}"
 
+        logger.debug(4)
         self.api.messages.edit(
             peer_id=event.peer.bpid,
             conversation_message_id=event.button.cmid,
@@ -892,6 +896,7 @@ class ChangeDelay(BaseAction):
             keyboard=keyboard.json,
         )
 
+        logger.debug(5)
         self.snackbar(event, snackbar_message)
 
         return True
