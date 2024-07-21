@@ -22,6 +22,7 @@ from data.scripts import (
     update_setting_points,
     get_setting_delay,
     update_setting_delay,
+    close_menu_session,
 )
 from .base import BaseAction
 
@@ -60,7 +61,11 @@ class CloseMenu(BaseAction):
         snackbar_message = "❌ Меню закрыто."
         self.snackbar(event, snackbar_message)
 
-        # TODO: Удаление сессии меню из БД
+        close_menu_session(
+            db_instance=TOASTER_DB,
+            bpid=event.peer.bpid,
+            cmid=event.button.cmid,
+        )
 
         return True
 
@@ -241,8 +246,6 @@ class GameRoll(BaseAction):
         snackbar_message = "🎲 Рулетка прокручена!"
         self.snackbar(event, snackbar_message)
 
-        # TODO: Создать сессию меню
-
         return True
 
 
@@ -275,8 +278,6 @@ class GameCoinflip(BaseAction):
 
         snackbar_message = "🎲 Монета брошена!"
         self.snackbar(event, snackbar_message)
-
-        # TODO: Создать сессию меню
 
         return True
 
