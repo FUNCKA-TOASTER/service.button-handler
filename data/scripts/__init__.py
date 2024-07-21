@@ -23,6 +23,10 @@ from .delay import (
     get_setting_delay,
     update_setting_delay,
 )
+from .session import (
+    open_menu_session,
+    close_menu_session,
+)
 from .url import insert_pattern
 from .cursed import insert_cursed
 
@@ -46,4 +50,6 @@ __all__ = (
     "insert_pattern",
     "insert_cursed",
     "get_log_peers",
+    "open_menu_session",
+    "close_menu_session",
 )

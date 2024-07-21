@@ -4,7 +4,7 @@ from toaster.database import script
 from data import Peer, PeerMark
 
 
-@script(auto_commit=False)
+@script(auto_commit=False, debug=True)
 def get_peer_mark(session: Session, bpid: int) -> Optional[PeerMark]:
     peer = session.get(Peer, {"id": bpid})
     return peer.mark if peer else None
