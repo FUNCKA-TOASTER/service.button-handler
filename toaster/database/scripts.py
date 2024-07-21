@@ -38,7 +38,7 @@ def script(auto_commit: bool = True, debug: bool = False) -> Callable:
             session.commit()
 
         @script(auto_commit=False)
-        def get_user(session: Session, id: int):
+        def ge_user(session: Session, id: int):
             user = session.get(User, {"id": id})
             return user
 

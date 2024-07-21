@@ -13,8 +13,9 @@ About:
     in handling table operations.
 """
 
+from typing import Any
 from functools import singledispatch
-from sqlalchemy import create_engine, Engine, MetaData
+from sqlalchemy import create_engine, Engine
 from sqlalchemy.orm import Session, sessionmaker, declarative_base
 from loguru import logger
 
@@ -32,7 +33,7 @@ class Database:
     """
 
     def __init__(self, connection_uri: str, debug: bool = False) -> None:
-        self._engine = create_engine(connection_uri, echo=debug, pool_pre_ping=True)
+        self._engine = create_engine(connection_uri, echo=debug)
         self._session = sessionmaker(bind=self._engine, autoflush=False)
 
     @singledispatch
@@ -48,7 +49,7 @@ class Database:
         BaseModel.metadata.create_all(self._engine)
 
     @create_tables.register
-    def _(self, base: MetaData):
+    def _(self, base: Any):
         """Creates all tables defined in the provided SQLAlchemy base model.
 
         Args:
@@ -57,7 +58,7 @@ class Database:
         base.metadata.create_all(self._engine)
 
     @drop_tables.register
-    def _(self, base: MetaData):
+    def _(self, base: Any):
         """Drops all tables defined in the provided SQLAlchemy base model.
 
         Args:

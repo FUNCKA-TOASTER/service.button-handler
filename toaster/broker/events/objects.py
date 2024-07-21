@@ -67,10 +67,12 @@ class Reply(NamedTuple):
     """Class for representing a reply(fwd) to a message.
 
     Attributes:
+        uuid (int): User unique ID. Replied message owner.
         cmid (int): Conversation message ID.
         text (str): Message text.
     """
 
+    uuid: int
     cmid: int
     text: str
 
