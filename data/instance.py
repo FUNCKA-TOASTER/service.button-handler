@@ -4,7 +4,5 @@ from toaster.database import Database, build_connection_uri
 from config import ALCHEMY_SETUP, DBMS_CREDS
 
 
-# Инстанция базы данных
+# Database instance
 TOASTER_DB = Database(build_connection_uri(ALCHEMY_SETUP, DBMS_CREDS))
-
-# TODO: Translate to eng

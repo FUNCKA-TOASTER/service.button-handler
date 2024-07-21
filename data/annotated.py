@@ -3,7 +3,9 @@ from sqlalchemy.orm import mapped_column
 from sqlalchemy import ForeignKey
 from sqlalchemy.dialects.mysql import BIGINT
 
-# TODO: Комментарий
+# This annotation defines the BPID (bot peer id) column with a BIGINT type.
+# The column is a foreign key referencing the 'id' column in the 'peers' table.
+# The 'ondelete' and 'onupdate' constraints ensure that changes to the 'peers' table are cascaded to this column.
 BPID = Annotated[
     int,
     mapped_column(
@@ -13,5 +15,6 @@ BPID = Annotated[
     ),
 ]
 
-# TODO: Комментарий
+# This annotation defines the UUID (unique user id) column with a BIGINT type.
+# The column is used as a primary key.
 UUID = Annotated[int, mapped_column(BIGINT, primary_key=True)]

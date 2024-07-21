@@ -55,8 +55,7 @@ class ButtonHandler:
     def check_owner(payload: Payload, event: Event):
         owner = payload.get("keyboard_owner")
         if owner != event.user.uuid:
-            # TODO: fix text
-            raise PermissionError("Not message owner")
+            raise PermissionError("The user is not the owner of the message.")
 
     def _get_api(self) -> Any:
         session = VkApi(

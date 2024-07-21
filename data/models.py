@@ -21,7 +21,6 @@ from .enums import (
 from .annotated import UUID, BPID
 
 
-# TODO: Прописать ondelete в местах, где это нужно
 # Таблицы основных элементов
 class Peer(BaseModel):
     __tablename__ = "peers"

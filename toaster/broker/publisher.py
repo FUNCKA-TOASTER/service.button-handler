@@ -28,7 +28,6 @@ class Publisher:
     def __init__(self, client: Redis) -> None:
         self.client = client
 
-    # TODO: handle possible exeptions
     def publish(self, obj: Any, channel_name: str) -> int:
         """Publishes a serialized object to a Redis channel.
 
