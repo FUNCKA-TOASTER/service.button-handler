@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 from sqlalchemy.orm import Session
 from toaster.database import script
 from data import Peer, PeerMark
@@ -33,3 +33,9 @@ def drop_peer_mark(session: Session, bpid: int) -> None:
     peer = session.get(Peer, {"id": bpid})
     session.delete(peer)
     session.commit()
+
+
+@script(auto_commit=False, debug=True)
+def get_log_peers(session: Session) -> List[str]:
+    peers = session.query(Peer).filter(Peer.mark == PeerMark.LOG).all()
+    return [peer.id for peer in peers]

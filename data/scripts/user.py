@@ -1,6 +1,18 @@
+from typing import Tuple, Optional
+from datetime import datetime
 from sqlalchemy.orm import Session
 from toaster.database import script
-from data import Permission, Staff, StaffRole, UserPermission
+from data import (
+    Permission,
+    Staff,
+    StaffRole,
+    UserPermission,
+    Warn,
+    Queue,
+)
+
+
+WarnInfo = Tuple[int, datetime]
 
 
 @script(auto_commit=False, debug=True)
@@ -43,3 +55,15 @@ def drop_user_permission(session: Session, uuid: int, bpid: int) -> None:
     user = session.get(Permission, {"uuid": uuid, "bpid": bpid})
     session.delete(user)
     session.commit()
+
+
+@script(auto_commit=False, debug=True)
+def get_user_warns(session: Session, uuid: int, bpid: int) -> Optional[WarnInfo]:
+    warn = session.get(Warn, {"bpid": bpid, "uuid": uuid})
+    return (warn.points, warn.expired) if warn else None
+
+
+@script(auto_commit=False, debug=True)
+def get_user_queue_status(session: Session, uuid: int, bpid: int) -> Optional[datetime]:
+    queue = session.get(Queue, {"bpid": bpid, "uuid": uuid})
+    return queue.expired if queue else None
