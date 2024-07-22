@@ -28,7 +28,6 @@ class Subscriber:
     def __init__(self, client: Redis) -> None:
         self.client = client.pubsub()
 
-    # TODO: handle possible exeptions
     def listen(self, channel_name: str) -> Any:
         """Listens to messages on a specified Redis channel and deserializes them.
 
