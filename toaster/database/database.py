@@ -32,7 +32,7 @@ class Database:
     """
 
     def __init__(self, connection_uri: str, debug: bool = False) -> None:
-        self._engine = create_engine(connection_uri, echo=debug)
+        self._engine = create_engine(connection_uri, echo=debug, pool_pre_ping=True)
         self._session = sessionmaker(bind=self._engine, autoflush=False)
 
     @singledispatch
