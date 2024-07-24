@@ -1,15 +1,12 @@
-"""Submodule "events".
+"""Module "events".
 
 File:
     objects.py
 
 About:
-    This file contains the implementation of various
+    File describing implementation of various
     NamedTuple classes used for representing different
-    types of objects in the events submodule. These
-    classes include Button, Message, Reaction, Reply,
-    User, and Peer, which encapsulate relevant data
-    for event handling.
+    types of event objects.
 """
 
 from __future__ import annotations

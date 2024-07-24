@@ -4,11 +4,9 @@ File:
     subscriber.py
 
 About:
-    This file contains the implementation of the
+    File describing the implementation of the
     Subscriber class, which listens to Redis channels
-    and deserializes incoming messages. It provides
-    methods for initializing the Redis client, subscribing
-    to channels, and listening for messages.
+    and deserializes incoming messages.
 """
 
 from typing import Any, ByteString

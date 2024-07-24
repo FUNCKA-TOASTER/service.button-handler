@@ -1,10 +1,20 @@
-"""VK keyboard button class description file."""
+"""Module "keyboards".
 
+File:
+    button.py
+
+About:
+    File describing the VK keyboard button class.
+"""
+
+from typing import Dict, Union
 from .action import BaseAction
 from .color import ButtonColor
 
+Payload = Dict[str, Union[str, int]]
 
-class Button(object):
+
+class Button:
     """VK keyboard button class."""
 
     def __init__(self, action: BaseAction, color: ButtonColor, owner_id: int):
@@ -13,12 +23,11 @@ class Button(object):
         self.owner_id = owner_id
 
     @property
-    def data(self) -> dict:
-        """Returns the data of the
-        button as a dictionary.
+    def data(self) -> Payload:
+        """Returns the data of the button as a dictionary.
 
         Returns:
-            dict: Button data.
+            dict: Button dictionary repr.
         """
         self.action.payload.setdefault("keyboard_owner", self.owner_id)
 

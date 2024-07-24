@@ -1,4 +1,11 @@
-"""VK keyboard builder module."""
+"""Module "keyboards".
+
+File:
+    __init__.py
+
+About:
+    Initializing the "keyboards" module
+"""
 
 from .color import ButtonColor
 from .keyboard import Keyboard

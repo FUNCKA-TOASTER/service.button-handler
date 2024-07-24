@@ -1,3 +1,13 @@
+"""Module "scripts".
+
+File:
+    url.py
+
+About:
+    File describing custom SQLA scripts associated
+    with the urls.
+"""
+
 from sqlalchemy.orm import Session
 from toaster.database import script
 from data import Url, UrlStatus, UrlType

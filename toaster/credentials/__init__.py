@@ -1,12 +1,10 @@
-"""
-Module "credentials".
+"""Module "credentials".
 
 File:
     credentials.py
 
 About:
-    This module provides importable classes for handling
-    database credentials and setup configurations.
+    Initializing the "credentials" module.
 """
 
 from .credentials import (

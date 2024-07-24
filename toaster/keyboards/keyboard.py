@@ -1,12 +1,22 @@
-"""Description of the VK keyboard class file."""
+"""Module "keyboards".
+
+File:
+    keyboard.py
+
+About:
+   File describing VK keyboard builder class.
+"""
 
 import json
+from typing import Any, Dict, Union
 from .button import Button
 from .action import BaseAction
 from .color import ButtonColor
 
+Payload = Dict[str, Union[str, int]]
 
-class Keyboard(object):
+
+class Keyboard:
     """VK keyboard builder class."""
 
     def __init__(self, inline: bool, one_time: bool, owner_id: int):
@@ -15,7 +25,7 @@ class Keyboard(object):
         self.one_time: bool = one_time
         self.buttons: list = []
 
-    def add_row(self):
+    def add_row(self) -> Any:
         """Adds a new line for placing buttons.
         The count of lines cannot exceed 6.
 
@@ -24,7 +34,7 @@ class Keyboard(object):
             RuntimeError: Cannot create a new row while the previous row is empty.
 
         Returns:
-            object: self
+            Any: self
         """
         if len(self.buttons) > 6:
             raise ValueError("The maximum count of rows has been exceeded.")
@@ -38,21 +48,21 @@ class Keyboard(object):
 
         return self
 
-    def add_button(self, action: BaseAction, color: ButtonColor):
-        """_summary_
+    def add_button(self, action: BaseAction, color: ButtonColor) -> Any:
+        """Adds a new button to the last row created.
 
         Args:
             action (BaseAction): VK keyboard button action.
             color (ButtonColor): VK keyboard button color.
 
         Raises:
-            RuntimeError: Missing rows.
+            RuntimeError: Missing button rows.
 
         Returns:
-            object: self.
+            Any: self.
         """
         if not self.buttons:
-            raise RuntimeError("Missing rows.")
+            raise RuntimeError("Missing button rows.")
 
         new_button = Button(action, color, self.owner_id).data
         self.buttons[-1].append(new_button)
@@ -60,7 +70,12 @@ class Keyboard(object):
         return self
 
     @property
-    def as_dict(self) -> dict:
+    def as_dict(self) -> Payload:
+        """Returns the data of the keyboard as a dictionary.
+
+        Returns:
+            Payload: Keyboard data dictionary repr.
+        """
         body = {
             "one_time": self.one_time,
             "inline": self.inline,
@@ -71,8 +86,7 @@ class Keyboard(object):
 
     @property
     def json(self) -> str:
-        """Converts keyboard object fields to
-        JSON string.
+        """Converts keyboard object fields to JSON string.
 
         Returns:
             str: JSON dumped string.

@@ -1,3 +1,13 @@
+"""Module "scripts".
+
+File:
+    session.py
+
+About:
+    File describing custom SQLA scripts associated
+    with the menu sessions.
+"""
+
 from typing import List, Tuple
 from sqlalchemy.orm import Session
 from toaster.database import script

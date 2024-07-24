@@ -1,3 +1,12 @@
+"""Module "data".
+
+File:
+    annotations.py
+
+About:
+    File describing type annotations for SQLA table models.
+"""
+
 from typing import Annotated
 from sqlalchemy.orm import mapped_column
 from sqlalchemy import ForeignKey

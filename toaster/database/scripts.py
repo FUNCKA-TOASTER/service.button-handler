@@ -4,14 +4,7 @@ File:
     scripts.py
 
 About:
-    This module provides a decorator for marking
-    functions as custom scripts for SQLAlchemy.
-    The `script` decorator facilitates the execution
-    of database operations within a managed session,
-    with options for automatic commit and debugging.
-    It simplifies the process of writing and calling
-    scripts that interact with the database by encapsulating
-    session management and error handling.
+    File describing the SQLA script decorator.
 """
 
 from typing import Callable, Optional, Any
@@ -26,8 +19,6 @@ def script(auto_commit: bool = True, debug: bool = False) -> Callable:
     as a custom script for sqlalchemy. Using
     this mechanism, you can conveniently call
     the desired set of actions in the right place.
-    It is enough only to transfer the instance of
-    the database class to the script.
 
     Example: ::
 

@@ -1,3 +1,13 @@
+"""Module "scripts".
+
+File:
+    peer.py
+
+About:
+    File describing custom SQLA scripts associated
+    with the peer.
+"""
+
 from typing import Optional, List
 from sqlalchemy.orm import Session
 from toaster.database import script

@@ -4,11 +4,9 @@ File:
     publisher.py
 
 About:
-    This file contains the implementation of the
+    File describing the implementation of the
     Publisher class, which facilitates publishing
-    serialized objects to Redis channels. It provides
-    methods for initializing the Redis client, serializing
-    objects, and publishing them to specified channels.
+    serialized objects to Redis channels.
 """
 
 from typing import ByteString, Any

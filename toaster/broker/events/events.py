@@ -1,15 +1,15 @@
-"""Submodule "events".
+"""Module "events".
 
 File:
     events.py
 
 About:
-    This file contains the implementation of the Event
-    class, which is used to represent various types
-    of events.The Event class provides methods for
-    initializing an event, representing it as a string,
-    and converting it to a dictionary.
+    File describing custom Event class.
 """
+
+from typing import Dict, Union
+
+Payload = Dict[str, Union[str, int]]
 
 
 class Event:
@@ -34,7 +34,7 @@ class Event:
     event_id: str = None
     event_type: str = None
 
-    def __init__(self, raw_event: dict, event_type: str = "Undefined"):
+    def __init__(self, raw_event: Payload, event_type: str = "Undefined"):
         """Initializes an Event object.
 
         Args:
@@ -45,7 +45,7 @@ class Event:
         self.event_type = event_type
         self.event_id = raw_event.get("event_id")
 
-    def __str__(self):
+    def __str__(self) -> str:
         string = (
             "<-- "
             f"class Event <type: {self.event_type}>"
@@ -55,10 +55,10 @@ class Event:
         )
         return string
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.__str__()
 
-    def as_dict(self):
+    def as_dict(self) -> Payload:
         """Converts the Event object to a dictionary.
 
         Description:

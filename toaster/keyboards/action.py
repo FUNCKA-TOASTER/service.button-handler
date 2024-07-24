@@ -1,19 +1,30 @@
-"""File describing the types of actions of VK keyboard buttons."""
+"""Module "keyboards".
+
+File:
+    action.py
+
+About:
+    File describing button action classes VK keyboards.
+"""
+
+from typing import Dict, Union
+
+Payload = Dict[str, Union[str, int]]
 
 
-class BaseAction(object):
+class BaseAction:
     """VK keyboard button action base class."""
 
     def __init__(self, action_type: str):
         self.type = action_type
 
     @property
-    def data(self) -> dict:
-        """Returns a dictionary representation of the button
-        action feilds.
+    def data(self) -> Payload:
+        """Returns a dictionary representation of the
+        button action feilds.
 
         Returns:
-            dict: Action dictionary.
+            dict: Action dictionary representation.
         """
         data = {key: value for key, value in vars(self).items()}
 
@@ -21,11 +32,9 @@ class BaseAction(object):
 
 
 class Text(BaseAction):
-    """Text button. Sends a message with
-    the text specified in label.
-    """
+    """Sends the text of the clicked button to the dialog."""
 
-    def __init__(self, label: str, payload: dict):
+    def __init__(self, label: str, payload: Payload):
         super().__init__("text")
 
         self.label = label
@@ -33,9 +42,9 @@ class Text(BaseAction):
 
 
 class OpenLink(BaseAction):
-    """Link key. Opens the specified link."""
+    """Follows a link."""
 
-    def __init__(self, url: str, label: str, payload: dict):
+    def __init__(self, url: str, label: str, payload: Payload):
         super().__init__("open_link")
 
         self.link = url
@@ -44,11 +53,9 @@ class OpenLink(BaseAction):
 
 
 class Location(BaseAction):
-    """When clicked, it sends the location to
-    a dialogue with a bot or conversation.
-    """
+    """Sends geolocation to the dialog."""
 
-    def __init__(self, url: str, label: str, payload: dict):
+    def __init__(self, url: str, label: str, payload: Payload):
         super().__init__("location")
 
         self.link = url
@@ -57,12 +64,9 @@ class Location(BaseAction):
 
 
 class VKPay(BaseAction):
-    """Opens the VKPay payment window with
-    predefined parameters. The button is called
-    “Pay via VKPay”, VKPay is displayed as a logo.
-    """
+    """Opens the VKPay payment window."""
 
-    def __init__(self, payment_hash: str, label: str, payload: dict):
+    def __init__(self, payment_hash: str, label: str, payload: Payload):
         super().__init__("vkpay")
 
         self.hash = payment_hash
@@ -71,12 +75,15 @@ class VKPay(BaseAction):
 
 
 class OpenApp(BaseAction):
-    """Opens the specified VK Mini Apps
-    application.
-    """
+    """Opens the VK Mini App."""
 
     def __init__(
-        self, app_hash: str, label: str, payload: dict, app_id: int, owner_id: int
+        self,
+        app_hash: str,
+        label: str,
+        app_id: int,
+        owner_id: int,
+        payload: Payload,
     ):
         super().__init__("open_app")
 
@@ -88,13 +95,9 @@ class OpenApp(BaseAction):
 
 
 class Callback(BaseAction):
-    """Allows you to receive a notification
-    about pressing a button without sending
-    a message from the user and perform the
-    necessary action.
-    """
+    """Sends a click notification to the server."""
 
-    def __init__(self, label: str, payload: dict):
+    def __init__(self, label: str, payload: Payload):
         super().__init__("callback")
 
         self.label = label

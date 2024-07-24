@@ -4,11 +4,9 @@ File:
     credentials.py
 
 About:
-    This file provides data structures for storing
+    File describing data structures for storing
     credentials and setup configurations for any
-    connections. It includes classes for SQLAlchemy
-    and Redis credentials, encapsulating the necessary
-    information to establish connections to these services.
+    connections.
 """
 
 from typing import NamedTuple
@@ -56,4 +54,3 @@ class RedisCredentials(NamedTuple):
     host: str
     port: int
     db: int
-

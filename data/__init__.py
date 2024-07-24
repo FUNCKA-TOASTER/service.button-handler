@@ -1,3 +1,12 @@
+"""Module "data".
+
+File:
+    __init__.py
+
+About:
+    Initializing the "data" module.
+"""
+
 from .models import BaseModel
 from .models import (
     Peer,
@@ -21,7 +30,7 @@ from .enums import (
     SettingStatus,
     StaffRole,
 )
-from .instance import TOASTER_DB
+from .instances import TOASTER_DB
 
 __all__ = (
     "BaseModel",

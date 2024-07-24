@@ -1,21 +1,31 @@
-"""File describing the types of answers of VK keyboard buttons."""
+"""Module "keyboards".
+
+File:
+    answer.py
+
+About:
+    File describing the answers classes of VK keyboard buttons.
+"""
 
 import json
+from typing import Dict, Union
+
+Payload = Dict[str, Union[str, int]]
 
 
-class BaseAnswer(object):
+class BaseAnswer:
     """VK keyboard button action base class."""
 
     def __init__(self, action_type: str):
         self.type = action_type
 
     @property
-    def data(self) -> dict:
+    def data(self) -> Payload:
         """Returns a dictionary representation of the button
-        action feilds.
+        answer feilds.
 
         Returns:
-            dict: Action dictionary.
+            dict: Answer dictionary repr.
         """
         data = {key: value for key, value in vars(self).items()}
 
@@ -23,7 +33,7 @@ class BaseAnswer(object):
 
 
 class SnackbarAnswer(BaseAnswer):
-    """VK keyboard button action base class."""
+    """Send a snackbar as response."""
 
     def __init__(self, text: str):
         super().__init__("show_snackbar")
@@ -32,7 +42,7 @@ class SnackbarAnswer(BaseAnswer):
 
 
 class LinkAnswer(BaseAnswer):
-    """VK keyboard button action base class."""
+    """Follow a link as response."""
 
     def __init__(self, url: str):
         super().__init__("open_link")
@@ -41,7 +51,7 @@ class LinkAnswer(BaseAnswer):
 
 
 class AppAnswer(BaseAnswer):
-    """VK keyboard button action base class."""
+    """Open VK Mini App as response."""
 
     def __init__(self, app_hash: str, app_id: int, owner_id: int):
         super().__init__("open_app")

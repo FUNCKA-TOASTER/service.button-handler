@@ -1,3 +1,13 @@
+"""Module "scripts".
+
+File:
+    user.py
+
+About:
+    File describing custom SQLA scripts associated
+    with the user.
+"""
+
 from typing import Tuple, Optional
 from datetime import datetime
 from sqlalchemy.orm import Session

@@ -1,3 +1,13 @@
+"""Module "scripts".
+
+File:
+    cursed.py
+
+About:
+    File describing custom SQLA scripts associated
+    with the cursed words.
+"""
+
 from sqlalchemy.orm import Session
 from toaster.database import script
 from data import Cursed

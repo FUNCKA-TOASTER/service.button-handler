@@ -1,3 +1,12 @@
+"""Module "scripts".
+
+File:
+    __init__.py
+
+About:
+    Initializing the "scripts" module.
+"""
+
 from .peer import (
     get_peer_mark,
     set_peer_mark,

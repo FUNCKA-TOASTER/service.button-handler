@@ -4,13 +4,7 @@ File:
     database.py
 
 About:
-    This module provides the Database class, which
-    encapsulates the setup and management of a SQLAlchemy
-    engine and session. It includes methods for creating
-    and dropping tables, and for obtaining a session to
-    interact with the database. The module uses the
-    `singledispatch` decorator to provide flexibility
-    in handling table operations.
+    File describing the Databse class.
 """
 
 from functools import singledispatch
@@ -23,13 +17,7 @@ BaseModel = declarative_base()
 
 
 class Database:
-    """A class to manage database connections and operations using SQLAlchemy.
-
-    Description:
-        This class sets up the SQLAlchemy engine and session factory,
-        provides methods to create and drop tables, and allows for
-        session management.
-    """
+    """SQLA Database class."""
 
     def __init__(self, connection_uri: str, debug: bool = False) -> None:
         self._engine = create_engine(connection_uri, echo=debug, pool_pre_ping=True)
@@ -37,13 +25,15 @@ class Database:
 
     @singledispatch
     def create_tables(self) -> None:
-        """Creates all tables defined in the SQLAlchemy base model (BaseModel)."""
+        """Creates all tables defined in the SQLAlchemy BaseModel."""
+
         logger.info("Creating tables...")
         BaseModel.metadata.create_all(self._engine)
 
     @singledispatch
     def drop_tables(self) -> None:
-        """Drops all tables defined in the SQLAlchemy base model (BaseModel)."""
+        """Drops all tables defined in the SQLAlchemy BaseModel."""
+
         logger.info("Droping tables...")
         BaseModel.metadata.create_all(self._engine)
 

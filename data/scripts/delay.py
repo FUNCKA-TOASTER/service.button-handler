@@ -1,3 +1,13 @@
+"""Module "scripts".
+
+File:
+    delay.py
+
+About:
+    File describing custom SQLA scripts associated
+    with the delay.
+"""
+
 from typing import Optional
 from sqlalchemy.orm import Session
 from toaster.database import script

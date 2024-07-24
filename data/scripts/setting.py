@@ -1,3 +1,13 @@
+"""Module "scripts".
+
+File:
+    setting.py
+
+About:
+    File describing custom SQLA scripts associated
+    with the settings.
+"""
+
 from typing import Dict, Optional
 from sqlalchemy.orm import Session
 from toaster.database import script

@@ -4,11 +4,7 @@ File:
     connection.py
 
 About:
-    This module provides a utility function to build a
-    connection URI for SQLAlchemy. The connection URI is
-    constructed using the database setup configuration and
-    credentials, allowing for secure and convenient connection
-    string generation.
+    File describing connection uri builder function.
 """
 
 from urllib.parse import quote

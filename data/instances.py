@@ -1,4 +1,11 @@
-"""В этом файле отписываются коннекты к базама данных, схемамам и т.д."""
+"""Module "data".
+
+File:
+    instance.py
+
+About:
+    File describing the database class instances used.
+"""
 
 from toaster.database import Database, build_connection_uri
 from config import ALCHEMY_SETUP, DBMS_CREDS

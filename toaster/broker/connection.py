@@ -4,10 +4,7 @@ File:
     connection.py
 
 About:
-    This module provides functionality to build a
-    connection to a Redis server. It includes a function
-    that takes Redis credentials and returns a Redis
-    connection object.
+    File describing Redis connection builder function.
 """
 
 from redis import Redis

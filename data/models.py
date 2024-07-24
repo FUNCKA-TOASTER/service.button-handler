@@ -1,3 +1,12 @@
+"""Module "data".
+
+File:
+    models.py
+
+About:
+    File describing SQLA table models.
+"""
+
 from datetime import datetime
 from toaster.database import BaseModel
 from sqlalchemy.orm import Mapped, mapped_column
@@ -18,11 +27,19 @@ from .enums import (
     StaffRole,
 )
 
-from .annotated import UUID, BPID
+from .annotations import UUID, BPID
 
 
 # Таблицы основных элементов
 class Peer(BaseModel):
+    """Peer SQLA model
+
+    Columns:
+        id
+        name
+        mark
+    """
+
     __tablename__ = "peers"
 
     id: Mapped[int] = mapped_column(BIGINT, primary_key=True, unique=True)
@@ -32,6 +49,14 @@ class Peer(BaseModel):
 
 # Таблицы данных о пользователе и сообщениях
 class Permission(BaseModel):
+    """Permission SQLA model
+
+    Columns:
+        bpid
+        uuid
+        permission
+    """
+
     __tablename__ = "permissions"
 
     bpid: Mapped[BPID]
@@ -40,6 +65,15 @@ class Permission(BaseModel):
 
 
 class Warn(BaseModel):
+    """Warn SQLA model
+
+    Columns:
+        bpid
+        uuid
+        points
+        expired
+    """
+
     __tablename__ = "warns"
 
     bpid: Mapped[BPID]
@@ -49,6 +83,14 @@ class Warn(BaseModel):
 
 
 class Session(BaseModel):
+    """Session SQLA model
+
+    Columns:
+        bpid
+        cmid
+        expired
+    """
+
     __tablename__ = "sessions"
 
     bpid: Mapped[BPID]
@@ -57,6 +99,14 @@ class Session(BaseModel):
 
 
 class Queue(BaseModel):
+    """Queue SQLA model
+
+    Columns:
+        bpid
+        uuid
+        expired
+    """
+
     __tablename__ = "queues"
 
     bpid: Mapped[BPID]
@@ -66,6 +116,16 @@ class Queue(BaseModel):
 
 # Таблицы настроект узлов
 class Setting(BaseModel):
+    """Setting SQLA model
+
+    Columns:
+        bpid
+        name
+        status
+        destination
+        points
+    """
+
     __tablename__ = "settings"
 
     bpid: Mapped[BPID]
@@ -76,6 +136,13 @@ class Setting(BaseModel):
 
 
 class Cursed(BaseModel):
+    """Cursed SQLA model
+
+    Columns:
+        bpid
+        word
+    """
+
     __tablename__ = "curses"
 
     bpid: Mapped[BPID]
@@ -83,6 +150,14 @@ class Cursed(BaseModel):
 
 
 class Delay(BaseModel):
+    """Delay SQLA model
+
+    Columns:
+        bpid
+        setting
+        delay
+    """
+
     __tablename__ = "delays"
 
     bpid: Mapped[BPID]
@@ -91,6 +166,15 @@ class Delay(BaseModel):
 
 
 class Url(BaseModel):
+    """Url SQLA model
+
+    Columns:
+        bpid
+        type
+        pattern
+        status
+    """
+
     __tablename__ = "urls"
 
     bpid: Mapped[BPID]
@@ -100,6 +184,13 @@ class Url(BaseModel):
 
 
 class Staff(BaseModel):
+    """Staff SQLA model
+
+    Columns:
+        uuid
+        role
+    """
+
     __tablename__ = "staffs"
 
     uuid: Mapped[UUID]
