@@ -1,46 +1,55 @@
-# ⚙️ TOASTER.BUTTON-HANDLING-SERVICE
+# ⚙️ SERVICE.BUTTON-HANDLER
 
 ![main_img](https://github.com/STALCRAFT-FUNCKA/toaster.button-handling-service/assets/76991612/40e1cb24-f2d0-4786-bf49-a8dabe0f35b2)
 
-## 📄 Информация ##
+## 📄 Информация
 
-**TOASTER.BUTTON-HANDLING-SERVICE** - сервис обработки событий, классифицированных как нажатие кнопки. Событие приходит от сервиса фетчинга, после чего обрабатывается. Праллельно производятся необходимые действия внутреннего\внешнего логирования.
+**SERVICE.BUTTON-HANDLER** - сервис обработки событий, классифицированных как "button". Событие приходит от сервиса фетчинга через шину Redis, после чего обрабатывается, параллельно логируя свои дейстивия как внутри контейнера (внутренние логи), так и внутри лог-чатов (внешние логи).
 
-### Входные данные:
+### Входные данные
 
-**ButtonEvent (button_pressed):**
-```
-content type: application\json
+Пример обьекта события, которое приходит на service.button-handler:
 
-{
-    "ts": 1709107935, 
-    "datetime": "2024-02-28 11:12:15", 
-    "event_type": "button_pressed", 
-    "event_id": "e93488a3813b59f6c6b53ee51f59103e2a9240d6", 
-    "user_id": 206295116, 
-    "user_name": "Руслан Башинский", 
-    "user_nick": "oidaho", 
-    "peer_id": 2000000002, 
-    "peer_name": "FUNCKA | DEV | CHAT", 
-    "chat_id": 2, 
-    "cmid": 2618, 
-    "button_event_id": "ac89a3425ec3", 
-    "payload": {
-        "keyboard_owner_id": 206295116, 
-        "call_action": "test"
-    }
-}
+```python
+class Event:
+    event_id: str
+    event_type: str
+
+    peer: Peer
+    user: User
+    button: Button
 ```
 
-Пример события, которое приходит от toaster.event-routing-service сервера на toaster.button-handling-service.
+```python
+class Button(NamedTuple):
+    cmid: int
+    beid: str
+    payload: dict
+```
 
-Далее, сервис определяет, какая команда была вызвана, а уже после - исполняет все действия, которые за этой командой сокрыты.
+```python
+class Peer(NamedTuple):
+    bpid: int
+    cid: int
+    name: str
+```
 
+```python
+class User(NamedTuple):
+    uuid: int
+    name: str
+    firstname: str
+    lastname: str
+    nick: str
+```
+
+Далее, сервис определяет имя вызвваемого действия внутри полезной нагрузки кнопки и исполняет его, имспользуя атрибуты, которые также были заложены внутри полезной нагрузки.
 
 ### Дополнительно
 
 Docker setup:
-```
+
+```shell
     docker network
         name: TOASTER
         ip_gateway: 172.18.0.1
@@ -62,15 +71,12 @@ Docker setup:
     docker container
         name: toaster.button-handling-service
         network_ip: 172.1.08.7
-
-    docker volumes:
-        /var/log/TOASTER/toaster.button-handling-service:/service/logs
 ```
 
 Jenkisn shell command:
 ```
-imageName="toaster.button-handling-service"
-containerName="toaster.button-handling-service"
+imageName="service.button-handler"
+containerName="service.button-handler"
 localIP="172.18.0.7"
 networkName="TOASTER"
 
@@ -92,7 +98,6 @@ docker build . -t $imageName \
 #run container
 docker run -d \
 --name $containerName \
---volume /var/log/TOASTER/$imageName:/service/logs \
 --restart always \
 $imageName
 
