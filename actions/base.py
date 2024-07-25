@@ -1,3 +1,12 @@
+"""Module "actions".
+
+File:
+    base.py
+
+About:
+    Initializing the "actions" module.
+"""
+
 from abc import ABC, abstractmethod
 from vk_api import VkApi
 from toaster.broker.events import Event
@@ -5,11 +14,11 @@ from toaster.keyboards import SnackbarAnswer
 
 
 class BaseAction(ABC):
-    """Command handler base class."""
+    """Base class of the bot button response action."""
 
     NAME = "None"
 
-    def __init__(self, api: VkApi):
+    def __init__(self, api: VkApi) -> None:
         self.api = api
 
     def __call__(self, event: Event) -> bool:
@@ -17,15 +26,23 @@ class BaseAction(ABC):
 
     @abstractmethod
     def _handle(self, event: Event) -> bool:
-        """DOCSTRING"""
+        """The main function of action execution.
 
-    def snackbar(self, event: dict, text: str):
+        Args:
+            event (Event): Custom Event object.
+
+        Returns:
+            bool: Execution status.
+        """
+
+    def snackbar(self, event: Event, text: str) -> None:
         """Sends a snackbar to the user.
 
         Args:
-            event (ButtonEvent): VK button_pressed custom event.
+            event (Event): Custom Event object.
             text (str): Sncakbar text.
         """
+
         self.api.messages.sendMessageEventAnswer(
             event_id=event.button.beid,
             user_id=event.user.uuid,

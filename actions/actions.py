@@ -1,3 +1,12 @@
+"""Module "actions".
+
+File:
+    actions.py
+
+About:
+    File describing possible button response actions.
+"""
+
 import random
 from toaster.broker.events import Event
 from toaster.keyboards import Keyboard, ButtonColor, Callback

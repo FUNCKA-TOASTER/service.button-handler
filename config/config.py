@@ -4,9 +4,8 @@ File:
     config.py
 
 About:
-    This file defines configuration variables used
-    throughout the application, including service names,
-    API tokens, broker addresses, and other settings.
+    This file defines the used variables
+    and configuration objects.
 """
 
 import os
@@ -15,10 +14,6 @@ from toaster.credentials import (
     AlchemySetup,
     RedisCredentials,
 )
-
-
-# Service name used for identification
-SERVICE_NAME = "toaster.button-handling-service"
 
 # Broker subscription channel name
 CHANNEL_NAME = "button"

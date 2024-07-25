@@ -1,9 +1,9 @@
 [tool.poetry]
 package-mode = false
-name = "toaster.button-handling-service"
+name = "service.button-handler"
 version = "0.2.0"
 description = ""
-repository = "https://github.com/STALCRAFT-FUNCKA/toaster.button-handling-service"
+repository = "https://github.com/FUNCKA-TOASTER/service.button-handler"
 documentation = "https://github.com/STALCRAFT-FUNCKA/TOASTER/wiki"
 authors = [
     "Oidaho <oidahomain@gmail.com>"

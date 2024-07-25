@@ -29,7 +29,7 @@ def setup_logger() -> None:
 
 
 def main():
-    """Entry point."""
+    """Programm entry point."""
 
     setup_logger()
     TOASTER_DB.create_tables()

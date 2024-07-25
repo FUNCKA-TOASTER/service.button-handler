@@ -1,3 +1,12 @@
+"""Module "actions".
+
+File:
+    __init__.py
+
+About:
+    Initializing the "actions" module.
+"""
+
 from .actions import (
     Error,
     RejectAccess,

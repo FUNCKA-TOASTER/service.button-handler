@@ -1,3 +1,12 @@
+"""Module "handler".
+
+File:
+    handler.py
+
+About:
+    File describing button handler class.
+"""
+
 from typing import NoReturn, Optional, Any, Union, Dict
 from loguru import logger
 from vk_api import VkApi
@@ -11,13 +20,13 @@ ExecResult = Optional[Union[bool, NoReturn]]
 
 
 class ButtonHandler:
-    """DOCSTRING"""
+    """Button handler class"""
 
     def __call__(self, event: Event) -> None:
         try:
-            payload = self.get_payload(event)
+            payload = self._get_payload(event)
 
-            self.check_owner(payload, event)
+            self._check_owner(payload, event)
 
             action_name = payload.get("action_name")
             if self._execute(action_name, event):
@@ -44,7 +53,7 @@ class ButtonHandler:
         return action_obj(event)
 
     @staticmethod
-    def get_payload(event: Event):
+    def _get_payload(event: Event):
         payload = event.button.payload
         if payload is None:
             raise ValueError("Event does not contains payload.")
@@ -52,7 +61,7 @@ class ButtonHandler:
         return payload
 
     @staticmethod
-    def check_owner(payload: Payload, event: Event):
+    def _check_owner(payload: Payload, event: Event):
         owner = payload.get("keyboard_owner")
         if owner != event.user.uuid:
             raise PermissionError("The user is not the owner of the message.")
