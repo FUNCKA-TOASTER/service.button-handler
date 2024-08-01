@@ -466,8 +466,8 @@ class FiltersSettings(BaseAction):
             bpid=event.peer.bpid,
         )
         color_by_status = {
-            SettingStatus.inactive: ButtonColor.NEGATIVE,
-            SettingStatus.active: ButtonColor.POSITIVE,
+            SettingStatus.active: ButtonColor.NEGATIVE,
+            SettingStatus.inactive: ButtonColor.POSITIVE,
         }
 
         page = int(payload.get("page", 1))
