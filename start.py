@@ -12,8 +12,10 @@ About:
 
 import sys
 from loguru import logger
-from toaster.broker import Subscriber, build_connection
-from data import TOASTER_DB
+from toaster.broker import (
+    Subscriber,
+    build_connection,
+)
 from handler import ButtonHandler
 import config
 
@@ -32,7 +34,6 @@ def main():
     """Programm entry point."""
 
     setup_logger()
-    TOASTER_DB.create_tables()
     subscriber = Subscriber(client=build_connection(config.REDIS_CREDS))
     handler = ButtonHandler()
 

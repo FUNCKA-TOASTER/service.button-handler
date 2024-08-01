@@ -74,7 +74,8 @@ Docker setup:
 ```
 
 Jenkisn shell command:
-```
+
+```shell
 imageName="service.button-handler"
 containerName="service.button-handler"
 localIP="172.18.0.7"

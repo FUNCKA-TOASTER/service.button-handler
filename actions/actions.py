@@ -10,14 +10,14 @@ About:
 import random
 from toaster.broker.events import Event
 from toaster.keyboards import Keyboard, ButtonColor, Callback
-from data import TOASTER_DB
-from data import (
+from db import TOASTER_DB
+from toaster_utils.enums import (
     UserPermission,
     SettingDestination,
     SettingStatus,
     PeerMark,
 )
-from data.scripts import (
+from toaster_utils.scripts import (
     get_peer_mark,
     set_peer_mark,
     drop_peer_mark,
@@ -404,7 +404,7 @@ class SystemsSettings(BaseAction):
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Фильтрация URL: {'Вкл.' if systems['url_filtering'].value else 'Выкл.'}",
+                        label=f"Фильтрация URL: {'Вкл.' if systems['link_filter'].value else 'Выкл.'}",
                         payload={
                             "action_name": "systems_settings",
                             "action_context": "change_status",
@@ -412,12 +412,12 @@ class SystemsSettings(BaseAction):
                             "page": "2",
                         },
                     ),
-                    color_by_status[systems["url_filtering"]],
+                    color_by_status[systems["link_filter"]],
                 )
                 .add_row()
                 .add_button(
                     Callback(
-                        label=f"Усиленная фильтрация URL: {'Вкл.' if systems['hard_url_filtering'].value else 'Выкл.'}",
+                        label=f"Усиленная фильтрация URL: {'Вкл.' if systems['hard_link_filter'].value else 'Выкл.'}",
                         payload={
                             "action_name": "systems_settings",
                             "action_context": "change_status",
@@ -425,7 +425,7 @@ class SystemsSettings(BaseAction):
                             "page": "2",
                         },
                     ),
-                    color_by_status[systems["hard_url_filtering"]],
+                    color_by_status[systems["hard_link_filter"]],
                 )
                 .add_row()
                 .add_button(
@@ -1018,7 +1018,7 @@ class SystemsPunishment(BaseAction):
                         label="Фильтрация URL",
                         payload={
                             "action_name": "change_punishment",
-                            "setting_name": "url_filtering",
+                            "setting_name": "link_filter",
                             "page": "2",
                         },
                     ),
@@ -1030,7 +1030,7 @@ class SystemsPunishment(BaseAction):
                         label="Усиленная фильтрация URL",
                         payload={
                             "action_name": "change_punishment",
-                            "setting_name": "hard_url_filtering",
+                            "setting_name": "hard_link_filter",
                             "page": "2",
                         },
                     ),
