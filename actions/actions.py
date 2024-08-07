@@ -408,7 +408,7 @@ class SystemsSettings(BaseAction):
                         payload={
                             "action_name": "systems_settings",
                             "action_context": "change_status",
-                            "system_name": "url_filtering",
+                            "system_name": "link_filter",
                             "page": "2",
                         },
                     ),
@@ -421,7 +421,7 @@ class SystemsSettings(BaseAction):
                         payload={
                             "action_name": "systems_settings",
                             "action_context": "change_status",
-                            "system_name": "hard_url_filtering",
+                            "system_name": "hard_link_filter",
                             "page": "2",
                         },
                     ),
