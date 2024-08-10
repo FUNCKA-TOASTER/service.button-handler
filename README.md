@@ -58,7 +58,7 @@ Docker setup:
     
 
     docker image
-        name: toaster.button-handling-service
+        name: service.button-handler
         args:
             TOKEN: "..."
             GROUPID: "..."
@@ -69,7 +69,7 @@ Docker setup:
     
 
     docker container
-        name: toaster.button-handling-service
+        name: service.button-handler
         network_ip: 172.1.08.7
 ```
 
