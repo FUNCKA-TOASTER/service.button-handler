@@ -1,4 +1,4 @@
-"""Service "toaster.button-handling-service".
+"""Service "session.button-handler".
 
 File:
     start.py
