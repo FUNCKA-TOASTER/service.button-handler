@@ -1,6 +1,6 @@
 # ⚙️ SERVICE.BUTTON-HANDLER
 
-![main_img](https://github.com/STALCRAFT-FUNCKA/toaster.button-handling-service/assets/76991612/40e1cb24-f2d0-4786-bf49-a8dabe0f35b2)
+![main_img](https://github.com/FUNCKA-TOASTER/service.button-handler/assets/76991612/40e1cb24-f2d0-4786-bf49-a8dabe0f35b2)
 
 ## 📄 Информация
 
