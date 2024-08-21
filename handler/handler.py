@@ -11,6 +11,7 @@ from typing import NoReturn, Optional, Any, Union, Dict
 from loguru import logger
 from vk_api import VkApi
 from funcka_bots.broker.events import Event
+from funcka_bots.handler import ABCHandler
 from actions import action_list
 import config
 
@@ -19,7 +20,7 @@ Payload = Dict[str, Union[str, int]]
 ExecResult = Optional[Union[bool, NoReturn]]
 
 
-class ButtonHandler:
+class ButtonHandler(ABCHandler):
     """Button handler class"""
 
     def __call__(self, event: Event) -> None:
