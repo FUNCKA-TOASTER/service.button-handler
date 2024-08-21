@@ -10,7 +10,7 @@ About:
 from typing import NoReturn, Optional, Any, Union, Dict
 from loguru import logger
 from vk_api import VkApi
-from toaster.broker.events import Event
+from funcka_bots.broker.events import Event
 from actions import action_list
 import config
 

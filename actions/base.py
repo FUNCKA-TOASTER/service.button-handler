@@ -9,8 +9,8 @@ About:
 
 from abc import ABC, abstractmethod
 from vk_api import VkApi
-from toaster.broker.events import Event
-from toaster.keyboards import SnackbarAnswer
+from funcka_bots.broker.events import Event
+from funcka_bots.keyboards import SnackbarAnswer
 
 
 class BaseAction(ABC):

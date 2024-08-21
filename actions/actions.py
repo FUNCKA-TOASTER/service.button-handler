@@ -8,16 +8,16 @@ About:
 """
 
 import random
-from toaster.broker.events import Event
-from toaster.keyboards import Keyboard, ButtonColor, Callback
+from funcka_bots.broker.events import Event
+from funcka_bots.keyboards import Keyboard, ButtonColor, Callback
 from db import TOASTER_DB
-from toaster_utils.enums import (
+from toaster.enums import (
     UserPermission,
     SettingDestination,
     SettingStatus,
     PeerMark,
 )
-from toaster_utils.scripts import (
+from toaster.scripts import (
     get_peer_mark,
     set_peer_mark,
     drop_peer_mark,
