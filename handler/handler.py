@@ -10,7 +10,7 @@ About:
 from typing import NoReturn, Optional, Any, Union, Dict
 from loguru import logger
 from vk_api import VkApi
-from funcka_bots.broker.events import Event
+from funcka_bots.broker.events import BaseEvent
 from funcka_bots.handler import ABCHandler
 from actions import action_list
 import config
@@ -23,7 +23,7 @@ ExecResult = Optional[Union[bool, NoReturn]]
 class ButtonHandler(ABCHandler):
     """Button handler class"""
 
-    def __call__(self, event: Event) -> None:
+    def __call__(self, event: BaseEvent) -> None:
         try:
             payload = self._get_payload(event)
 
@@ -45,7 +45,7 @@ class ButtonHandler(ABCHandler):
         else:
             logger.info("Not a single action was executed.")
 
-    def _execute(self, action_name: str, event: Event) -> ExecResult:
+    def _execute(self, action_name: str, event: BaseEvent) -> ExecResult:
         selected = action_list.get(action_name)
         if selected is None:
             raise ValueError(f"Could not call action '{action_name}'.")
@@ -54,7 +54,7 @@ class ButtonHandler(ABCHandler):
         return action_obj(event)
 
     @staticmethod
-    def _get_payload(event: Event):
+    def _get_payload(event: BaseEvent):
         payload = event.button.payload
         if payload is None:
             raise ValueError("Event does not contains payload.")
@@ -62,7 +62,7 @@ class ButtonHandler(ABCHandler):
         return payload
 
     @staticmethod
-    def _check_owner(payload: Payload, event: Event):
+    def _check_owner(payload: Payload, event: BaseEvent):
         owner = payload.get("keyboard_owner")
         if owner != event.user.uuid:
             raise PermissionError("The user is not the owner of the message.")

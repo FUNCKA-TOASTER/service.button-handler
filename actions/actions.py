@@ -8,7 +8,7 @@ About:
 """
 
 import random
-from funcka_bots.broker.events import Event
+from funcka_bots.broker.events import BaseEvent
 from funcka_bots.keyboards import Keyboard, ButtonColor, Callback
 from db import TOASTER_DB
 from toaster.enums import (
@@ -40,7 +40,7 @@ from .base import BaseAction
 class Error(BaseAction):
     NAME = "error"
 
-    def _handle(self, event: Event) -> bool:
+    def _handle(self, event: BaseEvent) -> bool:
         snackbar_message = "⚠️ Что-то пошло не так."
         self.snackbar(event, snackbar_message)
 
@@ -50,7 +50,7 @@ class Error(BaseAction):
 class RejectAccess(BaseAction):
     NAME = "reject_access"
 
-    def _handle(self, event: Event) -> bool:
+    def _handle(self, event: BaseEvent) -> bool:
         snackbar_message = "⚠️ Отказано в доступе."
         self.snackbar(event, snackbar_message)
 
@@ -60,7 +60,7 @@ class RejectAccess(BaseAction):
 class CloseMenu(BaseAction):
     NAME = "close_menu"
 
-    def _handle(self, event: Event) -> bool:
+    def _handle(self, event: BaseEvent) -> bool:
         self.api.messages.delete(
             peer_id=event.peer.bpid,
             cmids=event.button.cmid,
@@ -83,7 +83,7 @@ class CloseMenu(BaseAction):
 class SetMark(BaseAction):
     NAME = "set_mark"
 
-    def _handle(self, event: Event) -> bool:
+    def _handle(self, event: BaseEvent) -> bool:
         mark = get_peer_mark(
             db_instance=TOASTER_DB,
             bpid=event.peer.bpid,
@@ -112,7 +112,7 @@ class SetMark(BaseAction):
 class UpdatePeerData(BaseAction):
     NAME = "update_peer_data"
 
-    def _handle(self, event: Event) -> bool:
+    def _handle(self, event: BaseEvent) -> bool:
         mark = get_peer_mark(
             db_instance=TOASTER_DB,
             bpid=event.peer.bpid,
@@ -137,7 +137,7 @@ class UpdatePeerData(BaseAction):
 class DropMark(BaseAction):
     NAME = "drop_mark"
 
-    def _handle(self, event: Event) -> bool:
+    def _handle(self, event: BaseEvent) -> bool:
         mark = get_peer_mark(
             db_instance=TOASTER_DB,
             bpid=event.peer.bpid,
@@ -162,7 +162,7 @@ class DropMark(BaseAction):
 class SetPermission(BaseAction):
     NAME = "set_permission"
 
-    def _handle(self, event: Event) -> bool:
+    def _handle(self, event: BaseEvent) -> bool:
         payload = event.button.payload
         target_uuid = payload.get("target")
 
@@ -195,7 +195,7 @@ class SetPermission(BaseAction):
 class DropPermission(BaseAction):
     NAME = "drop_permission"
 
-    def _handle(self, event: Event) -> bool:
+    def _handle(self, event: BaseEvent) -> bool:
         payload = event.button.payload
         target_uuid = payload.get("target")
 
@@ -227,7 +227,7 @@ class GameRoll(BaseAction):
     NAME = "game_roll"
     EMOJI = ["0️⃣", "1️⃣", " 2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
 
-    def _handle(self, event: Event) -> bool:
+    def _handle(self, event: BaseEvent) -> bool:
         num = random.randint(0, 100)
         result = ""
         for didgit in str(num):
@@ -262,7 +262,7 @@ class GameCoinflip(BaseAction):
     NAME = "game_coinflip"
     EMOJI = ["Орёл 🪙", "Решка 🪙"]
 
-    def _handle(self, event: Event) -> bool:
+    def _handle(self, event: BaseEvent) -> bool:
         num = random.randint(0, 1)
         result = self.EMOJI[num]
 
@@ -295,7 +295,7 @@ class GameCoinflip(BaseAction):
 class SystemsSettings(BaseAction):
     NAME = "systems_settings"
 
-    def _handle(self, event: Event) -> bool:
+    def _handle(self, event: BaseEvent) -> bool:
         payload = event.button.payload
 
         systems = get_destinated_settings_status(
@@ -457,7 +457,7 @@ class SystemsSettings(BaseAction):
 class FiltersSettings(BaseAction):
     NAME = "filters_settings"
 
-    def _handle(self, event: Event) -> bool:
+    def _handle(self, event: BaseEvent) -> bool:
         payload = event.button.payload
 
         filters = get_destinated_settings_status(
@@ -775,7 +775,7 @@ class FiltersSettings(BaseAction):
 class ChangeDelay(BaseAction):
     NAME = "change_delay"
 
-    def _handle(self, event: Event) -> bool:
+    def _handle(self, event: BaseEvent) -> bool:
         payload = event.button.payload
         setting_name = payload.get("setting_name")
 
@@ -937,7 +937,7 @@ class ChangeDelay(BaseAction):
 class SystemsPunishment(BaseAction):
     NAME = "systems_punishment"
 
-    def _handle(self, event: Event) -> bool:
+    def _handle(self, event: BaseEvent) -> bool:
         payload = event.button.payload
         page = int(payload.get("page", 1))
 
@@ -1067,7 +1067,7 @@ class SystemsPunishment(BaseAction):
 class FiltersPunishment(BaseAction):
     NAME = "filters_punishment"
 
-    def _handle(self, event: Event) -> bool:
+    def _handle(self, event: BaseEvent) -> bool:
         payload = event.button.payload
         page = int(payload.get("page", 1))
 
@@ -1343,7 +1343,7 @@ class FiltersPunishment(BaseAction):
 class ChangePunishment(BaseAction):
     NAME = "change_punishment"
 
-    def _handle(self, event: Event) -> bool:
+    def _handle(self, event: BaseEvent) -> bool:
         payload = event.button.payload
         setting_name = payload.get("setting_name")
 

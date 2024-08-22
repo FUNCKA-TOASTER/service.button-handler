@@ -9,7 +9,7 @@ About:
 
 from abc import ABC, abstractmethod
 from vk_api import VkApi
-from funcka_bots.broker.events import Event
+from funcka_bots.broker.events import BaseEvent
 from funcka_bots.keyboards import SnackbarAnswer
 
 
@@ -21,11 +21,11 @@ class BaseAction(ABC):
     def __init__(self, api: VkApi) -> None:
         self.api = api
 
-    def __call__(self, event: Event) -> bool:
+    def __call__(self, event: BaseEvent) -> bool:
         return self._handle(event)
 
     @abstractmethod
-    def _handle(self, event: Event) -> bool:
+    def _handle(self, event: BaseEvent) -> bool:
         """The main function of action execution.
 
         Args:
@@ -35,7 +35,7 @@ class BaseAction(ABC):
             bool: Execution status.
         """
 
-    def snackbar(self, event: Event, text: str) -> None:
+    def snackbar(self, event: BaseEvent, text: str) -> None:
         """Sends a snackbar to the user.
 
         Args:
