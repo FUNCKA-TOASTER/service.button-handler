@@ -8,9 +8,8 @@ About:
 """
 
 import random
-from funcka_bots.broker.events import BaseEvent
+from funcka_bots.events import BaseEvent
 from funcka_bots.keyboards import Keyboard, ButtonColor, Callback
-from db import TOASTER_DB
 from toaster.enums import (
     UserPermission,
     SettingDestination,
@@ -70,11 +69,7 @@ class CloseMenu(BaseAction):
         snackbar_message = "❌ Меню закрыто."
         self.snackbar(event, snackbar_message)
 
-        close_menu_session(
-            db_instance=TOASTER_DB,
-            bpid=event.peer.bpid,
-            cmid=event.button.cmid,
-        )
+        close_menu_session(bpid=event.peer.bpid, cmid=event.button.cmid)
 
         return True
 
@@ -84,21 +79,13 @@ class SetMark(BaseAction):
     NAME = "set_mark"
 
     def _handle(self, event: BaseEvent) -> bool:
-        mark = get_peer_mark(
-            db_instance=TOASTER_DB,
-            bpid=event.peer.bpid,
-        )
+        mark = get_peer_mark(bpid=event.peer.bpid)
 
         if mark is None:
             payload = event.button.payload
             mark = PeerMark(payload.get("mark"))
 
-            set_peer_mark(
-                db_instance=TOASTER_DB,
-                mark=mark,
-                bpid=event.peer.bpid,
-                name=event.peer.name,
-            )
+            set_peer_mark(mark=mark, bpid=event.peer.bpid, name=event.peer.name)
             snackbar_message = f'📝 Беседа помечена как "{mark.name}".'
 
         else:
@@ -113,17 +100,10 @@ class UpdatePeerData(BaseAction):
     NAME = "update_peer_data"
 
     def _handle(self, event: BaseEvent) -> bool:
-        mark = get_peer_mark(
-            db_instance=TOASTER_DB,
-            bpid=event.peer.bpid,
-        )
+        mark = get_peer_mark(bpid=event.peer.bpid)
 
         if mark is not None:
-            update_peer_data(
-                db_instance=TOASTER_DB,
-                bpid=event.peer.bpid,
-                name=event.peer.name,
-            )
+            update_peer_data(bpid=event.peer.bpid, name=event.peer.name)
             snackbar_message = "📝 Данные беседы обновлены."
 
         else:
@@ -138,16 +118,10 @@ class DropMark(BaseAction):
     NAME = "drop_mark"
 
     def _handle(self, event: BaseEvent) -> bool:
-        mark = get_peer_mark(
-            db_instance=TOASTER_DB,
-            bpid=event.peer.bpid,
-        )
+        mark = get_peer_mark(bpid=event.peer.bpid)
 
         if mark is not None:
-            drop_peer_mark(
-                db_instance=TOASTER_DB,
-                bpid=event.peer.bpid,
-            )
+            drop_peer_mark(bpid=event.peer.bpid)
             snackbar_message = f'📝 Метка "{mark.name}" снята с беседы.'
 
         else:
@@ -166,19 +140,12 @@ class SetPermission(BaseAction):
         payload = event.button.payload
         target_uuid = payload.get("target")
 
-        current_permission = get_user_permission(
-            db_instance=TOASTER_DB,
-            uuid=target_uuid,
-            bpid=event.peer.bpid,
-        )
+        current_permission = get_user_permission(uuid=target_uuid, bpid=event.peer.bpid)
         new_permission = UserPermission(int(payload.get("permission")))
 
         if current_permission == UserPermission.user:
             set_user_permission(
-                db_instance=TOASTER_DB,
-                uuid=target_uuid,
-                bpid=event.peer.bpid,
-                lvl=new_permission,
+                uuid=target_uuid, bpid=event.peer.bpid, lvl=new_permission
             )
             snackbar_message = f'⚒️ Пользователю назначена роль "{new_permission.name}".'
             self.snackbar(event, snackbar_message)
@@ -200,18 +167,11 @@ class DropPermission(BaseAction):
         target_uuid = payload.get("target")
 
         current_permission = get_user_permission(
-            db_instance=TOASTER_DB,
-            uuid=target_uuid,
-            bpid=event.peer.bpid,
-            ignore_staff=True,
+            uuid=target_uuid, bpid=event.peer.bpid, ignore_staff=True
         )
 
         if current_permission != UserPermission.user:
-            drop_user_permission(
-                db_instance=TOASTER_DB,
-                uuid=target_uuid,
-                bpid=event.peer.bpid,
-            )
+            drop_user_permission(uuid=target_uuid, bpid=event.peer.bpid)
             snackbar_message = "⚒️ Роль пользователя сброшена."
             self.snackbar(event, snackbar_message)
             return True
@@ -299,9 +259,7 @@ class SystemsSettings(BaseAction):
         payload = event.button.payload
 
         systems = get_destinated_settings_status(
-            db_instance=TOASTER_DB,
-            destination=SettingDestination.system,
-            bpid=event.peer.bpid,
+            destination=SettingDestination.system, bpid=event.peer.bpid
         )
         color_by_status = {
             SettingStatus.inactive: ButtonColor.NEGATIVE,
@@ -319,10 +277,7 @@ class SystemsSettings(BaseAction):
                 f"⚠️ Система {'Включена' if new_status.value else 'Выключена'}."
             )
             update_setting_status(
-                db_instance=TOASTER_DB,
-                status=new_status,
-                bpid=event.peer.bpid,
-                name=system_name,
+                status=new_status, bpid=event.peer.bpid, name=system_name
             )
 
         else:
@@ -461,9 +416,7 @@ class FiltersSettings(BaseAction):
         payload = event.button.payload
 
         filters = get_destinated_settings_status(
-            db_instance=TOASTER_DB,
-            destination=SettingDestination.filter,
-            bpid=event.peer.bpid,
+            destination=SettingDestination.filter, bpid=event.peer.bpid
         )
         color_by_status = {
             SettingStatus.inactive: ButtonColor.NEGATIVE,
@@ -481,10 +434,7 @@ class FiltersSettings(BaseAction):
                 f"⚠️ Система {'Включена' if not new_status.value else 'Выключена'}."
             )
             update_setting_status(
-                db_instance=TOASTER_DB,
-                status=new_status,
-                bpid=event.peer.bpid,
-                name=filter_name,
+                status=new_status, bpid=event.peer.bpid, name=filter_name
             )
 
         else:
@@ -779,11 +729,7 @@ class ChangeDelay(BaseAction):
         payload = event.button.payload
         setting_name = payload.get("setting_name")
 
-        delay = get_setting_delay(
-            db_instance=TOASTER_DB,
-            name=setting_name,
-            bpid=event.peer.bpid,
-        )
+        delay = get_setting_delay(name=setting_name, bpid=event.peer.bpid)
 
         action_context = payload.get("action_context")
         if action_context is not None:
@@ -798,12 +744,7 @@ class ChangeDelay(BaseAction):
                 delay = delay + time
                 snackbar_message = "⚠️ Время увеличено."
 
-            update_setting_delay(
-                db_instance=TOASTER_DB,
-                name=setting_name,
-                bpid=event.peer.bpid,
-                delay=delay,
-            )
+            update_setting_delay(name=setting_name, bpid=event.peer.bpid, delay=delay)
 
         else:
             snackbar_message = "⚙️ Меню установки задержки."
@@ -1347,11 +1288,7 @@ class ChangePunishment(BaseAction):
         payload = event.button.payload
         setting_name = payload.get("setting_name")
 
-        points = get_setting_points(
-            db_instance=TOASTER_DB,
-            bpid=event.peer.bpid,
-            name=setting_name,
-        )
+        points = get_setting_points(bpid=event.peer.bpid, name=setting_name)
 
         action_context = payload.get("action_context")
         if action_context is not None:
@@ -1368,10 +1305,7 @@ class ChangePunishment(BaseAction):
                 snackbar_message = "⚠️ Наказание увеличено."
 
             update_setting_points(
-                db_instance=TOASTER_DB,
-                bpid=event.peer.bpid,
-                name=setting_name,
-                points=points,
+                bpid=event.peer.bpid, name=setting_name, points=points
             )
 
         else:

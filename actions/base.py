@@ -9,7 +9,7 @@ About:
 
 from abc import ABC, abstractmethod
 from vk_api import VkApi
-from funcka_bots.broker.events import BaseEvent
+from funcka_bots.events import BaseEvent
 from funcka_bots.keyboards import SnackbarAnswer
 
 

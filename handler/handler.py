@@ -10,7 +10,7 @@ About:
 from typing import NoReturn, Optional, Any, Union, Dict
 from loguru import logger
 from vk_api import VkApi
-from funcka_bots.broker.events import BaseEvent
+from funcka_bots.events import BaseEvent
 from funcka_bots.handler import ABCHandler
 from actions import action_list
 import config
@@ -69,7 +69,7 @@ class ButtonHandler(ABCHandler):
 
     def _get_api(self) -> Any:
         session = VkApi(
-            token=config.TOKEN,
-            api_version=config.API_VERSION,
+            token=config.VK_GROUP_TOKEN,
+            api_version=config.VK_API_VERSION,
         )
         return session.get_api()
