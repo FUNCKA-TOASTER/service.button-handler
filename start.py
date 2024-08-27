@@ -12,7 +12,7 @@ About:
 
 import sys
 from loguru import logger
-from funcka_bots.broker import Subscriber
+from toaster import broker
 from handler import ButtonHandler
 import config
 
@@ -31,10 +31,9 @@ def main():
     """Programm entry point."""
 
     setup_logger()
-    subscriber = Subscriber(creds=config.BROKER_CREDS)
     handler = ButtonHandler()
 
-    for event in subscriber.listen(queue_name=config.BROKER_QUEUE_NAME):
+    for event in broker.listen(queue_name=config.BROKER_QUEUE_NAME):
         handler(event)
 
 
